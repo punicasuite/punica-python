@@ -11,11 +11,11 @@
     - [4.3. Compiling](#43-compiling)
     - [4.4. Deployment](#44-deployment)
     - [4.5. Invocation](#45-invocation)
-- [Example](#example)
-    - [Unbox Tutorialtoken](#unbox-tutorialtoken)
-    - [Compile Contract](#compile-contract)
-    - [Deploy](#deploy)
-    - [Invoke](#invoke)
+- [5. Example](#5-example)
+    - [5.1. Unbox Tutorialtoken](#51-unbox-tutorialtoken)
+    - [5.2. Compile Contract](#52-compile-contract)
+    - [5.3. Deploy](#53-deploy)
+    - [5.4. Invoke](#54-invoke)
 
 <!-- /TOC -->
 
@@ -323,9 +323,9 @@ Options:
 - If you not run punica cli in you project root directory, you need to use `-p` or `--project` option to specify your DApp project's path.
 - If multi wallet file exist in your `wallet` directory, you may need to use `--wallet` option to specify which wallet you want to use. otherwise, a random wallet file in `wallet` directory will be used.
 
-## Example
+## 5. Example
 
-### Unbox Tutorialtoken
+### 5.1. Unbox Tutorialtoken
 
 ```shell
 C:\tutorialtoken> punica unbox tutorialtoken
@@ -334,7 +334,7 @@ Unpacking...
 Unbox successful. Enjoy it!
 ```
 
-### Compile Contract
+### 5.2. Compile Contract
 
 ```shell
 C:\tutorialtoken> tree
@@ -379,7 +379,7 @@ C:\TUTORIALTOKEN\BUILD
     oep4_token_abi.json
 ```
 
-### Deploy
+### 5.3. Deploy
 
 After compile successful, you can deploy your smart contract into a Ontolog Network.
 
@@ -410,7 +410,7 @@ Running deployment: oep4_token.avm
 Enjoy your contract:)
 ```
 
-### Invoke
+### 5.4. Invoke
 
 ```shell
 C:\tutorialtoken> punica invoke

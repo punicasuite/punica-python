@@ -1,0 +1,7 @@
+click
+gitpython>=2.1.11
+aenum==2.1.2
+astor==0.7.1
+coz-bytecode==0.5.1
+punica-neo-boa
+ontology-python-sdk

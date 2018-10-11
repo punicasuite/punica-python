@@ -15,8 +15,8 @@
     - [5.1. Checkout Version](#51-checkout-version)
     - [5.2. Unbox Tutorialtoken](#52-unbox-tutorialtoken)
     - [5.3. Compile Contract](#53-compile-contract)
-    - [5.4. Deploy](#54-deploy)
-    - [5.5. Invoke](#55-invoke)
+    - [5.4. Deploy Smart Contract](#54-deploy-smart-contract)
+    - [5.5. Invoke Function in Smart Contract](#55-invoke-function-in-smart-contract)
 
 <!-- /TOC -->
 
@@ -388,7 +388,7 @@ C:\TUTORIALTOKEN\BUILD
     oep4_token_abi.json
 ```
 
-### 5.4. Deploy
+### 5.4. Deploy Smart Contract
 
 After compile successful, you can deploy your smart contract into a Ontolog Network.
 
@@ -419,7 +419,7 @@ Running deployment: oep4_token.avm
 Enjoy your contract:)
 ```
 
-### 5.5. Invoke
+### 5.5. Invoke Function in Smart Contract
 
 ```shell
 C:\tutorialtoken> punica invoke

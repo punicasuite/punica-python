@@ -5,10 +5,14 @@ import json
 import binascii
 import os
 
+import requests
 from boa.util import Digest
 from boa.compiler import Compiler
+import re
 
 from punica.exception.punica_exception import PunicaException, PunicaError
+
+PYTHON_COMPILE_URL = "https://smartxcompiler.ont.io/api/beta/python/compile"
 
 
 class PunicaCompiler:
@@ -68,7 +72,7 @@ class PunicaCompiler:
             f.write(json_data)
 
     @staticmethod
-    def compile_contract(contract_path: str, abi_save_path: str = '', avm_save_path: str = ''):
+    def compile_contract(contract_path: str, local: bool = False, abi_save_path: str = '', avm_save_path: str = ''):
         if abi_save_path == '':
             split_path = os.path.split(contract_path)
             save_path = os.path.join(os.path.dirname(split_path[0]), 'build', split_path[1])
@@ -77,6 +81,9 @@ class PunicaCompiler:
             split_path = os.path.split(contract_path)
             save_path = os.path.join(os.path.dirname(split_path[0]), 'build', split_path[1])
             avm_save_path = save_path.replace('.py', '.avm')
+        if not local:
+            PunicaCompiler.compile_contract_remote(contract_path)
+            return
         try:
             PunicaCompiler.generate_avm_file(contract_path, avm_save_path)
             PunicaCompiler.generate_abi_file(contract_path, abi_save_path)
@@ -85,3 +92,34 @@ class PunicaCompiler:
                 raise PunicaException(PunicaError.permission_error)
             else:
                 raise PunicaException(PunicaError.other_error(error.args[1]))
+
+    @staticmethod
+    def compile_contract_remote(contract_path: str):
+        with open(contract_path, "r") as f:
+            contract = f.read()
+            dict_payload = dict()
+            dict_payload['type'] = 'Python'
+            dict_payload['code'] = contract
+            url = PYTHON_COMPILE_URL
+            header = {'Content-type': 'application/json'}
+            timeout = 10
+            path = os.path.dirname(contract_path)
+            file_name = os.path.basename(contract_path).split(".")
+            session = requests.session()
+            res = session.post(url, json=dict_payload, headers=header, timeout=timeout, verify=False)
+            result = json.loads(res.content.decode())
+            if result["errcode"] == 0:
+                with open(path + "/" + file_name[0] + ".avm", "w", encoding='utf-8') as f:
+                    avm = result["avm"].lstrip('b\'')
+                    temp = avm.rstrip('\'')
+                    f.write(temp)
+                with open(path + "/" + file_name[0] + "_abi.json", "w", encoding='utf-8') as f2:
+                    r = re.sub('\\\\n', '', str(result["abi"]))
+                    abi = str(r.lstrip('b\''))
+                    temp = abi.rstrip('\'')
+                    f2.write(temp.replace(' ', ''))
+                print("compiled, Thank you")
+            else:
+                print("compile failed")
+                print(result)
+

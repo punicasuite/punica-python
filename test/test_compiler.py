@@ -8,6 +8,26 @@ from punica.compile.contract_compile import PunicaCompiler
 
 
 class TestCompiler(unittest.TestCase):
+    def test_compile_contract_remote(self):
+        contract_path = os.path.join(os.getcwd(), 'test_file', 'test_compile_remote', 'oep4.py')
+        PunicaCompiler.compile_contract(contract_path)
+        avm_save_path = os.path.join(os.getcwd(), 'test_file', 'test_compile_remote', 'oep4.avm')
+        abi_save_path = os.path.join(os.getcwd(), 'test_file', 'test_compile_remote', 'oep4_abi.json')
+        avm_local_path = os.path.join(os.getcwd(), 'test_file', 'test_compile_remote', 'oep4.avm')
+        abi_local_path = os.path.join(os.getcwd(), 'test_file', 'test_compile_remote', 'oep4_abi.json')
+        with open(avm_save_path, 'r') as f:
+            avm_save = f.read()
+        with open(avm_local_path, 'r') as f2:
+            avm_local = f2.read()
+            self.assertEqual(avm_save, avm_local)
+        with open(abi_save_path, 'r') as f3:
+            abi_save = f3.read()
+        with open(abi_local_path, 'r') as f4:
+            abi_local = f4.read()
+            self.assertEqual(abi_save, abi_local)
+        os.remove(avm_save_path)
+        os.remove(abi_save_path)
+
     def test_compile_contract(self):
         contract_path = os.path.join(os.getcwd(), 'test_file', 'test_compile', 'contracts', 'oep4.py')
         PunicaCompiler.compile_contract(contract_path)

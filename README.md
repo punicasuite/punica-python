@@ -74,7 +74,7 @@ cd tutorialtoken
 - Download ("unbox") the MetaCoin box:
 
 ```shell
-punica unbox ontology-tutorialtoken
+punica unbox tutorialtoken
 ```
 
 ```shell

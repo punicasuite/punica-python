@@ -17,7 +17,13 @@ class PunicaError:
 
     @staticmethod
     def other_error(msg: str) -> dict:
-        return PunicaError.get_error(59000, "Other Error, " + msg)
+        if isinstance(msg, bytes):
+            try:
+                msg = msg.decode()
+                msg = 'Other Error, ' + msg
+            except UnicodeDecodeError:
+                msg = 'Other Error'
+        return PunicaError.get_error(59000, msg)
 
     invalid_box_name = get_error.__func__(10000, 'box error, invalid box name')
     config_file_not_found = get_error.__func__(10001, 'punica config file not found')
@@ -33,6 +39,6 @@ class PunicaError:
 
     network_error = get_error.__func__(20000, 'please make sure you network state, and the repository exists.')
 
-    repo_exist_error = get_error.__func__(30000, 'something already exists at the destination.')
+    file_exist_error = get_error.__func__(30000, 'something already exists at the destination.')
     permission_error = get_error.__func__(30001, 'permission denied, please check your file path.')
     dir_path_error = get_error.__func__(30002, 'dir path not exist, please check your dir path.')

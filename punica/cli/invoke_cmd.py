@@ -3,9 +3,12 @@
 
 import click
 
+from ontology.exception.exception import SDKException
+
 from .main import main
 
 from punica.invoke.invoke_contract import Invoke
+from punica.exception.punica_exception import PunicaException
 
 
 @main.command('invoke')
@@ -17,4 +20,9 @@ def invoke_cmd(ctx, network, wallet):
     Invoke the function list in punica-config.
     """
     project_dir = ctx.obj['PROJECT_DIR']
-    Invoke.invoke_all_function_in_list(wallet, project_dir, network)
+    try:
+        Invoke.invoke_all_function_in_list(wallet, project_dir, network)
+    except (PunicaException, SDKException) as e:
+        print('An error occur...')
+        print('Punica will exist...')
+        exit(1)

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import pkg_resources
 
 import click
 
@@ -19,6 +20,12 @@ CONTEXT_SETTINGS = dict(
             "Specify a punica project directory."
     ),
     type=click.Path(exists=True, dir_okay=True),
+)
+@click.version_option(
+    pkg_resources.get_distribution("punica").version,
+    '--version',
+    '-v',
+    message='%(version)s',
 )
 @click.pass_context
 def main(ctx, project_dir):

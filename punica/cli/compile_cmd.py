@@ -4,10 +4,12 @@
 import os
 
 import click
+from ontology.exception.exception import SDKException
 
 from .main import main
 
 from punica.compile.contract_compile import PunicaCompiler
+from punica.exception.punica_exception import PunicaException
 
 
 def compile_contract(contract_dir, contract_name, avm, abi):
@@ -35,12 +37,18 @@ def compile_cmd(ctx, contract, avm, abi):
     Compile the specified contracts to avm and abi file.
     """
     project_dir = ctx.obj['PROJECT_DIR']
-    contract_dir = os.path.join(project_dir, 'contracts')
-    print('Compile...')
-    if contract != '':
-        compile_contract(contract_dir, contract, avm, abi)
-    else:
-        contract_list = os.listdir(contract_dir)
-        for contract in contract_list:
+
+    try:
+        contract_dir = os.path.join(project_dir, 'contracts')
+        print('Compile...')
+        if contract != '':
             compile_contract(contract_dir, contract, avm, abi)
-    print('Now we are finished :)')
+        else:
+            contract_list = os.listdir(contract_dir)
+            for contract in contract_list:
+                compile_contract(contract_dir, contract, avm, abi)
+        print('Now we are finished :)')
+    except (PunicaException, SDKException) as e:
+        print('An error occur...')
+        print('Punica will exist...')
+        exit(1)

@@ -3,9 +3,12 @@
 
 import click
 
+from ontology.exception.exception import SDKException
+
 from .main import main
 
 from punica.box.repo_box import Box
+from punica.exception.punica_exception import PunicaException
 
 
 @main.command('init')
@@ -15,4 +18,9 @@ def init_cmd(ctx):
     Initialize new and empty Ontology DApp project.
     """
     project_dir = ctx.obj['PROJECT_DIR']
-    Box.init(project_dir)
+    try:
+        Box.init(project_dir)
+    except (PunicaException, SDKException) as e:
+        print('An error occur...')
+        print('Punica will exist...')
+        exit(1)

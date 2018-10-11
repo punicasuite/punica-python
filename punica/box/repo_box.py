@@ -44,11 +44,11 @@ class Box:
             git.Repo.clone_from(url=repo_url, to_path=repo_to_path, depth=1)
         except git.GitCommandError as e:
             network_error = 'Could not read from remote repository'
-            repo_exist_error = 'already exists and is not an empty directory'
+            file_exist_error = 'already exists and is not an empty directory'
             if network_error in str(e.args[2]):
                 raise PunicaException(PunicaError.network_error)
-            elif repo_exist_error in str(e.args[2]):
-                raise PunicaException(PunicaError.repo_exist_error)
+            elif file_exist_error in str(e.args[2]):
+                raise PunicaException(PunicaError.file_exist_error)
             else:
                 raise PunicaException(PunicaError.other_error(e.args[2]))
 
@@ -56,7 +56,7 @@ class Box:
     def init(init_to_path: str):
         if init_to_path == '':
             init_to_path = os.getcwd()
-        repo_url = 'https://github.com/wdx7266/punica-init-default'
+        repo_url = 'https://github.com/punica-box/punica-init-default-box'
         Box.git_clone(repo_url, init_to_path)
         Box.handle_ignorance(init_to_path)
         print('Unbox successful. Enjoy it!')
@@ -74,6 +74,17 @@ class Box:
     @staticmethod
     def unbox(box_name: str, repo_to_path: str = ''):
         repo_url = Box.generate_repo_url(box_name)
-        Box.git_clone(repo_url, repo_to_path)
-        Box.handle_ignorance(repo_to_path)
+        try:
+            Box.git_clone(repo_url, repo_to_path)
+        except PunicaException as e:
+            if e.args[0] == 59000:
+                print('Please check out your box name.')
+            else:
+                print('Please check out your environment.')
+            return
+        try:
+            Box.handle_ignorance(repo_to_path)
+        except PunicaException as e:
+            print('Clean work abort...')
+            return
         print('Unbox successful. Enjoy it!')

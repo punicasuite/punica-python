@@ -12,10 +12,11 @@
     - [4.4. Deployment](#44-deployment)
     - [4.5. Invocation](#45-invocation)
 - [5. Example](#5-example)
-    - [5.1. Unbox Tutorialtoken](#51-unbox-tutorialtoken)
-    - [5.2. Compile Contract](#52-compile-contract)
-    - [5.3. Deploy](#53-deploy)
-    - [5.4. Invoke](#54-invoke)
+    - [5.1. Checkout Version](#51-checkout-version)
+    - [5.2. Unbox Tutorialtoken](#52-unbox-tutorialtoken)
+    - [5.3. Compile Contract](#53-compile-contract)
+    - [5.4. Deploy](#54-deploy)
+    - [5.5. Invoke](#55-invoke)
 
 <!-- /TOC -->
 
@@ -29,6 +30,7 @@ Usage: punica [OPTIONS] COMMAND [ARGS]...
 
 Options:
   -p, --project PATH  Specify a punica project directory.
+  -v, --version       Show the version and exit.
   -h, --help          Show this message and exit.
 
 Commands:
@@ -325,7 +327,14 @@ Options:
 
 ## 5. Example
 
-### 5.1. Unbox Tutorialtoken
+### 5.1. Checkout Version
+
+```shell
+C:\tutorialtoken> punica -v
+0.0.7
+```
+
+### 5.2. Unbox Tutorialtoken
 
 ```shell
 C:\tutorialtoken> punica unbox tutorialtoken
@@ -334,7 +343,7 @@ Unpacking...
 Unbox successful. Enjoy it!
 ```
 
-### 5.2. Compile Contract
+### 5.3. Compile Contract
 
 ```shell
 C:\tutorialtoken> tree
@@ -379,7 +388,7 @@ C:\TUTORIALTOKEN\BUILD
     oep4_token_abi.json
 ```
 
-### 5.3. Deploy
+### 5.4. Deploy
 
 After compile successful, you can deploy your smart contract into a Ontolog Network.
 
@@ -410,7 +419,7 @@ Running deployment: oep4_token.avm
 Enjoy your contract:)
 ```
 
-### 5.4. Invoke
+### 5.5. Invoke
 
 ```shell
 C:\tutorialtoken> punica invoke

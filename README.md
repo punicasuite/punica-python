@@ -6,11 +6,12 @@
 - [2. Setting up the development environment](#2-setting-up-the-development-environment)
 - [3. Install](#3-install)
 - [4. Quickstart](#4-quickstart)
-    - [4.1. Creating a Box Project](#41-creating-a-box-project)
-    - [4.2. Initializing a New Project](#42-initializing-a-new-project)
-    - [4.3. Compiling](#43-compiling)
-    - [4.4. Deployment](#44-deployment)
-    - [4.5. Invocation](#45-invocation)
+    - [4.1. Create a Project](#41-create-a-project)
+        - [4.1.1. Creating a Box Project](#411-creating-a-box-project)
+        - [4.1.2. Initializing a New Project](#412-initializing-a-new-project)
+    - [4.2. Compiling](#42-compiling)
+    - [4.3. Deployment](#43-deployment)
+    - [4.4. Invocation](#44-invocation)
 - [5. Example](#5-example)
     - [5.1. Checkout Version](#51-checkout-version)
     - [5.2. Unbox Tutorialtoken](#52-unbox-tutorialtoken)
@@ -58,7 +59,9 @@ pip install punica
 
 To use most Punica commands, you need to run them against an existing Punica project. So the first step is to create a Punica project.
 
-### 4.1. Creating a Box Project
+### 4.1. Create a Project
+
+#### 4.1.1. Creating a Box Project
 
 You can create a bare project template, but for those just getting started, you can use Punica Boxes, which are example applications and project templates.
 
@@ -92,7 +95,7 @@ Options:
 - You can use the `punica unbox <box-name>` command to download any of the other Punica Boxes.
 - If you not run punica cli in you project root directory, you need to use `-p` or `--project` option to specify your DApp project's path.
 
-### 4.2. Initializing a New Project
+#### 4.1.2. Initializing a New Project
 
 You can create a bare Punica project with no smart contracts included, use `punica init` command.
 
@@ -115,7 +118,7 @@ Options:
 
 **Note**: If you not run punica cli in you project root directory, you need to use `-p` or `--project` option to specify your DApp project's path.
 
-### 4.3. Compiling
+### 4.2. Compiling
 
 You can use the following command to compile your Ontology smart contracts:
 
@@ -147,7 +150,7 @@ Options:
 
 **Note**: If you not run punica cli in you project root directory, you need to use `-p` or `--project` option to specify your DApp project's path.
 
-### 4.4. Deployment
+### 4.3. Deployment
 
 To deploy your contract, run the following:
 
@@ -192,7 +195,7 @@ Options:
 - If multi `avm` file exist in your `bin` directory, you need to use `--avm` option to specify which contract you want to deploy.
 - If multi wallet file exist in your `wallet` directory, you may need to use `--wallet` option to specify which wallet you want to use. otherwise, a random wallet file in `wallet` directory will be used.
 
-### 4.5. Invocation
+### 4.4. Invocation
 
 If you want to invoke a list of function in your deployed smart contract, a convenience way is to use `Invoke` command.
 

@@ -8,23 +8,18 @@ from punica.compile.contract_compile import PunicaCompiler
 
 
 class TestCompiler(unittest.TestCase):
+
     def test_compile_contract_remote(self):
         contract_path = os.path.join(os.getcwd(), 'test_file', 'test_compile_remote', 'oep4.py')
         PunicaCompiler.compile_contract(contract_path)
-        avm_save_path = os.path.join(os.getcwd(), 'test_file', 'test_compile_remote', 'oep4.avm')
-        abi_save_path = os.path.join(os.getcwd(), 'test_file', 'test_compile_remote', 'oep4_abi.json')
-        avm_local_path = os.path.join(os.getcwd(), 'test_file', 'test_compile_remote', 'oep4.avm')
-        abi_local_path = os.path.join(os.getcwd(), 'test_file', 'test_compile_remote', 'oep4_abi.json')
+        avm_save_path = os.path.join(os.getcwd(), 'test_file', 'test_compile_remote', 'build', 'oep4.avm')
+        abi_save_path = os.path.join(os.getcwd(), 'test_file', 'test_compile_remote', 'build', 'oep4_abi.json')
         with open(avm_save_path, 'r') as f:
             avm_save = f.read()
-        with open(avm_local_path, 'r') as f2:
-            avm_local = f2.read()
-            self.assertEqual(avm_save, avm_local)
+            self.assertIsNotNone(avm_save)
         with open(abi_save_path, 'r') as f3:
             abi_save = f3.read()
-        with open(abi_local_path, 'r') as f4:
-            abi_local = f4.read()
-            self.assertEqual(abi_save, abi_local)
+            self.assertIsNotNone(abi_save)
         os.remove(avm_save_path)
         os.remove(abi_save_path)
 
@@ -82,6 +77,18 @@ class TestCompiler(unittest.TestCase):
             self.assertEqual(target_abi, abi)
         os.remove(abi_save_path)
         os.removedirs('build')
+
+    def test_generate_invoke_config(self):
+        abi_path = os.path.join(os.getcwd(), 'test_file', 'test_compile', 'oep4_token_abi.json')
+        invoke_config_path = os.path.join(os.getcwd(), 'test_file', 'test_compile', 'invoke_config.json')
+        PunicaCompiler.generate_invoke_config(abi_path, invoke_config_path)
+        os.remove(invoke_config_path)
+
+    def test_update_invoke_config(self):
+        abi_path = os.path.join(os.getcwd(), 'test_file', 'test_compile', 'oep4_token_abi.json')
+        invoke_config_path = os.path.join(os.getcwd(), 'test_file', 'test_compile', 'invoke_config.json')
+        PunicaCompiler.update_invoke_config(abi_path, invoke_config_path)
+        os.remove(invoke_config_path)
 
 
 if __name__ == '__main__':

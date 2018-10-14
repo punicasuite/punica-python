@@ -109,17 +109,107 @@ class PunicaCompiler:
             res = session.post(url, json=dict_payload, headers=header, timeout=timeout, verify=False)
             result = json.loads(res.content.decode())
             if result["errcode"] == 0:
-                with open(path + "/" + file_name[0] + ".avm", "w", encoding='utf-8') as f:
+                avm_save_path = os.path.join(path, 'build', file_name[0] + ".avm")
+                if not os.path.exists(os.path.join(path, 'build')):
+                    os.makedirs(os.path.join(path, 'build'))
+                with open(avm_save_path, "w", encoding='utf-8') as f:
                     avm = result["avm"].lstrip('b\'')
                     temp = avm.rstrip('\'')
                     f.write(temp)
-                with open(path + "/" + file_name[0] + "_abi.json", "w", encoding='utf-8') as f2:
+                abi_save_path = os.path.join(path, 'build', file_name[0] + "_abi.json")
+                with open(abi_save_path, "w", encoding='utf-8') as f2:
                     r = re.sub('\\\\n', '', str(result["abi"]))
                     abi = str(r.lstrip('b\''))
                     temp = abi.rstrip('\'')
                     f2.write(temp.replace(' ', ''))
                 print("compiled, Thank you")
+                print("abi: ", result["abi"])
+                json.loads(str(result["abi"]))
+                invoke_config_path = os.path.join(path, 'invoke-config.json')
+                if os.path.exists(invoke_config_path):
+                    PunicaCompiler.update_invoke_config(abi_save_path, invoke_config_path)
+                else:
+                    PunicaCompiler.generate_invoke_config(abi_save_path, invoke_config_path)
             else:
                 print("compile failed")
                 print(result)
+
+    @staticmethod
+    def generate_invoke_config(abi_path: str, invoke_config_path: str):
+        if abi_path == '':
+            raise PunicaError.abi_file_not_found
+        with open(abi_path, "r") as f:
+            abi_content = f.read()
+        dict_abi = json.loads(abi_content)
+        dict_invoke = dict()
+        dict_invoke['defaultWallet'] = ''
+        dict_deploy = dict()
+        dict_deploy['name'] = ''
+        dict_deploy['version'] = ''
+        dict_deploy['author'] = ''
+        dict_deploy['email'] = ''
+        dict_deploy['desc'] = ''
+        dict_deploy['needStorage'] = True
+        dict_deploy['payer'] = ''
+        dict_deploy['gasPrice'] = 500
+        dict_deploy['gasLimit'] = 20000
+        dict_invoke['deployConfig'] = dict_deploy
+        dict_invoke_detail = dict()
+        dict_invoke_detail['abi'] = ''
+        dict_invoke_detail['defaultPayer'] = ''
+        dict_invoke_detail['defaultSigner'] = ''
+        dict_invoke_detail['gasPrice'] = 500
+        dict_invoke_detail['gasLimit'] = 20000
+        dict_invoke_functions = dict()
+        for func in dict_abi['functions']:
+            if func['name'] == 'Main':
+                continue
+            dict_func_info = dict()
+            if len(func['parameters']) != 0:
+                dict_param = dict()
+                for param in func['parameters']:
+                    if param['name'] == '':
+                        continue
+                    dict_param[param['name']] = ''
+            dict_func_info['params'] = dict_param
+            dict_func_info['signers'] = dict()
+            dict_func_info['preExec'] = True
+            dict_invoke_functions[func['name']] = dict_func_info
+        dict_invoke_detail['Functions'] = dict_invoke_functions
+        dict_invoke['invokeConfig'] = dict_invoke_detail
+        with open(invoke_config_path, "w") as f:
+            json.dump(dict_invoke, f, default=lambda obj: dict(obj), indent=4)
+
+    @staticmethod
+    def update_invoke_config(abi_path: str, invoke_config_path: str):
+        with open(invoke_config_path, 'r') as f:
+            invoke_content = f.read()
+        dict_invoke = json.loads(invoke_content)
+        with open(abi_path, 'r') as f:
+            abi_content = f.read()
+        dict_abi = json.loads(abi_content)
+        if len(dict_abi['functions']) == 0:
+            return
+        is_need_update = False
+        for func in dict_abi['functions']:
+            all_funcs = dict_invoke['invokeConfig']['Functions'].keys()
+            if func['name'] not in all_funcs:
+                if func['name'] == 'Main':
+                    continue
+                is_need_update = True
+                dict_func_info = dict()
+                if len(func['parameters']) != 0:
+                    dict_param = dict()
+                    for param in func['parameters']:
+                        if param['name'] == '':
+                            continue
+                        dict_param[param['name']] = ''
+                dict_func_info['params'] = dict_param
+                dict_func_info['signers'] = dict()
+                dict_func_info['preExec'] = True
+                dict_invoke['invokeConfig']['Functions'][func['name']] = dict_func_info
+        if is_need_update:
+            with open(invoke_config_path, 'w') as f:
+                json.dump(dict_invoke, f, default=lambda obj: dict(obj), indent=4)
+
 

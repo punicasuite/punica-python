@@ -24,11 +24,11 @@ def compile_contract(contract_dir, contract_name, avm, abi, local):
     if not avm and not abi:
         PunicaCompiler.compile_contract(contract_path, local)
         print('\tGenerate abi file and avm file successful...')
-    print('\tEnjoy your contract:)')
+    print('\tEnjoy your contracts:)')
 
 
 @main.command('compile')
-@click.option('--contract', nargs=1, type=str, default='', help='Compile all contract files in contracts dir.')
+@click.option('--contracts', nargs=1, type=str, default='', help='Compile all contracts files in contracts dir.')
 @click.option('--avm', nargs=1, type=str, default=False, help='Only generate avm file flag.')
 @click.option('--abi', nargs=1, type=str, default=False, help='Only generate abi file flag.')
 @click.option('--local', nargs=1, type=str, default=False, help='Use local compiler.')

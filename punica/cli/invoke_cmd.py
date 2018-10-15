@@ -14,7 +14,7 @@ from punica.exception.punica_exception import PunicaException
 @main.command('invoke')
 @click.option('--network', nargs=1, type=str, default='', help='Specify which network the contracts will be deployed.')
 @click.option('--wallet', nargs=1, type=str, default='', help='Specify which wallet file will be used.')
-@click.option('--function', nargs=1, type=str, default='', help='Specify which function will be executed.')
+@click.option('--functions', nargs=1, type=str, default='', help='Specify which function will be executed.')
 @click.pass_context
 def invoke_cmd(ctx, network, wallet, functions):
     """
@@ -25,5 +25,6 @@ def invoke_cmd(ctx, network, wallet, functions):
         Invoke.invoke_all_function_in_list(wallet, project_dir, network, functions)
     except (PunicaException, SDKException) as e:
         print('An error occur...')
+        print(e)
         print('Punica will exist...')
         exit(1)

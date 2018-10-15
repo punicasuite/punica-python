@@ -46,11 +46,9 @@ class Deploy:
         return tx
 
     @staticmethod
-    def generate_contract_address(project_path: str = '', avm_file_name: str = '') -> str:
-        if project_path == '':
-            avm_dir_path = os.path.join(os.getcwd(), 'build')
-        else:
-            avm_dir_path = os.path.join(project_path, 'build')
+    def generate_contract_address(avm_dir_path: str = '', avm_file_name: str = '') -> str:
+        if avm_dir_path == '':
+            avm_dir_path = os.path.join(os.getcwd(), 'build', 'contracts')
         if not os.path.isdir(avm_dir_path):
             raise PunicaException(PunicaError.dir_path_error)
         hex_avm_code = read_avm(avm_dir_path, avm_file_name)[0]
@@ -83,7 +81,7 @@ class Deploy:
         hex_avm_code, avm_file_name = read_avm(avm_dir_path, avm_file_name)
         if hex_avm_code == '':
             raise PunicaException(PunicaError.avm_file_empty)
-        hex_contract_address = Deploy.generate_contract_address(project_dir, avm_file_name)
+        hex_contract_address = Deploy.generate_contract_address(avm_dir_path, avm_file_name)
         ontology = OntologySdk()
         ontology.rpc.set_address(rpc_address)
         contract = ontology.rpc.get_smart_contract(hex_contract_address)

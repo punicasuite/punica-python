@@ -48,7 +48,7 @@ def handle_deploy_config(config_dir_path: str) -> dict:
     return deploy_information
 
 
-def handle_invoke_config(config_dir_path: str) -> dict:
+def handle_invoke_config(config_dir_path: str):
     try:
         config_file_path = os.path.join(config_dir_path, 'contracts', 'invoke-config.json')
         with open(config_file_path, 'r') as f:
@@ -57,8 +57,9 @@ def handle_invoke_config(config_dir_path: str) -> dict:
         raise PunicaException(PunicaError.config_file_not_found)
     try:
         invoke_config = config['invokeConfig']
+        password_config = config['password']
     except KeyError:
         raise PunicaException(PunicaError.config_file_error)
     if not isinstance(invoke_config, dict):
         raise PunicaException(PunicaError.config_file_error)
-    return invoke_config
+    return invoke_config, password_config

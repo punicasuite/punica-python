@@ -172,7 +172,7 @@ class PunicaCompiler:
             dict_func_info['signers'] = dict()
             dict_func_info['preExec'] = True
             dict_invoke_functions[func['name']] = dict_func_info
-        dict_invoke_detail['Functions'] = dict_invoke_functions
+        dict_invoke_detail['functions'] = dict_invoke_functions
         dict_invoke['invokeConfig'] = dict_invoke_detail
         with open(invoke_config_path, "w") as f:
             json.dump(dict_invoke, f, default=lambda obj: dict(obj), indent=4)
@@ -189,14 +189,14 @@ class PunicaCompiler:
             return
         is_need_update = False
         for func in dict_abi['functions']:
-            all_funcs = dict_invoke['invokeConfig']['Functions'].keys()
+            all_funcs = dict_invoke['invokeConfig']['functions'].keys()
             if func['name'] not in all_funcs:
                 if func['name'] == 'Main':
                     continue
                 is_need_update = True
                 dict_func_info = dict()
+                dict_param = dict()
                 if len(func['parameters']) != 0:
-                    dict_param = dict()
                     for param in func['parameters']:
                         if param['name'] == '':
                             continue
@@ -204,7 +204,7 @@ class PunicaCompiler:
                 dict_func_info['params'] = dict_param
                 dict_func_info['signers'] = dict()
                 dict_func_info['preExec'] = True
-                dict_invoke['invokeConfig']['Functions'][func['name']] = dict_func_info
+                dict_invoke['invokeConfig']['functions'][func['name']] = dict_func_info
         if is_need_update:
             with open(invoke_config_path, 'w') as f:
                 json.dump(dict_invoke, f, default=lambda obj: dict(obj), indent=4)

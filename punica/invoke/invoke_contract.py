@@ -140,18 +140,23 @@ class Invoke:
         return list_params
 
     @staticmethod
-    def invoke_all_function_in_list(wallet_file_name: str = '', project_dir_path: str = '', network: str = '',
+    def invoke_all_function_in_list(l, wallet_file_name: str = '', project_dir_path: str = '', network: str = '',
                                     exec_func_str: str = '', config_name: str = ''):
         if project_dir_path == '':
             project_dir_path = os.getcwd()
         if not os.path.isdir(project_dir_path):
             raise PunicaException(PunicaError.dir_path_error)
+        invoke_config, password_config = handle_invoke_config(project_dir_path, config_name)
+        if isinstance(l, tuple):
+            for func in invoke_config['functions'].keys():
+                print('all functions:')
+                print('\t', func)
+            exit(0)
         ontology = OntologySdk()
-        wallet_dir_path = os.path.join(project_dir_path, 'wallet')
-        ontology.wallet_manager = read_wallet(wallet_dir_path, wallet_file_name)
         rpc_address = handle_network_config(project_dir_path, network)
         ontology.rpc.set_address(rpc_address)
-        invoke_config, password_config = handle_invoke_config(project_dir_path, config_name)
+        wallet_dir_path = os.path.join(project_dir_path, 'wallet')
+        ontology.wallet_manager = read_wallet(wallet_dir_path, wallet_file_name)
         try:
             abi_file_name = invoke_config['abi']
         except KeyError:
@@ -179,7 +184,7 @@ class Invoke:
         abi_info = Invoke.generate_abi_info(dict_abi)
         gas_price = invoke_config.get('gasPrice', 500)
         gas_limit = invoke_config.get('gasLimit', 21000000)
-        invoke_function_dict = invoke_config.get('Functions', dict())
+        invoke_function_dict = invoke_config.get('functions', dict())
         all_exec_func = list()
         if exec_func_str != '':
             all_exec_func = exec_func_str.split(',')

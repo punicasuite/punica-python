@@ -207,7 +207,7 @@ Support we have an invoke config in our `test-config.json`:
     "defaultPayer": "ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
     "gasPrice": 0,
     "gasLimit": 21000000,
-    "Functions": {
+    "functions": {
         "Name": {
             "params": {},
             "signers": {},

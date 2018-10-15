@@ -67,7 +67,7 @@ def handle_invoke_config(config_dir_path: str, config_name: str):
         invoke_config = config['invokeConfig']
         password_config = config['password']
     except KeyError:
-        raise PunicaException(PunicaError.config_file_error)
+        raise PunicaException(PunicaError.other_error('the config file lack invokeConfig or password'))
     if not isinstance(invoke_config, dict):
         raise PunicaException(PunicaError.config_file_error)
     return invoke_config, password_config

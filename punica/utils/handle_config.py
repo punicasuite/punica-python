@@ -48,9 +48,17 @@ def handle_deploy_config(config_dir_path: str) -> dict:
     return deploy_information
 
 
-def handle_invoke_config(config_dir_path: str):
+def handle_invoke_config(config_dir_path: str, config_name: str):
     try:
-        config_file_path = os.path.join(config_dir_path, 'contracts', 'test-config.json')
+        if config_name != '':
+            if config_name.endswith('.json'):
+                config_file_path = os.path.join(config_dir_path, 'contracts', config_name)
+            else:
+                config_file_path = os.path.join(config_dir_path, 'contracts', config_name + '.json')
+        else:
+            config_file_path = os.path.join(config_dir_path, 'contracts', 'test-config.json')
+        if not os.path.exists(config_file_path):
+            raise RuntimeError("the config path error")
         with open(config_file_path, 'r') as f:
             config = json.load(f)
     except FileNotFoundError:

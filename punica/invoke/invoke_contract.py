@@ -148,8 +148,8 @@ class Invoke:
             raise PunicaException(PunicaError.dir_path_error)
         invoke_config, password_config = handle_invoke_config(project_dir_path, config_name)
         if isinstance(l, tuple):
+            print('all functions:')
             for func in invoke_config['functions'].keys():
-                print('all functions:')
                 print('\t', func)
             exit(0)
         ontology = OntologySdk()

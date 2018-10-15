@@ -98,6 +98,8 @@ class Invoke:
             return list_params
         for param in dict_params.values():
             if isinstance(param, list):
+                if len(param) == 0:
+                    continue
                 for i in range(len(param)):
                     list_params2 = list()
                     if isinstance(param[i], dict):
@@ -117,6 +119,8 @@ class Invoke:
                                 list_params2.append(p)
                     list_params.append(list_params2)
             elif isinstance(param, str):
+                if param == '':
+                    raise RuntimeError("parameters value error")
                 list_p = param.split(':')
                 if len(list_p) != 2:
                     raise PunicaError.other_error("parameters error")
@@ -196,7 +200,6 @@ class Invoke:
             function_information = invoke_function_dict[function_key]
             try:
                 params = function_information['params']
-                print("params: ", params)
                 params = Invoke.params_normalize(params)
                 if len(abi_function.parameters) == 0:
                     pass

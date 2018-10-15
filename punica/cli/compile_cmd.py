@@ -33,7 +33,7 @@ def compile_contract(contract_dir, contract_name, avm, abi, local):
 # @click.option('--abi', nargs=1, type=str, default=False, help='Only generate abi file flag.')
 @click.option('--local', nargs=1, type=str, default=False, help='Use local compiler.')
 @click.pass_context
-def compile_cmd(ctx, contracts, avm, abi, local):
+def compile_cmd(ctx, contracts, local):
     """
     Compile the specified contracts to avm and abi file.
     """
@@ -44,7 +44,7 @@ def compile_cmd(ctx, contracts, avm, abi, local):
         if contracts != '':
             contract_dir2 = os.path.join(contract_dir, contracts)
             if os.path.isfile(contract_dir2) and contracts.endswith('.py'):
-                compile_contract(contract_dir, contracts, avm, abi, local)
+                compile_contract(contract_dir, contracts, False, False, local)
         else:
             contract_name_list = os.listdir(contract_dir)
             for contract_name in contract_name_list:
@@ -60,11 +60,11 @@ def compile_cmd(ctx, contracts, avm, abi, local):
                         if os.path.isdir(contract_dir3):
                             raise RuntimeError("Nested too deep")
                         elif os.path.isfile(contract_dir3) and contract_name2.endswith('.py'):
-                            compile_contract(contract_dir2, contract_name2, avm, abi, local)
+                            compile_contract(contract_dir2, contract_name2, False, False, local)
                         else:
                             raise RuntimeError("only support py contract")
                 elif os.path.isfile(contract_dir2) and contract_name.endswith('.py'):
-                    compile_contract(contract_dir, contract_name, avm, abi, local)
+                    compile_contract(contract_dir, contract_name, False, False, local)
                 else:
                     raise RuntimeError("contract path is wrong")
         print('Now we are finished :)')

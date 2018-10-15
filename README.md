@@ -144,8 +144,6 @@ Usage: punica compile [OPTIONS] CONTRACT_NAME
   Compile the specified contracts to avm and abi file.
 
 Options:
-  --avm TEXT  Only generate avm file flag.
-  --abi TEXT  Only generate abi file flag.
   --contracts Only compile the specified contract
   -h, --help  Show this message and exit.
 ```
@@ -207,7 +205,6 @@ Support we have an invoke config in our `test-config.json`:
 "invokeConfig":{
     "abi": "oep4_token_abi.json",
     "defaultPayer": "ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
-    "defaultSigner": "ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
     "gasPrice": 0,
     "gasLimit": 21000000,
     "Functions": {
@@ -431,8 +428,10 @@ Now we are finished :)
 ```shell
 C:\tutorialtoken> tree
 C:.
-├─build
+│
 ├─contracts
+│     └─build
+│
 ├─src
 │  └─static
 │      ├─css

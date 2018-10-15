@@ -141,7 +141,7 @@ class Invoke:
 
     @staticmethod
     def invoke_all_function_in_list(wallet_file_name: str = '', project_dir_path: str = '', network: str = '',
-                                    exec_func_str: str = ''):
+                                    exec_func_str: str = '', config_name: str = ''):
         if project_dir_path == '':
             project_dir_path = os.getcwd()
         if not os.path.isdir(project_dir_path):
@@ -151,7 +151,7 @@ class Invoke:
         ontology.wallet_manager = read_wallet(wallet_dir_path, wallet_file_name)
         rpc_address = handle_network_config(project_dir_path, network)
         ontology.rpc.set_address(rpc_address)
-        invoke_config, password_config = handle_invoke_config(project_dir_path)
+        invoke_config, password_config = handle_invoke_config(project_dir_path, config_name)
         try:
             abi_file_name = invoke_config['abi']
         except KeyError:

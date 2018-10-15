@@ -43,30 +43,10 @@ class Invoke:
         return abi_info
 
     @staticmethod
-    def generate_signed_invoke_transaction(contract_address: bytearray, abi_func: AbiFunction, payer_acct: Account,
-                                           signers: list, gas_price: int, gas_limit: int):
-        params = BuildParams.serialize_abi_function(abi_func)
-        unix_time_now = int(time.time())
-        params.append(0x67)
-        for i in contract_address:
-            params.append(i)
-        signers_len = len(signers)
-        payer_address = payer_acct.get_address().to_array()
-        tx = Transaction(0, 0xd1, unix_time_now, gas_price, gas_limit, payer_address, params,
-                         bytearray(), [], bytearray())
-        ontology = OntologySdk()
-        if signers_len == 1:
-            ontology.sign_transaction(tx, signers[0])
-        else:
-            for index in range(signers_len):
-                OntologySdk().add_sign_transaction(tx, signers[index])
-        return tx
-
-    @staticmethod
-    def generate_unsigned_invoke_transaction(abi_func: AbiFunction, contract_address: bytearray, gas_price: int,
+    def generate_unsigned_invoke_transaction(contract_address: bytearray, abi_func: AbiFunction, payer_base58: bytearray, gas_price: int,
                                              gas_limit: int):
         params = BuildParams.serialize_abi_function(abi_func)
-        tx = NeoVm.make_invoke_transaction(contract_address, bytearray(params), b'', gas_limit, gas_price)
+        tx = NeoVm.make_invoke_transaction(contract_address, bytearray(params), payer_base58, gas_limit, gas_price)
         return tx
 
     @staticmethod
@@ -112,40 +92,62 @@ class Invoke:
         return signer_acct_list
 
     @staticmethod
-    def params_normalize(params: list) -> list:
-        for index in range(len(params)):
-            param = params[index]
+    def params_normalize(dict_params: dict) -> list:
+        list_params = list()
+        if len(dict_params) == 0:
+            return list_params
+        for param in dict_params.values():
             if isinstance(param, list):
                 for i in range(len(param)):
-                    if isinstance(param[i], str) and len(param[i]) == 34:
+                    list_params2 = list()
+                    if isinstance(param[i], dict):
+                        for p in param[i].values():
+                            if isinstance(p, str):
+                                list_p = p.split(':')
+                                if len(list_p) != 2:
+                                    raise PunicaError.other_error('parameters error')
+                                if list_p[0] == 'ByteArray':
+                                    if len(list_p[1]) == 34:
+                                        list_params2.append(Address.b58decode(list_p[1]).to_array())
+                                    else:
+                                        list_params2.append(list_p[1].encode())
+                                elif list_p[0] == 'String':
+                                    list_params2.append(list_p[1])
+                            elif isinstance(p, int):
+                                list_params2.append(p)
+                    list_params.append(list_params2)
+            elif isinstance(param, str):
+                list_p = param.split(':')
+                if len(list_p) != 2:
+                    raise PunicaError.other_error("parameters error")
+                if list_p[0] == 'ByteArray':
+                    if len(list_p[1]) == 34:
                         try:
-                            param[i] = Address.b58decode(param[i]).to_array()
+                            bs =  Address.b58decode(list_p[1]).to_array()
+                            list_params.append(bs)
                         except SDKException:
-                            pass
-                params[index] = param
-            else:
-                if isinstance(params[index], str) and len(params[index]) == 34:
-                    try:
-                        params[index] = Address.b58decode(params[index]).to_array()
-                    except SDKException:
-                        pass
-        return params
+                            list_params.append(list_p[1].encode())
+                    else:
+                        list_params.append(list_p[1].encode())
+                elif list_p[0] == 'String':
+                    list_params.append(list_p[1])
+            elif isinstance(param, int):
+                list_params.append(param)
+        return list_params
 
     @staticmethod
-    def invoke_all_function_in_list(wallet_file_name: str = '', project_dir_path: str = '', network: str = ''):
+    def invoke_all_function_in_list(wallet_file_name: str = '', project_dir_path: str = '', network: str = '',
+                                    exec_func_str: str = ''):
         if project_dir_path == '':
             project_dir_path = os.getcwd()
         if not os.path.isdir(project_dir_path):
             raise PunicaException(PunicaError.dir_path_error)
-
-        wallet_dir_path = os.path.join(project_dir_path, 'wallet')
-        wallet_manager = read_wallet(wallet_dir_path, wallet_file_name)
-
-        rpc_address = handle_network_config(project_dir_path, network)
         ontology = OntologySdk()
+        wallet_dir_path = os.path.join(project_dir_path, 'wallet')
+        ontology.wallet_manager = read_wallet(wallet_dir_path, wallet_file_name)
+        rpc_address = handle_network_config(project_dir_path, network)
         ontology.rpc.set_address(rpc_address)
-
-        invoke_config = handle_invoke_config(project_dir_path)
+        invoke_config, password_config = handle_invoke_config(project_dir_path)
         try:
             abi_file_name = invoke_config['abi']
         except KeyError:
@@ -155,7 +157,7 @@ class Invoke:
         except KeyError:
             raise PunicaException(PunicaError.config_file_error)
         print('Running invocation: {}'.format(abi_file_name))
-        abi_dir_path = os.path.join(project_dir_path, 'build')
+        abi_dir_path = os.path.join(project_dir_path, 'contracts', 'build')
         dict_abi = read_abi(abi_dir_path, abi_file_name)
         try:
             hex_contract_address = dict_abi['hash']
@@ -165,7 +167,7 @@ class Invoke:
         if not isinstance(hex_contract_address, str) or len(hex_contract_address) != 40:
             raise PunicaException(PunicaError.abi_file_error)
         contract = ontology.rpc.get_smart_contract(hex_contract_address)
-        if contract == 'unknow contract':
+        if contract == 'unknow contracts':
             print('Contract 0x{} hasn\'t been deployed in current network: {}'.format(hex_contract_address, network))
             raise PunicaException(PunicaError.abi_file_error)
         contract_address = bytearray(binascii.a2b_hex(hex_contract_address))
@@ -174,29 +176,42 @@ class Invoke:
         gas_price = invoke_config.get('gasPrice', 500)
         gas_limit = invoke_config.get('gasLimit', 21000000)
         invoke_function_dict = invoke_config.get('Functions', dict())
+        all_exec_func = list()
+        if exec_func_str != '':
+            all_exec_func = exec_func_str.split(',')
+            for exec_func in all_exec_func:
+                if exec_func not in invoke_function_dict.keys():
+                    raise PunicaError.other_error('there is not the function :', exec_func + ' in the abi file')
         print('Unlock default payer account...')
-        default_payer_acct = Invoke.unlock_account(default_b58_payer_address, wallet_manager)
+        if password_config[default_b58_payer_address] != '':
+            default_payer_acct = ontology.wallet_manager.get_account(default_b58_payer_address,
+                                                                     password_config[default_b58_payer_address])
+        else:
+            default_payer_acct = Invoke.unlock_account(default_b58_payer_address, wallet_manager)
         for function_key in invoke_function_dict:
+            if len(all_exec_func) != 0 and function_key not in all_exec_func:
+                continue
             print('Invoking {}...'.format(function_key))
             abi_function = abi_info.get_function(function_key)
             function_information = invoke_function_dict[function_key]
             try:
                 params = function_information['params']
+                print("params: ", params)
                 params = Invoke.params_normalize(params)
                 if len(abi_function.parameters) == 0:
                     pass
                 elif len(abi_function.parameters) == 1:
                     abi_function.set_params_value((params,))
+
                 elif len(abi_function.parameters) == len(params):
                     abi_function.set_params_value(tuple(params))
                 else:
                     abi_function = None
                     print('\tInvoke failed, params mismatching with the abi file')
                 if abi_function is not None:
-                    b58_signers = function_information.get('signers', list())
-                    if len(b58_signers) == 0:
-                        tx = Invoke.generate_unsigned_invoke_transaction(abi_function, contract_address, gas_price,
-                                                                         gas_limit)
+                    if function_information['preExec']:
+                        tx = Invoke.generate_unsigned_invoke_transaction(contract_address, abi_function, bytearray(),
+                                                                         gas_price, gas_limit)
                         result = ontology.rpc.send_raw_transaction_pre_exec(tx)
                         print('\tInvoke successful...')
                         print('\t\t... Invoke result: {}'.format(result))
@@ -205,16 +220,36 @@ class Invoke:
                         if b58_payer_address == default_b58_payer_address:
                             payer_acct = default_payer_acct
                         else:
-                            payer_acct = Invoke.unlock_account(b58_payer_address, wallet_manager)
-                        b58_signers = function_information.get('signers', list())
+                            if password_config[b58_payer_address] != '':
+                                payer_acct = ontology.wallet_manager.get_account(b58_payer_address, password_config[b58_payer_address])
+                            else:
+                                payer_acct = Invoke.unlock_account(b58_payer_address, wallet_manager)
+                        tx = Invoke.generate_unsigned_invoke_transaction(contract_address, abi_function,
+                                                                         payer_acct.get_address().to_array(), gas_price,
+                                                                         gas_limit)
+                        ontology.add_sign_transaction(tx, payer_acct)
+                        dict_signers = function_information.get('signers', dict())
                         signer_list = list()
-                        if len(b58_signers) != 0:
+                        if len(dict_signers) != 0:
                             print('Unlock signers account...')
-                            for b58_signer_address in b58_signers:
-                                signer = Invoke.unlock_account(b58_signer_address, wallet_manager)
-                                signer_list.append(signer)
-                        tx = Invoke.generate_signed_invoke_transaction(contract_address, abi_function, payer_acct,
-                                                                       signer_list, gas_price, gas_limit)
+                            for b58_signer_address in dict_signers['signer']:
+                                if b58_signer_address == b58_payer_address:
+                                    pass
+                                else:
+                                    if password_config[b58_signer_address] != '':
+                                        signer = ontology.wallet_manager.get_account(b58_signer_address, password_config[b58_signer_address])
+                                    else:
+                                        signer = Invoke.unlock_account(b58_signer_address, wallet_manager)
+                                    signer_list.append(signer)
+                            if dict_signers['m'] == 1:
+                                for signer in signer_list:
+                                    ontology.add_sign_transaction(tx, signer)
+                            elif dict_signers['m'] > 1:
+                                list_public_key = list()
+                                for pubkey in dict_signers['publicKeys']:
+                                    list_public_key.append(bytearray.fromhex(pubkey))
+                                for signer in signer_list:
+                                    ontology.add_multi_sign_transaction(tx, dict_signers['m'], list_public_key, signer)
                         ontology.rpc.set_address(rpc_address)
                         try:
                             tx_hash = ontology.rpc.send_raw_transaction(tx)
@@ -226,5 +261,5 @@ class Invoke:
                         except SDKException as e:
                             print('\tInvoke failed, {}'.format(e.args[1].replace('Other Error, ', '')))
 
-            except KeyError:
-                print('\tInvoke failed, params is empty')
+            except (KeyError, RuntimeError) as e:
+                print('\tInvoke failed,', e.args)

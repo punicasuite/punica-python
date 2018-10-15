@@ -126,12 +126,13 @@ You can use the following command to compile your Ontology smart contracts:
 punica compile
 ```
 
-If everything goes smoothly, you can find the `avm` and `abi` file in `build` folder.
+If everything goes smoothly, you can find the `avm` and `abi` file in `contracts/build` folder.
 
 ```shell
-├─build
-│      contract.avm
-│      contract_abi.json
+contacts
+    ├─build
+    │      contract.avm
+    │      contract_abi.json
 ```
 
 For more usage, you can use `punica compile --help` command.
@@ -145,6 +146,7 @@ Usage: punica compile [OPTIONS] CONTRACT_NAME
 Options:
   --avm TEXT  Only generate avm file flag.
   --abi TEXT  Only generate abi file flag.
+  --contracts Only compile the specified contract
   -h, --help  Show this message and exit.
 ```
 
@@ -199,53 +201,106 @@ Options:
 
 If you want to invoke a list of function in your deployed smart contract, a convenience way is to use `Invoke` command.
 
-Support we have an invoke config in our `punica-config.json`:
+Support we have an invoke config in our `test-config.json`:
 
 ```json
 "invokeConfig":{
-    "abi":"oep4.json",
-    "defaultPayer":"ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
-    "gasPrice": 500,
+    "abi": "oep4_token_abi.json",
+    "defaultPayer": "ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
+    "defaultSigner": "ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
+    "gasPrice": 0,
     "gasLimit": 21000000,
-    "Functions":{
-      "Name":{
-        "params":[],
-        "signers":[]
-      },
-      "Symbol":{
-        "params":[],
-        "signers":[]
-      },
-      "Decimal":{
-        "params":[],
-        "signers":[]
-      },
-      "TotalSupply":{
-        "params":[],
-        "signers":[]
-      },
-      "BalanceOf":{
-        "params":["ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6"],
-        "signers":[]
-      },
-      "Transfer":{
-        "params":["ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6","AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve",1],
-        "signers":["ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6"],
-        "payer":"ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6"
-      },
-      "TransferMulti":{
-        "params":[["ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6", "AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve", 1], ["AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve", "Ad4H6AB3iY7gBGNukgBLgLiB6p3v627gz1", 2]],
-        "signers":["ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6","AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve"],
-        "payer":"ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6"
-      },
-      "Allowance":{
-        "params":["ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6","AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve"],
-        "signers":["ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6"]
-      },
-      "TransferFrom":{
-        "params":["AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve","ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6","Ad4H6AB3iY7gBGNukgBLgLiB6p3v627gz1",1],
-        "signers":["ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6"]
-      }
+    "Functions": {
+        "Name": {
+            "params": {},
+            "signers": {},
+            "preExec": true
+        },
+        "Symbol": {
+            "params": {},
+            "signers": {},
+            "preExec": true
+        },
+        "Decimal": {
+            "params": {},
+            "signers": {},
+            "preExec": true
+        },
+        "TotalSupply": {
+            "params": {},
+            "signers": {},
+            "preExec": true
+        },
+        "BalanceOf": {
+            "params": {
+                "account": "ByteArray:ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6"
+            },
+            "signers": {},
+            "preExec": true
+        },
+        "Transfer": {
+            "params": {
+                "from_acct": "ByteArray:ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
+                "to_acct": "ByteArray:AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve",
+                "amount": 1
+            },
+            "signers": {
+                "m": 1,
+                "signer": ["ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6"]
+            },
+            "preExec": false
+        },
+        "TransferMulti": {
+            "params": {
+                "args": [
+                    {
+                        "from": "ByteArray:ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
+                        "to": "ByteArray:AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve",
+                        "amount": 1
+                    },
+                    {
+                        "from": "ByteArray:AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve",
+                        "to": "ByteArray:Ad4H6AB3iY7gBGNukgBLgLiB6p3v627gz1",
+                        "amount": 2
+                    }
+                ]
+            },
+            "signers": {
+                "m": 1,
+                "signer": ["ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6", "AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve"]
+            },
+            "payer": "ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
+            "preExec": false
+        },
+        "Allowance": {
+            "params": {
+                "owner": "ByteArray:ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
+                "spender": "ByteArray:AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve"
+            },
+            "signers": {
+                "m": 1,
+                "signer": ["ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6"]
+            },
+            "preExec": false
+        },
+        "TransferFrom": {
+            "params": {
+                "sender": "ByteArray:AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve",
+                "from_acct": "ByteArray:ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
+                "to_acct": "ByteArray:Ad4H6AB3iY7gBGNukgBLgLiB6p3v627gz1",
+                "amount": 1
+            },
+            "signers": {
+                "m": 1,
+                "signer": ["ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6"]
+            },
+            "preExec": false
+        },
+        "Init": {
+            "params": {},
+            "signers": {},
+            "preExec": true
+        }
     }
 }
 ```
@@ -318,9 +373,10 @@ Usage: punica invoke [OPTIONS]
   Invoke the function list in punica-config.
 
 Options:
-  --network TEXT  Specify which network the contract will be deployed.
-  --wallet TEXT   Specify which wallet file will be used.
-  -h, --help      Show this message and exit.
+  --network TEXT   Specify which network the contract will be deployed.
+  --wallet TEXT    Specify which wallet file will be used.
+  --functions Text Specify which function will be used.
+  -h, --help       Show this message and exit.
 ```
 
 **Note**:
@@ -352,6 +408,8 @@ Unbox successful. Enjoy it!
 C:\tutorialtoken> tree
 C:.
 ├─contracts
+│     └─build
+│
 ├─src
 │  └─static
 │      ├─css

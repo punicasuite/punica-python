@@ -187,7 +187,7 @@ class Invoke:
             default_payer_acct = ontology.wallet_manager.get_account(default_b58_payer_address,
                                                                      password_config[default_b58_payer_address])
         else:
-            default_payer_acct = Invoke.unlock_account(default_b58_payer_address, wallet_manager)
+            default_payer_acct = Invoke.unlock_account(default_b58_payer_address, ontology.wallet_manager)
         for function_key in invoke_function_dict:
             if len(all_exec_func) != 0 and function_key not in all_exec_func:
                 continue
@@ -223,7 +223,7 @@ class Invoke:
                             if password_config[b58_payer_address] != '':
                                 payer_acct = ontology.wallet_manager.get_account(b58_payer_address, password_config[b58_payer_address])
                             else:
-                                payer_acct = Invoke.unlock_account(b58_payer_address, wallet_manager)
+                                payer_acct = Invoke.unlock_account(b58_payer_address, ontology.wallet_manager)
                         tx = Invoke.generate_unsigned_invoke_transaction(contract_address, abi_function,
                                                                          payer_acct.get_address().to_array(), gas_price,
                                                                          gas_limit)
@@ -239,7 +239,7 @@ class Invoke:
                                     if password_config[b58_signer_address] != '':
                                         signer = ontology.wallet_manager.get_account(b58_signer_address, password_config[b58_signer_address])
                                     else:
-                                        signer = Invoke.unlock_account(b58_signer_address, wallet_manager)
+                                        signer = Invoke.unlock_account(b58_signer_address, ontology.wallet_manager)
                                     signer_list.append(signer)
                             if dict_signers['m'] == 1:
                                 for signer in signer_list:

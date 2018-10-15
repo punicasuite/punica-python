@@ -50,7 +50,7 @@ def handle_deploy_config(config_dir_path: str) -> dict:
 
 def handle_invoke_config(config_dir_path: str):
     try:
-        config_file_path = os.path.join(config_dir_path, 'contracts', 'invoke-config.json')
+        config_file_path = os.path.join(config_dir_path, 'contracts', 'test-config.json')
         with open(config_file_path, 'r') as f:
             config = json.load(f)
     except FileNotFoundError:

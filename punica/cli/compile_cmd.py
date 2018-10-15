@@ -29,8 +29,8 @@ def compile_contract(contract_dir, contract_name, avm, abi, local):
 
 @main.command('compile')
 @click.option('--contracts', nargs=1, type=str, default='', help='Compile specified contracts files in contracts dir.')
-@click.option('--avm', nargs=1, type=str, default=False, help='Only generate avm file flag.')
-@click.option('--abi', nargs=1, type=str, default=False, help='Only generate abi file flag.')
+# @click.option('--avm', nargs=1, type=str, default=False, help='Only generate avm file flag.')
+# @click.option('--abi', nargs=1, type=str, default=False, help='Only generate abi file flag.')
 @click.option('--local', nargs=1, type=str, default=False, help='Use local compiler.')
 @click.pass_context
 def compile_cmd(ctx, contracts, avm, abi, local):

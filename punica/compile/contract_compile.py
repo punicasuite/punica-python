@@ -123,9 +123,7 @@ class PunicaCompiler:
                     temp = abi.rstrip('\'')
                     f2.write(temp.replace(' ', ''))
                 print("compiled, Thank you")
-                print("abi: ", result["abi"])
-                json.loads(str(result["abi"]))
-                invoke_config_path = os.path.join(path, 'invoke-config.json')
+                invoke_config_path = os.path.join(path, 'test-config.json')
                 if os.path.exists(invoke_config_path):
                     PunicaCompiler.update_invoke_config(abi_save_path, invoke_config_path)
                 else:
@@ -152,12 +150,11 @@ class PunicaCompiler:
         dict_deploy['needStorage'] = True
         dict_deploy['payer'] = ''
         dict_deploy['gasPrice'] = 500
-        dict_deploy['gasLimit'] = 20000
+        dict_deploy['gasLimit'] = 21000000
         dict_invoke['deployConfig'] = dict_deploy
         dict_invoke_detail = dict()
         dict_invoke_detail['abi'] = ''
         dict_invoke_detail['defaultPayer'] = ''
-        dict_invoke_detail['defaultSigner'] = ''
         dict_invoke_detail['gasPrice'] = 500
         dict_invoke_detail['gasLimit'] = 20000
         dict_invoke_functions = dict()
@@ -165,8 +162,8 @@ class PunicaCompiler:
             if func['name'] == 'Main':
                 continue
             dict_func_info = dict()
+            dict_param = dict()
             if len(func['parameters']) != 0:
-                dict_param = dict()
                 for param in func['parameters']:
                     if param['name'] == '':
                         continue

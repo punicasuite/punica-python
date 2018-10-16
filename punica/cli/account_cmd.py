@@ -25,9 +25,9 @@ def list_cmd(ctx):
 
 @account_cmd.command('add')
 @click.pass_context
-def list_cmd(ctx):
+def add_cmd(ctx):
     project_dir = ctx.obj['PROJECT_DIR']
     Account.add_account(project_dir)
-    print('ctx: ', ctx)
+    print('create account successful')
 
 

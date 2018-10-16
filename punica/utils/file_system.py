@@ -92,14 +92,18 @@ def read_wallet(wallet_dir_path: str, wallet_file_name: str = '') -> WalletManag
         raise PunicaException(PunicaError.directory_error)
     wallet_manager = WalletManager()
     if wallet_file_name == '':
+        wallet_dir_path = os.path.join(wallet_dir_path, 'wallet')
         dir_list = os.listdir(wallet_dir_path)
         if len(dir_list) == 1:
-            wallet_file_name = dir_list[0]
+            wallet_path = os.path.join(wallet_dir_path, dir_list[0])
         else:
             raise PunicaException(PunicaError.wallet_file_unspecified)
-    wallet_path = os.path.join(wallet_dir_path, wallet_file_name)
-    if not os.path.isfile(wallet_path):
-        raise PunicaException(PunicaError.wallet_file_not_found)
+    else:
+        wallet_path = os.path.join(wallet_dir_path, wallet_file_name)
+        if not os.path.exists(wallet_path):
+            wallet_path = os.path.join(wallet_dir_path, 'wallet', wallet_file_name)
+            if not os.path.exists(wallet_path):
+                raise PunicaError.other_error(wallet_path, ' is error')
     try:
         wallet_manager.open_wallet(wallet_path)
     except SDKException:

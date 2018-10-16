@@ -16,6 +16,7 @@ from ontology.smart_contract.neo_contract.abi.build_params import BuildParams
 from ontology.smart_contract.neo_vm import NeoVm
 from ontology.wallet.wallet_manager import WalletManager
 
+from punica.common.define import DEFAULT_CONFIG
 from punica.exception.punica_exception import PunicaException, PunicaError
 
 from punica.utils.file_system import (
@@ -30,6 +31,15 @@ from punica.utils.handle_config import (
 
 
 class Invoke:
+    @staticmethod
+    def list_all_functions(project_dir: str, config_name: str):
+        if config_name == '':
+            config_name = DEFAULT_CONFIG
+        invoke_config, password_config = handle_invoke_config(project_dir, config_name)
+        print("All Functions:")
+        for function_name in invoke_config['functions'].keys():
+            print('\t', function_name)
+
     @staticmethod
     def generate_abi_info(dict_abi: dict) -> AbiInfo:
         try:
@@ -158,8 +168,7 @@ class Invoke:
         ontology = OntologySdk()
         rpc_address = handle_network_config(project_dir_path, network)
         ontology.rpc.set_address(rpc_address)
-        wallet_dir_path = os.path.join(project_dir_path, 'wallet')
-        ontology.wallet_manager = read_wallet(wallet_dir_path, wallet_file_name)
+        ontology.wallet_manager = read_wallet(project_dir_path, wallet_file_name)
         try:
             abi_file_name = invoke_config['abi']
         except KeyError:
@@ -222,8 +231,8 @@ class Invoke:
                         tx = Invoke.generate_unsigned_invoke_transaction(contract_address, abi_function, bytearray(),
                                                                          gas_price, gas_limit)
                         result = ontology.rpc.send_raw_transaction_pre_exec(tx)
-                        print('\tInvoke successful...')
-                        print('\t\t... Invoke result: {}'.format(result))
+                        print('Invoke successful...')
+                        print('\tInvoke result: {}'.format(result))
                     else:
                         b58_payer_address = function_information.get('payer', default_b58_payer_address)
                         if b58_payer_address == default_b58_payer_address:

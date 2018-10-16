@@ -13,7 +13,7 @@ class TestAccountCmd(unittest.TestCase):
         project_path = os.path.join(os.getcwd(), 'test_file', 'test_account')
         password.return_value = 'password'
         runner = CliRunner()
-        result = runner.invoke(main, ['-p', project_path, 'account', '--add'])
+        result = runner.invoke(main, ['-p', project_path, 'account', '--i', '1383ed1fe570b6673351f1a30a66b21204918ef8f673e864769fa2a653401114'])
         self.assertEqual(0, result.exit_code)
 
 

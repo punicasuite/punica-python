@@ -12,7 +12,7 @@ class ListPunica:
         else:
             config_dir = os.path.join(config_dir, config_name)
         if not os.path.exists(config_dir):
-            print("No functions")
+            print(config_dir, " not exist")
         else:
             invoke_config, password_config = handle_invoke_config(project_dir, 'default-config.json')
             print("All Functions:")

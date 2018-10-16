@@ -301,6 +301,23 @@ Support we have an invoke config in our `default-config.json`:
     }
 }
 ```
+View the functions that can be called
+`punica list`
+
+The following output we will get:
+```shell
+All Functions:
+         Init
+         Name
+         Symbol
+         Decimal
+         TotalSupply
+         BalanceOf
+         Transfer
+         TransferMulti
+         Allowance
+         TransferFrom
+```
 
 To run our invoke function list, run the following:
 

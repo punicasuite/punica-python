@@ -12,6 +12,8 @@ import re
 
 from punica.exception.punica_exception import PunicaException, PunicaError
 
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+
 PYTHON_COMPILE_URL = "https://smartxcompiler.ont.io/api/beta/python/compile"
 
 
@@ -105,6 +107,7 @@ class PunicaCompiler:
             timeout = 10
             path = os.path.dirname(contract_path)
             file_name = os.path.basename(contract_path).split(".")
+            requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
             session = requests.session()
             res = session.post(url, json=dict_payload, headers=header, timeout=timeout, verify=False)
             result = json.loads(res.content.decode())
@@ -153,7 +156,7 @@ class PunicaCompiler:
         dict_deploy['gasLimit'] = 21000000
         dict_invoke['deployConfig'] = dict_deploy
         dict_invoke_detail = dict()
-        dict_invoke_detail['abi'] = ''
+        dict_invoke_detail['abi'] = os.path.basename(abi_path)
         dict_invoke_detail['defaultPayer'] = ''
         dict_invoke_detail['gasPrice'] = 500
         dict_invoke_detail['gasLimit'] = 20000

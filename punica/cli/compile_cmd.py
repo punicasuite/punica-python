@@ -71,5 +71,4 @@ def compile_cmd(ctx, contracts, local):
     except (PunicaException, SDKException) as e:
         print('An error occur...')
         print(e)
-        print('Punica will exist...')
         exit(1)

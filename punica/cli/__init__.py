@@ -6,4 +6,3 @@ from .deploy_cmd import deploy_cmd
 from .invoke_cmd import invoke_cmd
 from .compile_cmd import compile_cmd
 from .account_cmd import account_cmd
-from .list_cmd import list_cmd

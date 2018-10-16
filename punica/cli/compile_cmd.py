@@ -23,8 +23,6 @@ def compile_contract(contract_dir, contract_name, avm, abi, local):
         print('\tGenerate abi file successful...')
     if not avm and not abi:
         PunicaCompiler.compile_contract(contract_path, local)
-        print('\tGenerate abi file and avm file successful...')
-    print('\tEnjoy your contracts:)')
 
 
 @main.command('compile')
@@ -67,7 +65,6 @@ def compile_cmd(ctx, contracts, local):
                     compile_contract(contract_dir, contract_name, False, False, local)
                 else:
                     raise RuntimeError("contract path is wrong")
-        print('Now we are finished :)')
     except (PunicaException, SDKException) as e:
         print('An error occur...')
         print(e)

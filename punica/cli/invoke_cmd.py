@@ -19,7 +19,7 @@ from punica.exception.punica_exception import PunicaException
 @click.pass_context
 def invoke_cmd(ctx, network, wallet, functions, config):
     """
-    Invoke the function list in punica-config.
+    Invoke the function list in default-config or specify config.
     """
     project_dir = ctx.obj['PROJECT_DIR']
     try:

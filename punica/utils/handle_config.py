@@ -4,6 +4,8 @@
 import json
 import os
 
+from punica.common.define import DEFAULT_CONFIG
+
 from punica.exception.punica_exception import PunicaException, PunicaError
 
 
@@ -56,9 +58,9 @@ def handle_invoke_config(config_dir_path: str, config_name: str):
             else:
                 config_file_path = os.path.join(config_dir_path, 'contracts', config_name + '.json')
         else:
-            config_file_path = os.path.join(config_dir_path, 'contracts', 'default-config.json')
+            config_file_path = os.path.join(config_dir_path, 'contracts', DEFAULT_CONFIG)
         if not os.path.exists(config_file_path):
-            raise RuntimeError("the config path error")
+            raise RuntimeError(config_file_path, " not exist")
         with open(config_file_path, 'r') as f:
             config = json.load(f)
     except FileNotFoundError:

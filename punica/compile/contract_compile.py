@@ -10,6 +10,7 @@ from boa.util import Digest
 from boa.compiler import Compiler
 import re
 
+from punica.common.define import DEFAULT_CONFIG
 from punica.exception.punica_exception import PunicaException, PunicaError
 
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
@@ -126,7 +127,7 @@ class PunicaCompiler:
                     temp = abi.rstrip('\'')
                     f2.write(temp.replace(' ', ''))
                 print("compiled, Thank you")
-                invoke_config_path = os.path.join(path, 'test-config.json')
+                invoke_config_path = os.path.join(path, DEFAULT_CONFIG)
                 if os.path.exists(invoke_config_path):
                     PunicaCompiler.update_invoke_config(abi_save_path, invoke_config_path)
                 else:

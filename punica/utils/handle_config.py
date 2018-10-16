@@ -56,7 +56,7 @@ def handle_invoke_config(config_dir_path: str, config_name: str):
             else:
                 config_file_path = os.path.join(config_dir_path, 'contracts', config_name + '.json')
         else:
-            config_file_path = os.path.join(config_dir_path, 'contracts', 'test-config.json')
+            config_file_path = os.path.join(config_dir_path, 'contracts', 'default-config.json')
         if not os.path.exists(config_file_path):
             raise RuntimeError("the config path error")
         with open(config_file_path, 'r') as f:

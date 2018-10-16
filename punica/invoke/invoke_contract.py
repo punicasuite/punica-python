@@ -140,18 +140,13 @@ class Invoke:
         return list_params
 
     @staticmethod
-    def invoke_all_function_in_list(l, wallet_file_name: str = '', project_dir_path: str = '', network: str = '',
+    def invoke_all_function_in_list(wallet_file_name: str = '', project_dir_path: str = '', network: str = '',
                                     exec_func_str: str = '', config_name: str = ''):
         if project_dir_path == '':
             project_dir_path = os.getcwd()
         if not os.path.isdir(project_dir_path):
             raise PunicaException(PunicaError.dir_path_error)
         invoke_config, password_config = handle_invoke_config(project_dir_path, config_name)
-        if isinstance(l, tuple):
-            print('all functions:')
-            for func in invoke_config['functions'].keys():
-                print('\t', func)
-            exit(0)
         ontology = OntologySdk()
         rpc_address = handle_network_config(project_dir_path, network)
         ontology.rpc.set_address(rpc_address)

@@ -92,6 +92,14 @@ class Invoke:
         return signer_acct_list
 
     @staticmethod
+    def get_account(ontology, password_config, b58_address):
+        if len(password_config) != 0:
+            pwd = password_config.get(b58_address, '')
+            if pwd != '':
+                return ontology.wallet_manager.get_account(b58_address, pwd)
+        return Invoke.unlock_account(b58_address, ontology.wallet_manager)
+
+    @staticmethod
     def params_normalize(dict_params: dict) -> list:
         list_params = list()
         if len(dict_params) == 0:
@@ -159,7 +167,7 @@ class Invoke:
         try:
             default_b58_payer_address = invoke_config['defaultPayer']
         except KeyError:
-            raise PunicaException(PunicaError.config_file_error)
+            raise PunicaException(PunicaError.other_error("defaultPayer is null"))
         print('Running invocation: {}'.format(abi_file_name))
         abi_dir_path = os.path.join(project_dir_path, 'contracts', 'build')
         dict_abi = read_abi(abi_dir_path, abi_file_name)
@@ -186,12 +194,10 @@ class Invoke:
             for exec_func in all_exec_func:
                 if exec_func not in invoke_function_dict.keys():
                     raise PunicaError.other_error('there is not the function :', exec_func + ' in the abi file')
-        print('Unlock default payer account...')
-        if password_config[default_b58_payer_address] != '':
-            default_payer_acct = ontology.wallet_manager.get_account(default_b58_payer_address,
-                                                                     password_config[default_b58_payer_address])
-        else:
-            default_payer_acct = Invoke.unlock_account(default_b58_payer_address, ontology.wallet_manager)
+        if default_b58_payer_address != '':
+            print('Unlock default payer account...')
+            default_payer_acct = Invoke.get_account(ontology,password_config, default_b58_payer_address)
+
         for function_key in invoke_function_dict:
             if len(all_exec_func) != 0 and function_key not in all_exec_func:
                 continue
@@ -223,10 +229,7 @@ class Invoke:
                         if b58_payer_address == default_b58_payer_address:
                             payer_acct = default_payer_acct
                         else:
-                            if password_config[b58_payer_address] != '':
-                                payer_acct = ontology.wallet_manager.get_account(b58_payer_address, password_config[b58_payer_address])
-                            else:
-                                payer_acct = Invoke.unlock_account(b58_payer_address, ontology.wallet_manager)
+                            payer_acct = Invoke.get_account(ontology, password_config, b58_payer_address)
                         tx = Invoke.generate_unsigned_invoke_transaction(contract_address, abi_function,
                                                                          payer_acct.get_address().to_array(), gas_price,
                                                                          gas_limit)
@@ -239,10 +242,7 @@ class Invoke:
                                 if b58_signer_address == b58_payer_address:
                                     pass
                                 else:
-                                    if password_config[b58_signer_address] != '':
-                                        signer = ontology.wallet_manager.get_account(b58_signer_address, password_config[b58_signer_address])
-                                    else:
-                                        signer = Invoke.unlock_account(b58_signer_address, ontology.wallet_manager)
+                                    signer = Invoke.get_account(ontology, password_config, b58_signer_address)
                                     signer_list.append(signer)
                             if dict_signers['m'] == 1:
                                 for signer in signer_list:

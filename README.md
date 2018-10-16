@@ -39,6 +39,7 @@ Commands:
   deploy   Deploys the specified contracts to specified chain.
   init     Initialize new and empty Ontology DApp project.
   invoke   Invoke the function list in punica-config.
+  list     list all functions in the default-config or specify config
   unbox    Download a Punica Box, a pre-built Ontology DApp project.
 ```
 

@@ -199,7 +199,7 @@ Options:
 
 If you want to invoke a list of function in your deployed smart contract, a convenience way is to use `Invoke` command.
 
-Support we have an invoke config in our `test-config.json`:
+Support we have an invoke config in our `default-config.json`:
 
 ```json
 "invokeConfig":{

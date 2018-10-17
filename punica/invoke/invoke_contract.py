@@ -205,7 +205,7 @@ class Invoke:
                     raise PunicaError.other_error('there is not the function :', exec_func + ' in the abi file')
         if default_b58_payer_address != '':
             print('Unlock default payer account...')
-            default_payer_acct = Invoke.get_account(ontology,password_config, default_b58_payer_address)
+            default_payer_acct = Invoke.get_account(ontology, password_config, default_b58_payer_address)
 
         for function_key in invoke_function_dict:
             if len(all_exec_func) != 0 and function_key not in all_exec_func:

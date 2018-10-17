@@ -2,6 +2,7 @@ import getpass
 import os
 
 from ontology.ont_sdk import OntologySdk
+from ontology.wallet.wallet_manager import WalletManager
 
 from punica.exception.punica_exception import PunicaException, PunicaError
 
@@ -14,9 +15,9 @@ class Account:
         wallet_path = os.path.join(wallet_path_dir, 'wallet.json')
         if not os.path.exists(wallet_path):
             os.makedirs(wallet_path_dir)
-        sdk = OntologySdk()
-        sdk.wallet_manager.open_wallet(wallet_path)
-        return sdk.wallet_manager
+        wallet_manager = WalletManager()
+        wallet_manager.open_wallet(wallet_path)
+        return wallet_manager
 
     @staticmethod
     def list_account(project_path):

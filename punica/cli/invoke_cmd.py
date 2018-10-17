@@ -39,7 +39,7 @@ def invoke_cmd(ctx, network, wallet, functions, config):
 @click.pass_context
 def list_cmd(ctx, config):
     """
-    list all the function in default-config or specify config.
+    List all the function in default-config or specify config.
     """
     project_dir = ctx.obj['PROJECT_DIR']
     Invoke.list_all_functions(project_dir, config)

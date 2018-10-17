@@ -1,15 +1,90 @@
 
+
 import click
 
-from punica.asset.asset import Asset
+from punica.wallet.account import Account
+from punica.wallet.asset import Asset
+from punica.wallet.ontid import OntId
+
 from .main import main
 
 
-@main.group('asset', invoke_without_command=True)
+@main.group('wallet', invoke_without_command=True)
+@click.pass_context
+def wallet_cmd(ctx):
+    """
+    Manager your asset, ontid, account.
+    """
+    pass
+
+
+@wallet_cmd.group('ontid', invoke_without_command=True)
+@click.pass_context
+def ontid_cmd(ctx):
+    """
+    Manager your ont_id, list or add.
+    """
+    pass
+
+
+@ontid_cmd.command('add')
+@click.pass_context
+def add_amd(ctx):
+    """
+    Add ont_id to wallet.
+    """
+    project_dir = ctx.obj['PROJECT_DIR']
+    OntId.add_ont_id(project_dir)
+
+
+@ontid_cmd.command('list')
+@click.pass_context
+def list_amd(ctx):
+    """
+    List all the ont_id in wallet.
+    """
+    project_dir = ctx.obj['PROJECT_DIR']
+    OntId.list_ont_id(project_dir)
+
+
+@wallet_cmd.group('account', invoke_without_command=True)
+@click.option('--delete', nargs=1, type=str, default='', help='Delete account by address.')
+@click.option('--i', nargs=1, type=str, default='', help='Import account by private key')
+@click.pass_context
+def account_cmd(ctx, delete, i):
+    """
+    Manager your account.
+    """
+    project_dir = ctx.obj['PROJECT_DIR']
+    Account.execute(project_dir, delete, i)
+
+
+@account_cmd.command('list')
+@click.pass_context
+def list_cmd(ctx):
+    """
+    List all your account address.
+    """
+    project_dir = ctx.obj['PROJECT_DIR']
+    Account.list_account(project_dir)
+
+
+@account_cmd.command('add')
+@click.pass_context
+def add_cmd(ctx):
+    """
+    Add account to wallet.json.
+    """
+    project_dir = ctx.obj['PROJECT_DIR']
+    Account.add_account(project_dir)
+    print('create account successful')
+
+
+@wallet_cmd.group('asset', invoke_without_command=True)
 @click.pass_context
 def asset_cmd(ctx):
     """
-    manager your asset, transfer, balance, withdraw ong, unbound ong.
+    Manager your asset, transfer, balance, withdraw ong, unbound ong.
     """
     pass
 
@@ -25,7 +100,7 @@ def asset_cmd(ctx):
 @click.pass_context
 def transfer(ctx, asset, sender, to, amount, gas_price, gas_limit, network):
     """
-    transfer your asset to another address.
+    Transfer your asset to another address.
     """
     project_dir = ctx.obj['PROJECT_DIR']
     Asset.transfer(project_dir, asset, sender, to, amount, gas_price, gas_limit, network)
@@ -38,7 +113,7 @@ def transfer(ctx, asset, sender, to, amount, gas_price, gas_limit, network):
 @click.pass_context
 def balance_of(ctx, asset, address, network):
     """
-    query balance of the address.
+    Query balance of the address.
     """
     project_dir = ctx.obj['PROJECT_DIR']
     Asset.balance_of(project_dir, asset, address, network)
@@ -54,7 +129,7 @@ def balance_of(ctx, asset, address, network):
 @click.pass_context
 def withdraw_ong(ctx, claimer, to, amount, gas_price, gas_limit, network):
     """
-    withdraw unbound ong.
+    Withdraw unbound ong.
     """
     project_dir = ctx.obj['PROJECT_DIR']
     Asset.withdraw_ong(project_dir, claimer, to, amount, gas_limit, gas_price, network)
@@ -66,7 +141,7 @@ def withdraw_ong(ctx, claimer, to, amount, gas_price, gas_limit, network):
 @click.pass_context
 def query_unbound_ong(ctx, address, network):
     """
-    query unbound ong.
+    Query unbound ong.
     """
     project_dir = ctx.obj['PROJECT_DIR']
     Asset.query_unbound_ong(project_dir, address, network)

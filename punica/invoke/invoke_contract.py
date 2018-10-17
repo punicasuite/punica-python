@@ -266,10 +266,10 @@ class Invoke:
                         try:
                             tx_hash = ontology.rpc.send_raw_transaction(tx)
                             if tx_hash == '':
-                                print('\tInvoke failed...')
+                                print('Invoke failed...')
                             else:
-                                print('\tInvoke successful...')
-                                print('\t\t... txHash: 0x{}'.format(tx_hash))
+                                print('Invoke successful')
+                                print('txHash: 0x{}'.format(tx_hash))
                         except SDKException as e:
                             print('\tInvoke failed, {}'.format(e.args[1].replace('Other Error, ', '')))
 

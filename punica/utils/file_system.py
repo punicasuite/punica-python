@@ -78,10 +78,10 @@ def read_avm(avm_dir_path: str, avm_file_name: str = '') -> (str, str):
 
 def read_abi(abi_dir_path: str, abi_file_name: str) -> dict:
     if not os.path.isdir(abi_dir_path):
-        raise PunicaException(PunicaError.directory_error)
+        raise PunicaException(PunicaError.other_error('build folder not exist, please compile first'))
     abi_file_path = os.path.join(abi_dir_path, abi_file_name)
     if not os.path.exists(abi_file_path):
-        raise PunicaException(PunicaError.config_file_not_found)
+        raise PunicaException(PunicaError.other_error('abi config file not exist'))
     with open(abi_file_path, 'r') as f:
         dict_abi = json.load(f)
     return dict_abi

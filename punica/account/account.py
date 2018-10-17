@@ -2,6 +2,9 @@ import getpass
 import os
 
 from ontology.ont_sdk import OntologySdk
+from ontology.wallet.wallet_manager import WalletManager
+
+from punica.exception.punica_exception import PunicaException, PunicaError
 
 
 class Account:
@@ -12,9 +15,9 @@ class Account:
         wallet_path = os.path.join(wallet_path_dir, 'wallet.json')
         if not os.path.exists(wallet_path):
             os.makedirs(wallet_path_dir)
-        sdk = OntologySdk()
-        sdk.wallet_manager.open_wallet(wallet_path)
-        return sdk.wallet_manager
+        wallet_manager = WalletManager()
+        wallet_manager.open_wallet(wallet_path)
+        return wallet_manager
 
     @staticmethod
     def list_account(project_path):
@@ -34,6 +37,8 @@ class Account:
         except RuntimeError as e:
             print('write wallet file error')
             print(e.args)
+        except PunicaException:
+            pass
 
     @staticmethod
     def execute(project_path: str, delete: str, i: str):
@@ -59,13 +64,13 @@ class Account:
     @staticmethod
     def get_password():
         while True:
-            acct_password = getpass.getpass('Please input account password: ')
-            acct_password_repeat = getpass.getpass('Please repeat account password: ')
+            acct_password = getpass.getpass('Please input password: ')
+            acct_password_repeat = getpass.getpass('Please repeat password: ')
             if acct_password == acct_password_repeat:
                 return acct_password
             else:
                 print("password not match")
-                raise RuntimeError("password not match")
+                raise PunicaException(PunicaError.other_error('password not match'))
 
 
 

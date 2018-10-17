@@ -14,7 +14,7 @@ from punica.exception.punica_exception import PunicaException
 
 def compile_contract(contract_dir, contract_name, avm, abi, local):
     contract_path = os.path.join(contract_dir, contract_name)
-    print('\tCompile {}...'.format(contract_name))
+    print('Compile', contract_name)
     if avm:
         PunicaCompiler.generate_avm_file(contract_path)
         print('\tGenerate avm file successful...')
@@ -37,7 +37,7 @@ def compile_cmd(ctx, contracts, local):
     """
     project_dir = ctx.obj['PROJECT_DIR']
     try:
-        print('Compile...')
+        print('Compile')
         contract_dir = os.path.join(project_dir, 'contracts')
         if contracts != '':
             contract_dir2 = os.path.join(contract_dir, contracts)

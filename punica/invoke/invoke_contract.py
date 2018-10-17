@@ -210,7 +210,7 @@ class Invoke:
         for function_key in invoke_function_dict:
             if len(all_exec_func) != 0 and function_key not in all_exec_func:
                 continue
-            print('Invoking {}...'.format(function_key))
+            print('Invoking ', function_key)
             abi_function = abi_info.get_function(function_key)
             function_information = invoke_function_dict[function_key]
             try:
@@ -231,8 +231,8 @@ class Invoke:
                         tx = Invoke.generate_unsigned_invoke_transaction(contract_address, abi_function, bytearray(),
                                                                          gas_price, gas_limit)
                         result = ontology.rpc.send_raw_transaction_pre_exec(tx)
-                        print('Invoke successful...')
-                        print('\tInvoke result: {}'.format(result))
+                        print('Invoke successful')
+                        print('Invoke result: {}'.format("0x" + result))
                     else:
                         b58_payer_address = function_information.get('payer', default_b58_payer_address)
                         if b58_payer_address == default_b58_payer_address:

@@ -76,7 +76,15 @@ class Deploy:
                               wallet_file_name: str = ''):
         if project_dir == '':
             project_dir = os.getcwd()
-        avm_dir_path = os.path.join(project_dir, 'contracts', 'build')
+        if avm_file_name != '':
+            avm_path = os.path.join(project_dir, avm_file_name)
+            if os.path.exists(avm_path):
+                avm_dir_path = os.path.dirname(avm_path)
+                avm_file_name = os.path.basename(avm_path)
+            else:
+                avm_dir_path = os.path.join(project_dir, 'contracts', 'build')
+        else:
+            avm_dir_path = os.path.join(project_dir, 'contracts', 'build')
         rpc_address = handle_network_config(project_dir, network)
         hex_avm_code, avm_file_name = read_avm(avm_dir_path, avm_file_name)
         if hex_avm_code == '':

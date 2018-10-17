@@ -1,5 +1,5 @@
 
-from punica.account.account import Account
+from punica.wallet.account import Account
 from punica.exception.punica_exception import PunicaException
 
 

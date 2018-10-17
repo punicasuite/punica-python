@@ -6,7 +6,7 @@ from punica.invoke.invoke_contract import Invoke
 
 from punica.utils.handle_config import handle_network_config
 
-from punica.account.account import Account
+from punica.wallet.account import Account
 from punica.exception.punica_exception import PunicaException, PunicaError
 
 

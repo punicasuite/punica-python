@@ -200,17 +200,16 @@ class Invoke:
         all_exec_func = list()
         if exec_func_str != '':
             all_exec_func = exec_func_str.split(',')
-            for exec_func in all_exec_func:
-                if exec_func not in invoke_function_dict.keys():
-                    raise PunicaError.other_error('there is not the function :', exec_func + ' in the abi file')
         if default_b58_payer_address != '':
             print('Unlock default payer account...')
             default_payer_acct = Invoke.get_account(ontology, password_config, default_b58_payer_address)
-
-        for function_key in invoke_function_dict:
-            if len(all_exec_func) != 0 and function_key not in all_exec_func:
+        if len(all_exec_func) == 0:
+            all_exec_func = invoke_function_dict.keys()
+        for function_key in all_exec_func:
+            print('Invoking ', function_key)
+            if function_key not in invoke_function_dict.keys():
+                print('there is not the function:', function_key + ' in the abi file')
                 continue
-            print('Invoking {}...'.format(function_key))
             abi_function = abi_info.get_function(function_key)
             function_information = invoke_function_dict[function_key]
             try:
@@ -231,8 +230,8 @@ class Invoke:
                         tx = Invoke.generate_unsigned_invoke_transaction(contract_address, abi_function, bytearray(),
                                                                          gas_price, gas_limit)
                         result = ontology.rpc.send_raw_transaction_pre_exec(tx)
-                        print('Invoke successful...')
-                        print('\tInvoke result: {}'.format(result))
+                        print('Invoke successful')
+                        print('Invoke result: {}'.format("0x" + result))
                     else:
                         b58_payer_address = function_information.get('payer', default_b58_payer_address)
                         if b58_payer_address == default_b58_payer_address:

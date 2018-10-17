@@ -58,7 +58,7 @@ def handle_invoke_config(project_dir_path: str, config: str):
                 if not os.path.isfile(config_path):
                     raise PunicaError.other_error(config_path, ' is not file')
             else:
-                config_path = os.path.join(config_path, 'contracts', config)
+                config_path = os.path.join(project_dir_path, 'contracts', config)
                 if not os.path.exists(config_path):
                     raise PunicaError.other_error(config_path, ' not exist')
         else:

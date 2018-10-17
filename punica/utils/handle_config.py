@@ -50,18 +50,22 @@ def handle_deploy_config(config_dir_path: str) -> dict:
     return deploy_information
 
 
-def handle_invoke_config(config_dir_path: str, config_name: str):
+def handle_invoke_config(project_dir_path: str, config: str):
     try:
-        if config_name != '':
-            if config_name.endswith('.json'):
-                config_file_path = os.path.join(config_dir_path, 'contracts', config_name)
+        if config != '':
+            config_path = os.path.join(project_dir_path, config)
+            if os.path.exists(config_path):
+                if not os.path.isfile(config_path):
+                    raise PunicaError.other_error(config_path, ' is not file')
             else:
-                config_file_path = os.path.join(config_dir_path, 'contracts', config_name + '.json')
+                config_path = os.path.join(config_path, 'contracts', config)
+                if not os.path.exists(config_path):
+                    raise PunicaError.other_error(config_path, ' not exist')
         else:
-            config_file_path = os.path.join(config_dir_path, 'contracts', DEFAULT_CONFIG)
-        if not os.path.exists(config_file_path):
-            raise RuntimeError(config_file_path, " not exist")
-        with open(config_file_path, 'r') as f:
+            config_path = os.path.join(project_dir_path, 'contracts', DEFAULT_CONFIG)
+        if not os.path.exists(config_path):
+            raise PunicaError.other_error(config_path, " not exist")
+        with open(config_path, 'r') as f:
             config = json.load(f)
     except FileNotFoundError:
         raise PunicaException(PunicaError.config_file_not_found)

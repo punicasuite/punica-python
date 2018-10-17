@@ -3,6 +3,8 @@ import os
 
 from ontology.ont_sdk import OntologySdk
 
+from punica.exception.punica_exception import PunicaException, PunicaError
+
 
 class Account:
 
@@ -34,6 +36,8 @@ class Account:
         except RuntimeError as e:
             print('write wallet file error')
             print(e.args)
+        except PunicaException:
+            pass
 
     @staticmethod
     def execute(project_path: str, delete: str, i: str):
@@ -59,13 +63,13 @@ class Account:
     @staticmethod
     def get_password():
         while True:
-            acct_password = getpass.getpass('Please input account password: ')
-            acct_password_repeat = getpass.getpass('Please repeat account password: ')
+            acct_password = getpass.getpass('Please input password: ')
+            acct_password_repeat = getpass.getpass('Please repeat password: ')
             if acct_password == acct_password_repeat:
                 return acct_password
             else:
                 print("password not match")
-                raise RuntimeError("password not match")
+                raise PunicaException(PunicaError.other_error('password not match'))
 
 
 

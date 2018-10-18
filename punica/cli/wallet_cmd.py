@@ -6,7 +6,7 @@ from punica.wallet.account import Account
 from punica.wallet.asset import Asset
 from punica.wallet.ontid import OntId
 
-from .main import main
+from .main import main, CONTEXT_SETTINGS
 
 
 @main.group('wallet', invoke_without_command=True)
@@ -47,16 +47,35 @@ def list_amd(ctx):
     OntId.list_ont_id(project_dir)
 
 
-@wallet_cmd.group('account', invoke_without_command=True)
-@click.option('--delete', nargs=1, type=str, default='', help='Delete account by address.')
-@click.option('--i', nargs=1, type=str, default='', help='Import account by private key')
+@wallet_cmd.group('account', invoke_without_command=True, context_settings=CONTEXT_SETTINGS)
 @click.pass_context
-def account_cmd(ctx, delete, i):
+def account_cmd(ctx):
     """
     Manager your account.
     """
+    pass
+
+
+@account_cmd.command('import')
+@click.option('--privatekey', nargs=1, type=str, default='', help='import account by privatekey.')
+@click.pass_context
+def import_cmd(ctx, privatekey):
+    """
+    delete account by address.
+    """
     project_dir = ctx.obj['PROJECT_DIR']
-    Account.execute(project_dir, delete, i)
+    Account.import_account(project_dir, privatekey)
+
+
+@account_cmd.command('delete')
+@click.option('--address', nargs=1, type=str, default='', help='Delete account by address.')
+@click.pass_context
+def delete_cmd(ctx, address):
+    """
+    delete account by address.
+    """
+    project_dir = ctx.obj['PROJECT_DIR']
+    Account.delete_account(project_dir, address)
 
 
 @account_cmd.command('list')

@@ -3,11 +3,8 @@
 import binascii
 import getpass
 import os
-import time
 
-from ontology.account.account import Account
 from ontology.common.address import Address
-from ontology.core.transaction import Transaction
 from ontology.exception.exception import SDKException
 from ontology.ont_sdk import OntologySdk
 from ontology.smart_contract.neo_contract.abi.abi_function import AbiFunction
@@ -31,6 +28,20 @@ from punica.utils.handle_config import (
 
 
 class Invoke:
+    @staticmethod
+    def get_function(params: dict, function_name: str, abi_info: AbiInfo):
+        if function_name == '':
+            raise PunicaException(PunicaError.other_error('function_name should not be nil'))
+        params = Invoke.params_normalize(params)
+        abi_function = abi_info.get_function(function_name)
+        if len(abi_function.parameters) == 0:
+            pass
+        elif len(abi_function.parameters) == 1:
+            abi_function.set_params_value((params,))
+        elif len(abi_function.parameters) == len(params):
+            abi_function.set_params_value(tuple(params))
+        return abi_function
+
     @staticmethod
     def list_all_functions(project_dir: str, config_name: str):
         if config_name == '':

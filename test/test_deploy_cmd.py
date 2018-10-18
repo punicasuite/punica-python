@@ -17,7 +17,7 @@ class TestDeployCmd(unittest.TestCase):
         project_path = os.path.join(os.getcwd(), 'test_file', 'test_deploy')
         password.return_value = 'password'
         runner = CliRunner()
-        result = runner.invoke(main, ['-p', project_path, 'deploy', '--avm', 'oep4.avm'])
+        result = runner.invoke(main, ['-p', '/Users/sss/dev/localgit/test', 'deploy', '--config', 'contracts/a.json'])
         self.assertEqual(0, result.exit_code)
 
 

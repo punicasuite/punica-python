@@ -15,7 +15,7 @@ def wallet_cmd(ctx):
     """
     Manager your asset, ontid, account.
     """
-    if ctx.invoked_subcommand is  None:
+    if ctx.invoked_subcommand is None:
         print('Usage: punica wallet [OPTIONS] COMMAND [ARGS]...')
         print('')
         print('  ', 'Manager your asset, ontid, account.')

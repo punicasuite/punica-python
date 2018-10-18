@@ -18,8 +18,11 @@ def test_cmd(ctx, file):
     """
     Unit test with specified smart contract
     """
-    project_dir = ctx.obj['PROJECT_DIR']
-    Test.test_file(project_dir, file)
+    if ctx.invoked_subcommand is None:
+        project_dir = ctx.obj['PROJECT_DIR']
+        Test.test_file(project_dir, file)
+    else:
+        pass
 
 
 @test_cmd.command('template')

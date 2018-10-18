@@ -13,9 +13,9 @@ from .main import main, CONTEXT_SETTINGS
 @click.pass_context
 def wallet_cmd(ctx):
     """
-    Manager your asset, ontid, account.
+    Manager your ontid, account, asset.
     """
-    if ctx.invoked_subcommand is  None:
+    if ctx.invoked_subcommand is None:
         print('Usage: punica wallet [OPTIONS] COMMAND [ARGS]...')
         print('')
         print('  ', 'Manager your asset, ontid, account.')
@@ -81,7 +81,7 @@ def account_cmd(ctx):
     if ctx.invoked_subcommand is None:
         print('Usage: punica wallet account [OPTIONS] COMMAND [ARGS]...')
         print('')
-        print('  ', ' Manager your account.')
+        print('  ', 'Manager your account.')
         print()
         print('Options:')
         print('  ', '-h, --help  Show this message and exit.')
@@ -144,7 +144,21 @@ def asset_cmd(ctx):
     """
     Manager your asset, transfer, balance, withdraw ong, unbound ong.
     """
-    pass
+    if ctx.invoked_subcommand is None:
+        print('Usage: punica wallet asset [OPTIONS] COMMAND [ARGS]...')
+        print('')
+        print('  ', 'Manager your asset, transfer, balance, withdraw ong, unbound ong.')
+        print()
+        print('Options:')
+        print('  ', '-h, --help  Show this message and exit.')
+        print()
+        print('Commands:')
+        print('  ', 'balanceOf    Query balance of the address.')
+        print('  ', 'transfer     Transfer your asset to another address.')
+        print('  ', 'unboundOng   Query unbound ong.')
+        print('  ', 'withdrawOng  Withdraw unbound ong.')
+    else:
+        pass
 
 
 @asset_cmd.command('transfer')

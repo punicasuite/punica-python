@@ -13,7 +13,7 @@ from .main import main, CONTEXT_SETTINGS
 @click.pass_context
 def wallet_cmd(ctx):
     """
-    Manager your asset, ontid, account.
+    Manager your ontid, account, asset.
     """
     if ctx.invoked_subcommand is None:
         print('Usage: punica wallet [OPTIONS] COMMAND [ARGS]...')

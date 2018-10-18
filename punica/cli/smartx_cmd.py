@@ -10,6 +10,8 @@ from .main import main
 @click.pass_context
 def smartx_cmd(ctx):
     """
-    Please go to smartx for debugging smart contracts: http://smartxdebug.ont.io/#/
+    Ontology smart contract IDE,SmartX (http://smartx.ont.io/)
     """
-    pass
+    print()
+    print('Please go to Smartx for debugging smart contracts: \nhttp://smartx.ont.io/#/')
+    print()

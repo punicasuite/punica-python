@@ -15,7 +15,20 @@ def wallet_cmd(ctx):
     """
     Manager your asset, ontid, account.
     """
-    pass
+    if ctx.invoked_subcommand is  None:
+        print('Usage: punica wallet [OPTIONS] COMMAND [ARGS]...')
+        print('')
+        print('  ', 'Manager your asset, ontid, account.')
+        print()
+        print('Options:')
+        print('  ', '-h, --help  Show this message and exit.')
+        print()
+        print('Commands:')
+        print('  ', 'account  Manager your account.')
+        print('  ', 'asset    Manager your asset, transfer, balance,...')
+        print('  ', 'ontid    Manager your ont_id, list or add.')
+    else:
+        pass
 
 
 @wallet_cmd.group('ontid', invoke_without_command=True)
@@ -24,7 +37,19 @@ def ontid_cmd(ctx):
     """
     Manager your ont_id, list or add.
     """
-    pass
+    if ctx.invoked_subcommand is None:
+        print('Usage: punica wallet [OPTIONS] COMMAND [ARGS]...')
+        print('')
+        print('  ', 'Manager your asset, ontid, account.')
+        print()
+        print('Options:')
+        print('  ', '-h, --help  Show this message and exit.')
+        print()
+        print('Commands:')
+        print('  ', 'add   Add ont_id to wallet.')
+        print('  ', 'list  List all the ont_id in wallet.')
+    else:
+        pass
 
 
 @ontid_cmd.command('add')
@@ -53,7 +78,21 @@ def account_cmd(ctx):
     """
     Manager your account.
     """
-    pass
+    if ctx.invoked_subcommand is None:
+        print('Usage: punica wallet account [OPTIONS] COMMAND [ARGS]...')
+        print('')
+        print('  ', ' Manager your account.')
+        print()
+        print('Options:')
+        print('  ', '-h, --help  Show this message and exit.')
+        print()
+        print('Commands:')
+        print('  ', 'add     Add account to wallet.json.')
+        print('  ', 'delete  Delete account by address.')
+        print('  ', 'import  Import account by private key.')
+        print('  ', 'list    List all your account address.')
+    else:
+        pass
 
 
 @account_cmd.command('import')

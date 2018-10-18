@@ -10,6 +10,33 @@ from punica.exception.punica_exception import PunicaException, PunicaError
 
 class Test:
     @staticmethod
+    def test_file(project_dir_path, file_name):
+        if file_name != '':
+            test_file_path = os.path.join(project_dir_path, file_name)
+            if not os.path.exists(test_file_path):
+                test_file_path = os.path.join(project_dir_path, 'test', file_name)
+                if not os.path.exists(test_file_path):
+                    print(test_file_path, 'not exist')
+                    os._exit(0)
+            file_name = os.path.basename(test_file_path)
+            if not file_name.endswith('.py'):
+                print('file type is wrong')
+                os._exit(0)
+            os.system('python ' + test_file_path)
+        else:
+            test_file_dir = os.path.join(project_dir_path, 'test')
+            if not os.path.exists(test_file_dir):
+                print(test_file_dir, 'not exist')
+                os._exit(0)
+            file_list = os.listdir(test_file_dir)
+            if len(file_list) == 0:
+                print(test_file_dir, 'is nil')
+            for f in file_list:
+                file_name = os.path.basename(f)
+                if file_name.endswith('.py'):
+                    os.system('python ' + os.path.join('test', f))
+
+    @staticmethod
     def generate_test_template(project_dir_path, config, abi):
         if project_dir_path == '':
             project_dir_path = os.getcwd()
@@ -62,14 +89,14 @@ class Test:
                 f.writelines('\n')
                 f.writelines('sdk = OntologySdk()' + '\n')
                 f.writelines('sdk.set_rpc()' + '\n')
-                f.writelines('contract_address = \'\'' + '\n')
-                f.writelines('wallet_path=\'\'' + '\n')
+                f.writelines('contract_address = ' + '\'' + dict_abi['hash'].replace('0x', '') + '\'' + '\n')
+                f.writelines('wallet_path= ' + 'wallet/wallet.json' + '\n')
                 f.writelines('sdk.wallet_manager.open_wallet(wallet_path)' + '\n')
                 f.writelines('acct = sdk.wallet_manager.get_account(\'\', \'\')' + '\n')
                 f.writelines('payer = sdk.wallet_manager.get_account(\'\', \'\')' + '\n')
                 f.writelines('gas_limit = 20000' + '\n')
                 f.writelines('gas_price = 500' + '\n')
-                f.writelines('abi_path = \'\'' + '\n')
+                f.writelines('abi_path = '+ os.path.join('contracts', 'build', os.path.basename(abi_path)) + '\n')
                 f.writelines('with open(abi_path, 'r') as f:' + '\n')
                 f.writelines('    dict_abi = json.loads(f.read())' + '\n')
                 f.writelines('    functions = dict_abi[\'functions\']' + '\n')
@@ -79,9 +106,10 @@ class Test:
                 for func in functions:
                     f.writelines('   '+'def ' + 'test_' + func['name'].lower()+'(self):' + '\n')
                     f.writelines('            pre_exec = True' + '\n')
-                    f.writelines('            function_name = \'\'' + '\n')
+                    f.writelines('            function_name = '+ func['name'] + '\n')
                     f.writelines('            params = dict()' + '\n')
-                    f.writelines('            params[\'\'] = \'\'' + '\n')
+                    for param in func['parameters']:
+                        f.writelines('            params'+ '['+ '\'' +param['name'] + '\''+ ']'+ '='+ '\'\'' + '\n')
                     f.writelines('            abi_function = Invoke.get_function(params, function_name, abi_info)' + '\n')
                     f.writelines('            sdk.neo_vm().send_transaction(contract_address, acct, payer, gas_limit, gas_price, abi_function, pre_exec)' + '\n')
                 f.writelines('if __name__ == \'__main__\':' + '\n')

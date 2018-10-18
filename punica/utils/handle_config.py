@@ -34,9 +34,20 @@ def handle_network_config(config_dir_path: str, network: str = '', is_print: boo
     return rpc_address
 
 
-def handle_deploy_config(config_dir_path: str) -> dict:
+def handle_deploy_config(project_path: str, config: str = '') -> dict:
     try:
-        config_file_path = os.path.join(config_dir_path, 'punica-config.json')
+        if config != '':
+            config_path = os.path.join(project_path, config)
+            if not os.path.exists(config_path):
+                print(config_path, ' not exist')
+                os._exit(0)
+            else:
+                config_file_path = os.path.join(project_path, 'contracts', config)
+        else:
+            config_file_path = os.path.join(project_path, 'contracts', 'punica-config.json')
+        if not os.path.exists(config_file_path):
+            print(config_path, ' not exist')
+            os._exit(0)
         with open(config_file_path, 'r') as f:
             config = json.load(f)
     except FileNotFoundError:

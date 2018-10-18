@@ -10,6 +10,21 @@ from punica.exception.punica_exception import PunicaException, PunicaError
 class Account:
 
     @staticmethod
+    def import_account(project_path, private_key):
+        wallet_path_dir = os.path.join(project_path, 'wallet')
+        wallet_path = os.path.join(wallet_path_dir, 'wallet.json')
+        if not os.path.exists(wallet_path):
+            os.makedirs(wallet_path_dir)
+        wallet_manager = WalletManager()
+        pwd = Account.get_password()
+        try:
+            wallet_manager.create_account_from_private_key('', pwd, private_key)
+            wallet_manager.write_wallet()
+        except ValueError as e:
+            print('import account error:')
+            print(e.args)
+
+    @staticmethod
     def get_wallet_manager(project_path: str):
         wallet_path_dir = os.path.join(project_path, 'wallet')
         wallet_path = os.path.join(wallet_path_dir, 'wallet.json')
@@ -18,6 +33,12 @@ class Account:
         wallet_manager = WalletManager()
         wallet_manager.open_wallet(wallet_path)
         return wallet_manager
+
+    @staticmethod
+    def delete_account(project_path, address: str):
+        wallet_manager = Account.get_wallet_manager(project_path)
+        wallet_manager.wallet_in_mem.accounts.remove(address)
+        wallet_manager.write_wallet()
 
     @staticmethod
     def list_account(project_path):
@@ -39,27 +60,6 @@ class Account:
             print(e.args)
         except PunicaException:
             pass
-
-    @staticmethod
-    def execute(project_path: str, delete: str, i: str):
-        wallet_path_dir = os.path.join(project_path, 'wallet')
-        wallet_path = os.path.join(wallet_path_dir, 'wallet.json')
-        if not os.path.exists(wallet_path):
-            os.makedirs(wallet_path_dir)
-        sdk = OntologySdk()
-        sdk.wallet_manager.open_wallet(wallet_path)
-        if delete != '':
-            pass
-        elif i != '':
-            pwd = Account.get_password()
-            try:
-                sdk.wallet_manager.create_account_from_private_key('', pwd, i)
-                sdk.wallet_manager.write_wallet()
-            except ValueError as e:
-                print('import account error:')
-                print(e.args)
-        else:
-            print('unsupported operator')
 
     @staticmethod
     def get_password():

@@ -12,6 +12,11 @@
     - [4.2. Compiling](#42-compiling)
     - [4.3. Deployment](#43-deployment)
     - [4.4. Invocation](#44-invocation)
+    - [4.5. Node](#45-node)
+    - [4.6. Scpm](#46-scpm)
+    - [4.7  Smartx](#47-smartx)
+    - [4.8  Test](#48-test)
+    - [4.9  Wallet](#49-wallet)
 - [5. Example](#5-example)
     - [5.1. Checkout Version](#51-checkout-version)
     - [5.2. Unbox Tutorialtoken](#52-unbox-tutorialtoken)
@@ -35,12 +40,16 @@ Options:
   -h, --help          Show this message and exit.
 
 Commands:
-  compile  Compile the specified contracts to avm and abi file.
-  deploy   Deploys the specified contracts to specified chain.
-  init     Initialize new and empty Ontology DApp project.
-  invoke   Invoke the function list in punica-config.
-  list     list all functions in the default-config or specify config
-  unbox    Download a Punica Box, a pre-built Ontology DApp project.
+  compile  Compile the specified contracts to avm and...
+  deploy   Deploys the specified contracts to specified...
+  init     Initialize new and empty Ontology DApp...
+  invoke   Invoke the function list in default-config or...
+  node     Ontology Blockchain private net in test mode.
+  scpm     smart contract package manager，support...
+  smartx   Ontology smart contract IDE,SmartX...
+  test     Unit test with specified smart contract
+  unbox    Download a Punica Box, a pre-built Ontology...
+  wallet   Manager your ontid, account, asset.
 ```
 
 ## 2. Setting up the development environment
@@ -398,6 +407,72 @@ Options:
 
 - If you not run punica cli in you project root directory, you need to use `-p` or `--project` option to specify your DApp project's path.
 - If multi wallet file exist in your `wallet` directory, you may need to use `--wallet` option to specify which wallet you want to use. otherwise, a random wallet file in `wallet` directory will be used.
+
+### 4.5 Node
+
+```shell
+sss:test sss$ punica node
+Usage: punica node [OPTIONS]
+
+   Ontology Blockchain private net in test mode. please download from
+   https://github.com/punicasuite/solo-chain/releases
+
+Options:
+   -h, --help  Show this message and exit.
+```
+
+### 4.6. Scpm
+
+```shell
+sss:test sss$ punica scpm
+Usage: punica scpm [OPTIONS]
+
+   smart contract package manager，support download and publish.
+
+Options:
+   -h, --help  Show this message and exit.
+
+```
+### 4.7  Smartx
+
+```shell
+sss:test sss$ punica smartx
+
+Please go to Smartx for debugging smart contracts:
+http://smartx.ont.io/#/
+```
+### 4.8  Test
+
+```shell
+sss:test sss$ punica test -h
+Usage: punica test [OPTIONS] COMMAND [ARGS]...
+
+  Unit test with specified smart contract
+
+Options:
+  --file TEXT  Specify which test file will be used.
+  -h, --help   Show this message and exit.
+
+Commands:
+  template  generate test template file
+```
+### 4.9  Wallet
+
+```shell
+sss:test sss$ punica wallet
+Usage: punica wallet [OPTIONS] COMMAND [ARGS]...
+
+   Manager your asset, ontid, account.
+
+Options:
+   -h, --help  Show this message and exit.
+
+Commands:
+   account  Manager your account.
+   asset    Manager your asset, transfer, balance,...
+   ontid    Manager your ont_id, list or add.
+
+```
 
 ## 5. Example
 

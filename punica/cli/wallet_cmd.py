@@ -72,6 +72,17 @@ def list_amd(ctx):
     OntId.list_ont_id(project_dir)
 
 
+@ontid_cmd.command('delete')
+@click.argument('ontid')
+@click.pass_context
+def delete_amd(ctx, ontid):
+    """
+    List all the ont_id in wallet.
+    """
+    project_dir = ctx.obj['PROJECT_DIR']
+    OntId.delete_ont_id(project_dir, ontid)
+
+
 @wallet_cmd.group('account', invoke_without_command=True, context_settings=CONTEXT_SETTINGS)
 @click.pass_context
 def account_cmd(ctx):
@@ -107,7 +118,7 @@ def import_cmd(ctx, privatekey):
 
 
 @account_cmd.command('delete')
-@click.option('--address', nargs=1, type=str, default='', help='Delete account by address.')
+@click.argument('address')
 @click.pass_context
 def delete_cmd(ctx, address):
     """

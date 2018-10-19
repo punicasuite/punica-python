@@ -82,18 +82,18 @@ class Test:
             dict_abi = json.loads(f.read())
             functions = dict_abi['functions']
             abi_name = os.path.basename(abi_path)
-            class_name = abi_name.split('_')[0]
-            class_name.capitalize()
+            class_name = abi_name.replace('_abi.json', '')
             test_dir_path = os.path.join(project_dir_path, 'test')
             test_file_path = os.path.join(test_dir_path, 'test_' + class_name +'.py')
+            if os.path.exists(test_file_path):
+                test_file_path = os.path.join(test_dir_path, 'test_' + class_name + str(2) + '.py')
             if not os.path.exists(test_dir_path):
                 os.makedirs(test_dir_path)
             with open(test_file_path, 'w') as f:
-                f.writelines('import json' + '\n')
                 f.writelines('import unittest' + '\n')
                 f.writelines('from punica.invoke.invoke_contract import Invoke' + '\n')
                 f.writelines('from ontology.ont_sdk import OntologySdk' + '\n')
-                f.writelines('from ontology.smart_contract.neo_contract.abi.abi_info import AbiInfo' + '\n')
+                f.writelines('from punica.test.test import Test' + '\n')
                 f.writelines('\n')
                 f.writelines('gas_limit = 20000' + '\n')
                 f.writelines('gas_price = 500' + '\n')
@@ -109,8 +109,11 @@ class Test:
                 f.writelines('payer = sdk.wallet_manager.get_account(\'\', \'\')' + ' # input account address from wallet and password' + '\n')
                 f.writelines('abi_info = Test.get_abi_info(abi_path)' + '\n')
                 f.writelines('\n')
+                f.writelines('\n')
+                class_name = class_name.capitalize()
                 f.writelines('class Test' + class_name +'(unittest.TestCase):' + '\n')
                 for func in functions:
+                    f.writelines('\n')
                     f.writelines('   '+'def ' + 'test_' + func['name'].lower()+'(self):' + '\n')
                     f.writelines('            pre_exec = True' + '\n')
                     f.writelines('            params = dict()' + '\n')
@@ -119,6 +122,7 @@ class Test:
                     f.writelines('            abi_function = Invoke.get_function(params, '+ '\''+func['name'] + '\'' +', abi_info)' + '\n')
                     f.writelines('            response = sdk.neo_vm().send_transaction(contract_address, acct, payer, gas_limit, gas_price, abi_function, pre_exec)' + '\n')
                     f.writelines('            print(response)' + '\n')
+                f.writelines('\n')
                 f.writelines('if __name__ == \'__main__\':' + '\n')
                 f.writelines('      ' + 'unittest.main()' + '\n')
             print('generated test file in :')

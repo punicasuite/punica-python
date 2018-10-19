@@ -37,8 +37,20 @@ class Account:
     @staticmethod
     def delete_account(project_path, address: str):
         wallet_manager = Account.get_wallet_manager(project_path)
-        wallet_manager.wallet_in_mem.accounts.remove(address)
-        wallet_manager.write_wallet()
+        for account in wallet_manager.wallet_in_mem.accounts:
+            if account.address == address:
+                pwd = getpass.getpass('Please input password: ')
+                try:
+                    wallet_manager.get_account(address, pwd)
+                except Exception:
+                    print('password is wrong')
+                    return
+                wallet_manager.wallet_in_mem.accounts.remove(account)
+                wallet_manager.write_wallet()
+                print('delete success')
+                return
+        print('delete failed')
+        print('there is not the address: ', address)
 
     @staticmethod
     def list_account(project_path):

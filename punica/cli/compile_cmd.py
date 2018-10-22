@@ -38,31 +38,47 @@ def compile_cmd(ctx, contracts, local):
     project_dir = ctx.obj['PROJECT_DIR']
     try:
         print('Compile')
-        contract_dir = os.path.join(project_dir, 'contracts')
         if contracts != '':
-            contract_dir2 = os.path.join(contract_dir, contracts)
-            if os.path.isfile(contract_dir2) and contracts.endswith('.py'):
-                compile_contract(contract_dir, contracts, False, False, local)
+            contract_file_path = os.path.join(project_dir, contracts)
+            if not os.path.exists(contract_file_path):
+                contract_file_path = os.path.join(project_dir, 'contracts', contracts)
+            if contracts.endswith('.py') or contracts.endswith('.cs'):
+                compile_contract(os.path.dirname(contract_file_path), os.path.basename(contract_file_path), False, False, local)
+            else:
+                print('Compile Error')
+                print('file type is wrong')
+                os._exit(0)
         else:
+            contract_dir = os.path.join(project_dir, 'contracts')
             contract_name_list = os.listdir(contract_dir)
             for contract_name in contract_name_list:
                 if contract_name.startswith('__') or contract_name.endswith('.json') or contract_name == 'build':
                     continue
-                contract_dir2 = os.path.join(contract_dir, contract_name)
-                if os.path.isdir(contract_dir2):
-                    contract_name_list2 = os.listdir(contract_dir2)
-                    for contract_name2 in contract_name_list2:
-                        if contract_name2.startswith('__') or contract_name.endswith('.json'):
+                contract_file_path = os.path.join(contract_dir, contract_name)
+                if os.path.isdir(contract_file_path):
+                    contract_name_list_sub = os.listdir(contract_file_path)
+                    for contract_name_sub in contract_name_list_sub:
+                        if contract_name_sub.startswith('__') or contract_name.endswith('.json'):
                             continue
-                        contract_dir3 = os.path.join(contract_dir2, contract_name2)
-                        if os.path.isdir(contract_dir3):
+                        contract_file_path_sub = os.path.join(contract_file_path, contract_name_sub)
+                        if os.path.isdir(contract_file_path_sub):
                             raise RuntimeError("Nested too deep")
-                        elif os.path.isfile(contract_dir3) and contract_name2.endswith('.py'):
-                            compile_contract(contract_dir2, contract_name2, False, False, local)
-                        else:
-                            raise RuntimeError("only support py contract")
-                elif os.path.isfile(contract_dir2) and contract_name.endswith('.py'):
-                    compile_contract(contract_dir, contract_name, False, False, local)
+                        elif os.path.isfile(contract_file_path_sub):
+                            if contract_file_path_sub.endswith('.py') or contract_file_path_sub.endswith('.cs'):
+                                compile_contract(os.path.dirname(contract_file_path_sub),
+                                                 os.path.basename(contract_file_path_sub), False, False, local)
+                            else:
+                                print('Compile Error')
+                                print('file type is wrong')
+                                os._exit(0)
+                elif os.path.isfile(contract_file_path):
+                    if contract_name.endswith('.py') or contract_name.endswith('.cs'):
+                        compile_contract(os.path.dirname(contract_file_path), os.path.basename(contract_file_path),
+                                         False, False, local)
+                    else:
+                        print('Compile Error')
+                        print('file type is wrong')
+                        os._exit(0)
                 else:
                     raise RuntimeError("contract path is wrong")
     except (PunicaException, SDKException) as e:

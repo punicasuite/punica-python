@@ -173,7 +173,7 @@ class PunicaCompiler:
         dict_invoke_detail['defaultPayer'] = ''
         dict_invoke_detail['gasPrice'] = 500
         dict_invoke_detail['gasLimit'] = 20000
-        dict_invoke_functions = dict()
+        dict_invoke_functions = list()
         for func in dict_abi['functions']:
             if func['name'] == 'Main':
                 continue
@@ -184,10 +184,11 @@ class PunicaCompiler:
                     if param['name'] == '':
                         continue
                     dict_param[param['name']] = ''
+            dict_func_info['name'] = func['name']
             dict_func_info['params'] = dict_param
             dict_func_info['signers'] = dict()
             dict_func_info['preExec'] = True
-            dict_invoke_functions[func['name']] = dict_func_info
+            dict_invoke_functions.append(dict_func_info)
         dict_invoke_detail['functions'] = dict_invoke_functions
         dict_invoke['invokeConfig'] = dict_invoke_detail
         with open(invoke_config_path, "w") as f:
@@ -204,9 +205,12 @@ class PunicaCompiler:
         if len(dict_abi['functions']) == 0:
             return
         is_need_update = False
+        all_funcs = dict_invoke['invokeConfig']['functions']
+        all_func_name_list = list()
+        for func_information in all_funcs:
+            all_func_name_list.append(func_information['name'])
         for func in dict_abi['functions']:
-            all_funcs = dict_invoke['invokeConfig']['functions'].keys()
-            if func['name'] not in all_funcs:
+            if func['name'] not in all_func_name_list:
                 if func['name'] == 'Main':
                     continue
                 is_need_update = True
@@ -217,10 +221,11 @@ class PunicaCompiler:
                         if param['name'] == '':
                             continue
                         dict_param[param['name']] = ''
+                dict_func_info['name'] = func['name']
                 dict_func_info['params'] = dict_param
                 dict_func_info['signers'] = dict()
                 dict_func_info['preExec'] = True
-                dict_invoke['invokeConfig']['functions'][func['name']] = dict_func_info
+                dict_invoke['invokeConfig']['functions'].append(dict_func_info)
         if is_need_update:
             with open(invoke_config_path, 'w') as f:
                 json.dump(dict_invoke, f, default=lambda obj: dict(obj), indent=4)

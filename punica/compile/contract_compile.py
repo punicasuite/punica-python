@@ -16,6 +16,7 @@ from punica.exception.punica_exception import PunicaException, PunicaError
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 PYTHON_COMPILE_URL = "https://smartxcompiler.ont.io/api/beta/python/compile"
+CSHARP_COMPILE_URL = "https://smartxcompiler.ont.io/api/v1.0/csharp/compile"
 
 
 class PunicaCompiler:
@@ -79,11 +80,17 @@ class PunicaCompiler:
         if abi_save_path == '':
             split_path = os.path.split(contract_path)
             save_path = os.path.join(os.path.dirname(split_path[0]), 'build', split_path[1])
-            abi_save_path = save_path.replace('.py', '_abi.json')
+            if save_path.endswith('.py'):
+                abi_save_path = save_path.replace('.py', '_abi.json')
+            else:
+                abi_save_path = save_path.replace('.cs', '_abi.json')
         if avm_save_path == '':
             split_path = os.path.split(contract_path)
             save_path = os.path.join(os.path.dirname(split_path[0]), 'build', split_path[1])
-            avm_save_path = save_path.replace('.py', '.avm')
+            if avm_save_path.endswith('.py'):
+                avm_save_path = save_path.replace('.py', '.avm')
+            else:
+                avm_save_path = save_path.replace('.cs', '.avm')
         if not local:
             PunicaCompiler.compile_contract_remote(contract_path)
             return
@@ -101,9 +108,14 @@ class PunicaCompiler:
         with open(contract_path, "r") as f:
             contract = f.read()
             dict_payload = dict()
-            dict_payload['type'] = 'Python'
-            dict_payload['code'] = contract
-            url = PYTHON_COMPILE_URL
+            if contract_path.endswith('.py'):
+                dict_payload['type'] = 'Python'
+                dict_payload['code'] = contract
+                url = PYTHON_COMPILE_URL
+            else:
+                dict_payload['type'] = 'CSharp'
+                dict_payload['code'] = contract
+                url = CSHARP_COMPILE_URL
             header = {'Content-type': 'application/json'}
             timeout = 10
             path = os.path.dirname(contract_path)

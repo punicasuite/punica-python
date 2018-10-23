@@ -7,8 +7,8 @@
 - [3. Install](#3-install)
 - [4. Quickstart](#4-quickstart)
     - [4.1. Create a Project](#41-create-a-project)
-        - [4.1.1. Creating a Box Project](#411-creating-a-box-project)
-        - [4.1.2. Initializing a New Project](#412-initializing-a-new-project)
+        - [4.1.1. Initializing a New Project](#411-initializing-a-new-project)
+	- [4.1.2. Creating a Box Project](#412-creating-a-box-project)
     - [4.2. Compiling](#42-compiling)
     - [4.3. Deployment](#43-deployment)
     - [4.4. Invocation](#44-invocation)
@@ -45,7 +45,7 @@ Commands:
   init     Initialize new and empty Ontology DApp...
   invoke   Invoke the function list in default-config or...
   node     Ontology Blockchain private net in test mode.
-  scpm     smart contract package manager，support...
+  scpm     Smart contract package manager，support...
   smartx   Ontology smart contract IDE,SmartX...
   test     Unit test with specified smart contract
   unbox    Download a Punica Box, a pre-built Ontology...
@@ -64,6 +64,11 @@ There are a few technical requirements before we start. Please install the follo
 ```shell
 pip install punica
 ```
+or 
+
+```shell
+python setup.py install
+```
 
 ## 4. Quickstart
 
@@ -71,7 +76,30 @@ To use most Punica commands, you need to run them against an existing Punica pro
 
 ### 4.1. Create a Project
 
-#### 4.1.1. Creating a Box Project
+#### 4.1.1. Initializing a New Project
+
+You can create a bare Punica project with no smart contracts included, use `punica init` command.
+
+Once this operation is completed, you'll now have a project structure with the following items:
+
+- `contracts/`: Directory for Ontology smart contracts.
+- `src/`: Directory for DApp source file.
+- `test/`: Directory for test files for testing your application and contracts.
+- `wallet/`: Directory for save Ontology wallet file.
+
+```shell
+punica init --help
+Usage: punica init [OPTIONS]
+
+  Initialize new and empty Ontology DApp project.
+
+Options:
+  -h, --help  Show this message and exit.
+```
+
+**Note**: If you not run punica cli in you project root directory, you need to use `-p` or `--project` option to specify your DApp project's path.
+
+#### 4.1.2. Creating a Box Project
 
 You can create a bare project template, but for those just getting started, you can use Punica Boxes, which are example applications and project templates.
 
@@ -105,28 +133,7 @@ Options:
 - You can use the `punica unbox <box-name>` command to download any of the other Punica Boxes.
 - If you not run punica cli in you project root directory, you need to use `-p` or `--project` option to specify your DApp project's path.
 
-#### 4.1.2. Initializing a New Project
 
-You can create a bare Punica project with no smart contracts included, use `punica init` command.
-
-Once this operation is completed, you'll now have a project structure with the following items:
-
-- `contracts/`: Directory for Ontology smart contracts.
-- `src/`: Directory for DApp source file.
-- `test/`: Directory for test files for testing your application and contracts.
-- `wallet/`: Directory for save Ontology wallet file.
-
-```shell
-punica init --help
-Usage: punica init [OPTIONS]
-
-  Initialize new and empty Ontology DApp project.
-
-Options:
-  -h, --help  Show this message and exit.
-```
-
-**Note**: If you not run punica cli in you project root directory, you need to use `-p` or `--project` option to specify your DApp project's path.
 
 ### 4.2. Compiling
 
@@ -217,35 +224,41 @@ Support we have an invoke config in our `default-config.json`:
     "defaultPayer": "ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
     "gasPrice": 0,
     "gasLimit": 21000000,
-    "functions": {
-        "Name": {
+    "functions": [
+        {   
+	    "name": "Name",
             "params": {},
             "signers": {},
             "preExec": true
         },
-        "Symbol": {
+	{
+            "name": "Symbol",
             "params": {},
             "signers": {},
             "preExec": true
         },
-        "Decimal": {
+	{
+            "name": "Decimal",
             "params": {},
             "signers": {},
             "preExec": true
         },
-        "TotalSupply": {
+        {
+	    "name": "TotalSupply",
             "params": {},
             "signers": {},
             "preExec": true
         },
-        "BalanceOf": {
+        {
+	    "name":"BalanceOf",
             "params": {
                 "account": "ByteArray:ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6"
             },
             "signers": {},
             "preExec": true
         },
-        "Transfer": {
+        {
+	    "name": "Transfer",
             "params": {
                 "from_acct": "ByteArray:ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
                 "to_acct": "ByteArray:AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve",
@@ -257,7 +270,8 @@ Support we have an invoke config in our `default-config.json`:
             },
             "preExec": false
         },
-        "TransferMulti": {
+        {
+	    "name": "TransferMulti",
             "params": {
                 "args": [
                     {
@@ -279,7 +293,8 @@ Support we have an invoke config in our `default-config.json`:
             "payer": "ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
             "preExec": false
         },
-        "Allowance": {
+        {
+	    "name": "Allowance",
             "params": {
                 "owner": "ByteArray:ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
                 "spender": "ByteArray:AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve"
@@ -290,7 +305,8 @@ Support we have an invoke config in our `default-config.json`:
             },
             "preExec": false
         },
-        "TransferFrom": {
+        {
+	    "name": "TransferFrom",
             "params": {
                 "sender": "ByteArray:AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve",
                 "from_acct": "ByteArray:ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
@@ -303,7 +319,8 @@ Support we have an invoke config in our `default-config.json`:
             },
             "preExec": false
         },
-        "Init": {
+        {
+	    "name": "Init",
             "params": {},
             "signers": {},
             "preExec": true
@@ -312,7 +329,10 @@ Support we have an invoke config in our `default-config.json`:
 }
 ```
 View the functions that can be called
-`punica list`
+
+```shell
+punica list
+```
 
 The following output we will get:
 ```shell
@@ -346,46 +366,8 @@ Unlock default payer account...
 Invoking Name...
 	Invoke successful...
 		... Invoke result: 546f6b656e4e616d65
-Invoking Symbol...
-	Invoke successful...
-		... Invoke result: 53796d626f6c
-Invoking Decimal...
-	Invoke successful...
-		... Invoke result: 08
-Invoking TotalSupply...
-	Invoke successful...
-		... Invoke result: 00008a5d78456301
-Invoking BalanceOf...
-	Invoke successful...
-		... Invoke result: e7fd895d78456301
-Invoking Transfer...
-Unlock signers account...
-	Unlock account: ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6
-    Please input account password: 
-	Unlock successful...
-	Invoke successful...
-		... txHash: 0xeaaa80394ee8d0c0229787ba811916432a0741833d2beaf60a5a80dbdfb9a45d
-Invoking TransferMulti...
-Unlock signers account...
-	Unlock account: AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve
-    Please input account password: 
-	Unlock successful...
-	Invoke successful...
-		... txHash: 0xc6c4fc178b3598ad329986782d8c6ffdc4858ae208d48c7ce429532cec39fc68
-Invoking Allowance...
-Unlock signers account...
-	Unlock account: ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6
-    Please input account password: 
-	Unlock successful...
-	Invoke successful...
-		... txHash: 0xc8f0433e9042ed45fbac9576d8ff778598db7ac1d563e51b499b047bdd58dd01
-Invoking TransferFrom...
-Unlock signers account...
-	Unlock account: ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6
-    Please input account password: 
-	Unlock successful...
-	Invoke successful...
-		... txHash: 0x7cb1c72b4e803a5ab80d9fcf96445392ed391cb68a23fa8459d4c6899f90611d
+Invoking Symbol......
+	
 ```
 
 For more usage, you can use `punica invoke --help` command.

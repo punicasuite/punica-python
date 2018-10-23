@@ -48,8 +48,9 @@ class Invoke:
             config_name = DEFAULT_CONFIG
         invoke_config, password_config = handle_invoke_config(project_dir, config_name)
         print("All Functions:")
-        for function_name in invoke_config['functions'].keys():
-            print('\t', function_name)
+        invoke_function_list = invoke_config['functions']
+        for function_information in invoke_function_list:
+            print('\t', function_information['name'])
 
     @staticmethod
     def generate_abi_info(dict_abi: dict) -> AbiInfo:
@@ -207,22 +208,32 @@ class Invoke:
         abi_info = Invoke.generate_abi_info(dict_abi)
         gas_price = invoke_config.get('gasPrice', 500)
         gas_limit = invoke_config.get('gasLimit', 21000000)
-        invoke_function_dict = invoke_config.get('functions', dict())
-        all_exec_func = list()
+        invoke_function_list = invoke_config.get('functions', list())
+        invoke_function_name_list = list()
+        for invoke_function in invoke_function_list:
+            invoke_function_name_list.append(invoke_function['name'])
+        all_exec_func_list = list()
         if exec_func_str != '':
-            all_exec_func = exec_func_str.split(',')
+            all_exec_func_list = exec_func_str.split(',')
         if default_b58_payer_address != '':
             print('Unlock default payer account...')
             default_payer_acct = Invoke.get_account(ontology, password_config, default_b58_payer_address)
-        if len(all_exec_func) == 0:
-            all_exec_func = invoke_function_dict.keys()
-        for function_key in all_exec_func:
-            print('Invoking ', function_key)
-            if function_key not in invoke_function_dict.keys():
-                print('there is not the function:', function_key + ' in the abi file')
+        if len(all_exec_func_list) == 0:
+            all_exec_func_list = invoke_function_name_list
+        for function_name in all_exec_func_list:
+            if function_name not in invoke_function_name_list:
+                print('there is not the function:', function_name + ' in the abi file')
                 continue
-            abi_function = abi_info.get_function(function_key)
-            function_information = invoke_function_dict[function_key]
+            print('Invoking ', function_name)
+            abi_function = abi_info.get_function(function_name)
+            function_information = None
+            for invoke_function in invoke_function_list:
+                if invoke_function['name'] == function_name:
+                    function_information = invoke_function
+                    break
+            if function_information is None:
+                print('there is not the function: ', function_name)
+                os._exit(0)
             try:
                 params = function_information['params']
                 params = Invoke.params_normalize(params)

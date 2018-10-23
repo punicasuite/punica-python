@@ -325,7 +325,7 @@ Support we have an invoke config in our `default-config.json`:
             "signers": {},
             "preExec": true
         }
-    }
+    ]
 }
 ```
 View the functions that can be called

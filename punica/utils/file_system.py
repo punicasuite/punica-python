@@ -60,6 +60,8 @@ def read_avm(avm_dir_path: str, avm_file_name: str = '') -> (str, str):
         raise PunicaException(PunicaError.directory_error)
     if avm_file_name != '':
         avm_file_path = os.path.join(avm_dir_path, avm_file_name)
+        if not os.path.exists(avm_file_path):
+            raise PunicaException(PunicaError.other_error(avm_file_path + ' not exist'))
         with open(avm_file_path, 'r') as f:
             hex_avm = f.read()
     else:
@@ -78,28 +80,32 @@ def read_avm(avm_dir_path: str, avm_file_name: str = '') -> (str, str):
 
 def read_abi(abi_dir_path: str, abi_file_name: str) -> dict:
     if not os.path.isdir(abi_dir_path):
-        raise PunicaException(PunicaError.directory_error)
+        raise PunicaException(PunicaError.other_error('build folder not exist, please compile first'))
     abi_file_path = os.path.join(abi_dir_path, abi_file_name)
     if not os.path.exists(abi_file_path):
-        raise PunicaException(PunicaError.config_file_not_found)
+        raise PunicaException(PunicaError.other_error('abi config file not exist'))
     with open(abi_file_path, 'r') as f:
         dict_abi = json.load(f)
     return dict_abi
 
 
-def read_wallet(wallet_dir_path: str, wallet_file_name: str = '') -> WalletManager:
-    if not os.path.isdir(wallet_dir_path):
+def read_wallet(project_path: str, wallet_file_name: str = '') -> WalletManager:
+    if not os.path.isdir(project_path):
         raise PunicaException(PunicaError.directory_error)
     wallet_manager = WalletManager()
     if wallet_file_name == '':
+        wallet_dir_path = os.path.join(project_path, 'wallet')
         dir_list = os.listdir(wallet_dir_path)
         if len(dir_list) == 1:
-            wallet_file_name = dir_list[0]
+            wallet_path = os.path.join(wallet_dir_path, dir_list[0])
         else:
             raise PunicaException(PunicaError.wallet_file_unspecified)
-    wallet_path = os.path.join(wallet_dir_path, wallet_file_name)
-    if not os.path.isfile(wallet_path):
-        raise PunicaException(PunicaError.wallet_file_not_found)
+    else:
+        wallet_path = os.path.join(project_path, wallet_file_name)
+        if not os.path.exists(wallet_path):
+            wallet_path = os.path.join(project_path, 'wallet', wallet_file_name)
+            if not os.path.exists(wallet_path):
+                raise PunicaError.other_error(wallet_path, ' is error')
     try:
         wallet_manager.open_wallet(wallet_path)
     except SDKException:

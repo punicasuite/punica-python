@@ -11,9 +11,9 @@ from punica.cli import main
 
 class TestUnbox(unittest.TestCase):
     def test_compile(self):
-        contract_path = os.path.join(os.getcwd(), 'test_file', 'test_compile_cmd', 'oep4.py')
+        contract_path = os.path.join(os.getcwd(), 'test_file', 'test_compile_cmd')
         runner = CliRunner()
-        result = runner.invoke(main, ['compile', contract_path])
+        result = runner.invoke(main, ['-p', '/Users/sss/dev/localgit/test', 'compile', '--contracts', 'contracts/hello_ontology.py'])
         self.assertEqual(0, result.exit_code)
 
 

@@ -22,5 +22,6 @@ def init_cmd(ctx):
         Box.init(project_dir)
     except (PunicaException, SDKException) as e:
         print('An error occur...')
+        print(e)
         print('Punica will exist...')
         exit(1)

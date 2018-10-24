@@ -4,6 +4,8 @@
 import json
 import os
 
+from punica.common.define import DEFAULT_CONFIG
+
 from punica.exception.punica_exception import PunicaException, PunicaError
 
 
@@ -32,9 +34,20 @@ def handle_network_config(config_dir_path: str, network: str = '', is_print: boo
     return rpc_address
 
 
-def handle_deploy_config(config_dir_path: str) -> dict:
+def handle_deploy_config(project_path: str, config: str = '') -> dict:
     try:
-        config_file_path = os.path.join(config_dir_path, 'punica-config.json')
+        if config != '':
+            config_path = os.path.join(project_path, config)
+            if not os.path.exists(config_path):
+                print(config_path, ' not exist')
+                os._exit(0)
+            else:
+                config_file_path = os.path.join(project_path, 'contracts', config)
+        else:
+            config_file_path = os.path.join(project_path, 'contracts', 'punica-config.json')
+        if not os.path.exists(config_file_path):
+            print(config_path, ' not exist')
+            os._exit(0)
         with open(config_file_path, 'r') as f:
             config = json.load(f)
     except FileNotFoundError:
@@ -48,17 +61,30 @@ def handle_deploy_config(config_dir_path: str) -> dict:
     return deploy_information
 
 
-def handle_invoke_config(config_dir_path: str) -> dict:
+def handle_invoke_config(project_dir_path: str, config: str):
     try:
-        config_file_path = os.path.join(config_dir_path, 'punica-config.json')
-        with open(config_file_path, 'r') as f:
+        if config != '':
+            config_path = os.path.join(project_dir_path, config)
+            if os.path.exists(config_path):
+                if not os.path.isfile(config_path):
+                    raise PunicaError.other_error(config_path, ' is not file')
+            else:
+                config_path = os.path.join(project_dir_path, 'contracts', config)
+                if not os.path.exists(config_path):
+                    raise PunicaError.other_error(config_path, ' not exist')
+        else:
+            config_path = os.path.join(project_dir_path, 'contracts', DEFAULT_CONFIG)
+        if not os.path.exists(config_path):
+            raise PunicaError.other_error(config_path, " not exist")
+        with open(config_path, 'r') as f:
             config = json.load(f)
     except FileNotFoundError:
         raise PunicaException(PunicaError.config_file_not_found)
     try:
         invoke_config = config['invokeConfig']
+        password_config = config['password']
     except KeyError:
-        raise PunicaException(PunicaError.config_file_error)
+        raise PunicaException(PunicaError.other_error('the config file lack invokeConfig or password'))
     if not isinstance(invoke_config, dict):
         raise PunicaException(PunicaError.config_file_error)
-    return invoke_config
+    return invoke_config, password_config

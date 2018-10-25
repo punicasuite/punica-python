@@ -35,5 +35,6 @@ def deploy_cmd(ctx, network, avm, wallet, config):
                 print('Deploy unsuccessfully...')
     except (PunicaException, SDKException) as e:
         print('An error occur...')
+        print(e)
         print('Punica will exist...')
         exit(1)

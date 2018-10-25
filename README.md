@@ -1,10 +1,11 @@
-# punica-python
-
-<!-- TOC -->
-
 <div align="center">
   <img src="https://raw.githubusercontent.com/punicasuite/punica-python/master/punica.png" height="200" width="200"><br><br>
 </div>
+
+# Punica python
+
+<!-- TOC -->
+
 
 
 - [1. Overview](#1-overview)

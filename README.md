@@ -2,6 +2,11 @@
 
 <!-- TOC -->
 
+<div align="center">
+  <img src="https://raw.githubusercontent.com/punicasuite/punica-python/master/punica.png" height="200" width="200"><br><br>
+</div>
+
+
 - [1. Overview](#1-overview)
 - [2. Setting up the development environment](#2-setting-up-the-development-environment)
 - [3. Install](#3-install)
@@ -26,9 +31,6 @@
 
 <!-- /TOC -->
 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/punicasuite/punica-python/master/punica.png" height="200" width="200"><br><br>
-</div>
 
 
 ## 1. Overview

@@ -38,11 +38,13 @@ def handle_deploy_config(project_dir_path: str, config: str = '') -> dict:
     try:
         if config != '':
             config_path = os.path.join(project_dir_path, config)
-            if not os.path.exists(config_path):
-                print(config_path, ' not exist')
-                os._exit(0)
+            if os.path.exists(config_path):
+                if not os.path.isfile(config_path):
+                    raise PunicaError.other_error(config_path, ' is not file')
             else:
                 config_path = os.path.join(project_dir_path, 'contracts', config)
+                if not os.path.exists(config_path):
+                    raise PunicaError.other_error(config_path, ' not exist')
         else:
             config_path = os.path.join(project_dir_path, 'contracts', DEFAULT_CONFIG)
         if not os.path.exists(config_path):

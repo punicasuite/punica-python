@@ -253,7 +253,10 @@ class Invoke:
                                                                          gas_price, gas_limit)
                         result = ontology.rpc.send_raw_transaction_pre_exec(tx)
                         print('Invoke successful')
-                        print('Invoke result: {}'.format("0x" + result))
+                        if isinstance(result, list):
+                            print('Invoke result: {}'.format(list(map(lambda r: "0x" + r, result))))
+                        else:
+                            print('Invoke result: {}'.format("0x" + result))
                     else:
                         b58_payer_address = function_information.get('payer', default_b58_payer_address)
                         if b58_payer_address == default_b58_payer_address:

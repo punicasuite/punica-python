@@ -24,7 +24,7 @@ from punica.exception.punica_exception import PunicaException, PunicaError
 class Deploy:
     @staticmethod
     def generate_signed_deploy_transaction(hex_avm_code: str, project_path: str = '', wallet_file_name: str = '',
-                                           config: str = ''):
+                                           config: str = '', network: str = ''):
         wallet_manager = read_wallet(project_path, wallet_file_name)
         deploy_information = handle_deploy_config(project_path, config)
         need_storage = deploy_information.get('needStorage', True)
@@ -35,7 +35,7 @@ class Deploy:
         desc = deploy_information.get('desc', '')
         b58_payer_address = deploy_information.get('payer', wallet_manager.get_default_account().get_address())
         gas_limit = deploy_information.get('gasLimit', 21000000)
-        gas_price = deploy_information.get('gasPrice', 500)
+        gas_price = 0 if network == 'privateNet' else deploy_information.get('gasPrice', 500)
         ontology = OntologySdk()
         tx = ontology.neo_vm().make_deploy_transaction(hex_avm_code, need_storage, name, version, author, email,
                                                        desc, b58_payer_address, gas_limit, gas_price)
@@ -99,7 +99,7 @@ class Deploy:
         ontology.rpc.set_address(rpc_address)
         contract = ontology.rpc.get_smart_contract(hex_contract_address)
         if contract == 'unknow contract' or contract == 'unknow contracts':
-            tx = Deploy.generate_signed_deploy_transaction(hex_avm_code, project_dir, wallet_file_name, config)
+            tx = Deploy.generate_signed_deploy_transaction(hex_avm_code, project_dir, wallet_file_name, config, network)
             print('Running deployment: {}'.format(avm_file_name))
             print('\tDeploying...')
             ontology.rpc.set_address(rpc_address)

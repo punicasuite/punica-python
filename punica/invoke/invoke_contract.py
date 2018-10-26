@@ -206,7 +206,7 @@ class Invoke:
         contract_address = bytearray(binascii.a2b_hex(hex_contract_address))
         contract_address.reverse()
         abi_info = Invoke.generate_abi_info(dict_abi)
-        gas_price = invoke_config.get('gasPrice', 500)
+        gas_price = 0 if network == 'privateNet' else invoke_config.get('gasPrice', 500)
         gas_limit = invoke_config.get('gasLimit', 21000000)
         invoke_function_list = invoke_config.get('functions', list())
         invoke_function_name_list = list()

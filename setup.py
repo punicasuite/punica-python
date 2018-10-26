@@ -21,7 +21,7 @@ setup(
     maintainer_email='wdx7266@outlook.com',
     # include_package_data=True,
     py_modules=['punica'],
-    python_requires='>=3.7,<4',
+    python_requires='>=3.6,<4',
     install_requires=[
         'Click',
         'GitPython',
@@ -39,7 +39,7 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
-        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
     ],
 )

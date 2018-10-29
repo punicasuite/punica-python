@@ -21,16 +21,14 @@ def handle_network_config(config_dir_path: str, network: str = '', is_print: boo
     except KeyError:
         raise PunicaException(PunicaError.config_file_error)
     if network == '':
-        try:
-            default_net = network_dict.get('defaultNet', '')
-            if default_net == '':
-                network = list(network_dict.keys())[0]
-            else:
-                network = network_dict.get(default_net, '')
-                if network == '':
-                    raise PunicaException(PunicaError.config_file_error)
-        except IndexError:
-            raise PunicaException(PunicaError.config_file_error)
+        default_net = network_dict.get('defaultNet', '')
+        if default_net == '':
+            network = list(network_dict.keys())[0]
+        else:
+            network = network_dict.get(default_net, '')
+            if network == '':
+                print('Error: there is not the network')
+                raise PunicaException(PunicaError.other_error('there is not the network'))
     try:
         rpc_address = ''.join([network_dict[network]['host'], ':', str(network_dict[network]['port'])])
     except KeyError:

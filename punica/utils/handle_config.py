@@ -18,10 +18,10 @@ def handle_network_config(config_dir_path: str, network: str = '', is_print: boo
         raise PunicaException(PunicaError.config_file_not_found)
     try:
         network_dict = config['networks']
+        default_net = config['defaultNet']
     except KeyError:
         raise PunicaException(PunicaError.config_file_error)
     if network == '':
-        default_net = network_dict.get('defaultNet', '')
         if default_net == '':
             network = list(network_dict.keys())[0]
         else:

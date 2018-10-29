@@ -22,7 +22,13 @@ def handle_network_config(config_dir_path: str, network: str = '', is_print: boo
         raise PunicaException(PunicaError.config_file_error)
     if network == '':
         try:
-            network = list(network_dict.keys())[0]
+            default_net = network_dict.get('defaultNet', '')
+            if default_net == '':
+                network = list(network_dict.keys())[0]
+            else:
+                network = network_dict.get(default_net, '')
+                if network == '':
+                    raise PunicaException(PunicaError.config_file_error)
         except IndexError:
             raise PunicaException(PunicaError.config_file_error)
     try:

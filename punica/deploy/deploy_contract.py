@@ -26,7 +26,7 @@ class Deploy:
     def generate_signed_deploy_transaction(hex_avm_code: str, project_path: str = '', wallet_file_name: str = '',
                                            config: str = ''):
         wallet_manager = read_wallet(project_path, wallet_file_name)
-        deploy_information = handle_deploy_config(project_path, config)
+        deploy_information, password_information = handle_deploy_config(project_path, config)
         need_storage = deploy_information.get('needStorage', True)
         name = deploy_information.get('name', os.path.split(project_path)[1])
         version = deploy_information.get('version', '0.0.1')
@@ -39,7 +39,9 @@ class Deploy:
         ontology = OntologySdk()
         tx = ontology.neo_vm().make_deploy_transaction(hex_avm_code, need_storage, name, version, author, email,
                                                        desc, b58_payer_address, gas_limit, gas_price)
-        password = getpass.getpass('\tPlease input payer account password: ')
+        password = password_information.get(b58_payer_address, '')
+        if password == '':
+            password = getpass.getpass('\tPlease input payer account password: ')
         payer_acct = wallet_manager.get_account(b58_payer_address, password)
         ontology.sign_transaction(tx, payer_acct)
         return tx

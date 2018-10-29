@@ -34,7 +34,7 @@ def handle_network_config(config_dir_path: str, network: str = '', is_print: boo
     return rpc_address
 
 
-def handle_deploy_config(project_dir_path: str, config: str = '') -> dict:
+def handle_deploy_config(project_dir_path: str, config: str = ''):
     try:
         if config != '':
             config_path = os.path.join(project_dir_path, config)
@@ -55,12 +55,13 @@ def handle_deploy_config(project_dir_path: str, config: str = '') -> dict:
     except FileNotFoundError:
         raise PunicaException(PunicaError.config_file_not_found)
     try:
-        deploy_information = config['invokeConfig']
+        deploy_information = config['deployConfig']
+        password_information = config['password']
     except KeyError:
         raise PunicaException(PunicaError.config_file_error)
     if not isinstance(deploy_information, dict):
         raise PunicaException(PunicaError.config_file_error)
-    return deploy_information
+    return deploy_information, password_information
 
 
 def handle_invoke_config(project_dir_path: str, config: str):

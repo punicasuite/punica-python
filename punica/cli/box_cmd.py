@@ -22,5 +22,4 @@ def unbox_cmd(ctx, box_name):
         Box.unbox(box_name, project_dir)
     except (PunicaException, SDKException):
         print('An error occur...')
-        print('Punica will exist...')
         exit(1)

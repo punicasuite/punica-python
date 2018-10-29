@@ -27,7 +27,7 @@ def handle_network_config(config_dir_path: str, network: str = '', is_print: boo
         else:
             network = network_dict.get(default_net, '')
             if network == '':
-                raise PunicaException(PunicaError.other_error('there is not the network'))
+                raise PunicaException(PunicaError.other_error('there is not the network: ' + default_net))
     try:
         rpc_address = ''.join([network_dict[network]['host'], ':', str(network_dict[network]['port'])])
     except KeyError:

@@ -4,12 +4,10 @@
 import os
 import re
 import json
-import shutil
 
 import git
 
 from punica.exception.punica_exception import PunicaError, PunicaException
-from punica.config.punica_config import InitConfig
 from punica.utils.file_system import (
     ensure_remove_dir_if_exists,
     remove_file_if_exists

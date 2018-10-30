@@ -87,7 +87,8 @@ class Deploy:
         else:
             avm_dir_path = os.path.join(project_dir, 'contracts', 'build')
         if not os.path.exists(avm_dir_path):
-            print(avm_dir_path, 'not exist')
+            print('there is not the avm file, please compile first')
+            return
         rpc_address = handle_network_config(project_dir, network)
         try:
             hex_avm_code, avm_file_name = read_avm(avm_dir_path, avm_file_name)

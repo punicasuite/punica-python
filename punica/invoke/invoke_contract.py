@@ -171,7 +171,7 @@ class Invoke:
 
     @staticmethod
     def invoke_all_function_in_list(wallet_file_name: str = '', project_dir_path: str = '', network: str = '',
-                                    exec_func_str: str = '', config_name: str = ''):
+                                    exec_func_str: str = '', config_name: str = '', pre_exec: str = ''):
         if project_dir_path == '':
             project_dir_path = os.getcwd()
         if not os.path.isdir(project_dir_path):
@@ -248,7 +248,7 @@ class Invoke:
                     abi_function = None
                     print('\tInvoke failed, params mismatching with the abi file')
                 if abi_function is not None:
-                    if function_information['preExec']:
+                    if function_information['preExec'] or pre_exec == 'true':
                         tx = Invoke.generate_unsigned_invoke_transaction(contract_address, abi_function, bytearray(),
                                                                          gas_price, gas_limit)
                         result = ontology.rpc.send_raw_transaction_pre_exec(tx)

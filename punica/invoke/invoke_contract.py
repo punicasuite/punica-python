@@ -47,10 +47,28 @@ class Invoke:
         if config_name == '':
             config_name = DEFAULT_CONFIG
         invoke_config, password_config = handle_invoke_config(project_dir, config_name)
+        try:
+            abi_file_name = invoke_config['abi']
+        except KeyError:
+            raise PunicaException(PunicaError.config_file_error)
+        abi_dir_path = os.path.join(project_dir, 'contracts', 'build')
+        dict_abi = read_abi(abi_dir_path, abi_file_name)
+        try:
+            func_in_abi_list = dict_abi['functions']
+        except KeyError:
+            raise PunicaException(PunicaError.other_error('abi file is wrong'))
+        func_name_in_abi_list = list()
+        for func_in_abi_dict in func_in_abi_list:
+            try:
+                func_name = func_in_abi_dict['name']
+            except KeyError:
+                raise PunicaException(PunicaError.other_error('abi file is wrong'))
+            func_name_in_abi_list.append(func_name)
         print("All Functions:")
         invoke_function_list = invoke_config['functions']
         for function_information in invoke_function_list:
-            print('\t', function_information['name'])
+            if function_information['name'] in func_name_in_abi_list:
+                print('\t', function_information['name'])
 
     @staticmethod
     def generate_abi_info(dict_abi: dict) -> AbiInfo:
@@ -222,10 +240,12 @@ class Invoke:
             all_exec_func_list = invoke_function_name_list
         for function_name in all_exec_func_list:
             if function_name not in invoke_function_name_list:
-                print('there is not the function:', function_name + ' in the abi file')
+                print('there is not the function:', '\"' + function_name + '\"' + ' in the default-config file')
                 continue
             print('Invoking ', function_name)
             abi_function = abi_info.get_function(function_name)
+            if abi_function is None:
+                raise PunicaException(PunicaError.other_error('\"' + function_name + '\"' + 'not found in the abi file'))
             function_information = None
             for invoke_function in invoke_function_list:
                 if invoke_function['name'] == function_name:

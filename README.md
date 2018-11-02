@@ -38,6 +38,15 @@
 
 Welcome to Punica! Punica has (almost) everything you need for Ontology DApp development.
 
+### Features
+* Punica-Cli supports smart contract compilation, deployment, invocation, testing, and one line commands.
+* Punica-Cli implements both Python and TypeScript versions for different language developers.
+* The Punica website offers a wealth of documentation and contract templates.
+* Solo chain has a UI test node for easy viewing of blocks, transactions, contracts, contract notify, and more.
+* Automatically generate dApp project directory, provide various types of boxes, easily develop dApps based on Punica-Boxes.
+* The contract test configuration and test function in SmartX use the same standard.
+* Smart contract package management tools provided.
+
 ```shell
 punica
 Usage: punica [OPTIONS] COMMAND [ARGS]...

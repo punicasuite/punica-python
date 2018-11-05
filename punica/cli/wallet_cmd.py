@@ -111,7 +111,7 @@ def account_cmd(ctx):
 @click.pass_context
 def import_cmd(ctx, privatekey):
     """
-    delete account by address.
+    Import account by private key.
     """
     project_dir = ctx.obj['PROJECT_DIR']
     Account.import_account(project_dir, privatekey)
@@ -122,7 +122,7 @@ def import_cmd(ctx, privatekey):
 @click.pass_context
 def delete_cmd(ctx, address):
     """
-    delete account by address.
+    Delete account by address.
     """
     project_dir = ctx.obj['PROJECT_DIR']
     Account.delete_account(project_dir, address)

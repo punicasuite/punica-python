@@ -46,7 +46,7 @@ class Invoke:
     def list_all_functions(project_dir: str, config_name: str):
         if config_name == '':
             config_name = DEFAULT_CONFIG
-        invoke_config, password_config = handle_invoke_config(project_dir, config_name)
+        wallet_file, invoke_config, password_config = handle_invoke_config(project_dir, config_name)
         try:
             abi_file_name = invoke_config['abi']
         except KeyError:
@@ -199,14 +199,17 @@ class Invoke:
         if not os.path.isdir(project_dir_path):
             raise PunicaException(PunicaError.dir_path_error)
         try:
-            invoke_config, password_config = handle_invoke_config(project_dir_path, config_name)
+            wallet_file, invoke_config, password_config = handle_invoke_config(project_dir_path, config_name)
         except PunicaException as e:
             print(e.args)
             return
         ontology = OntologySdk()
         rpc_address = handle_network_config(project_dir_path, network)
         ontology.rpc.set_address(rpc_address)
-        ontology.wallet_manager = read_wallet(project_dir_path, wallet_file_name)
+        if wallet_file_name !='':
+            ontology.wallet_manager = read_wallet(project_dir_path, wallet_file_name)
+        else:
+            ontology.wallet_manager = read_wallet(project_dir_path, wallet_file)
         try:
             abi_file_name = invoke_config['abi']
         except KeyError:
@@ -269,7 +272,6 @@ class Invoke:
                 except PunicaException as e:
                     print(e.args)
                     return
-                print('params********:', params)
                 if len(abi_function.parameters) == 0:
                     pass
                 elif len(abi_function.parameters) == 1:
@@ -293,6 +295,7 @@ class Invoke:
                                 print('Invoke result: {}'.format(''))
                             else:
                                 print('Invoke result: {}'.format(result))
+                        print('\n')
                     else:
                         b58_payer_address = function_information.get('payer', default_b58_payer_address)
                         if b58_payer_address == default_b58_payer_address:

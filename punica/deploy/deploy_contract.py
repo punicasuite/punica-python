@@ -25,8 +25,11 @@ class Deploy:
     @staticmethod
     def generate_signed_deploy_transaction(hex_avm_code: str, project_path: str = '', wallet_file_name: str = '',
                                            config: str = ''):
-        wallet_manager = read_wallet(project_path, wallet_file_name)
-        deploy_information, password_information = handle_deploy_config(project_path, config)
+        wallet_file, deploy_information, password_information = handle_deploy_config(project_path, config)
+        if wallet_file_name != '':
+            wallet_manager = read_wallet(project_path, wallet_file_name)
+        else:
+            wallet_manager = read_wallet(project_path, wallet_file)
         need_storage = deploy_information.get('needStorage', True)
         name = deploy_information.get('name', os.path.split(project_path)[1])
         version = deploy_information.get('version', '0.0.1')

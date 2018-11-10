@@ -198,30 +198,31 @@ This will deploy your smart contract in `bin` directory.
 A simple deployment process looks like this:
 
 ```shell
-Using network 'testNet'.
+Using network 'privateNet'.
 
-Running deployment: oep4.avm
+Use the default wallet file: wallet.json
+Running deployment: hello_ontology.avm
 	Deploying...
-	... 0x0131c56b6a00527ac46a51527ac46a00c3044e616d659c6409006593096c7566
-	Deploy to: 0xf9f47e6a80482eb1c8831789f46dbc5a4f606222
+	Deploy to: cb9f3b7c6fb1cf2c13a40637c189bdd066a272b4
 Deploy successful to network...
-	... 0xc08a440a7f93cc7229fee15b55455fac51ec15153753303bd252c710547ecb62
-Enjoy your contract:)
+	 Contract address is cb9f3b7c6fb1cf2c13a40637c189bdd066a272b4
+	 Txhash is 6ad673d77fee33829240ab1f197c0b7109d4fe44b6a8e46fc3d5dca93b7b289d
 ```
 
 For more usage, you can use `punica deploy --help` command.
 
 ```shell
-punica deploy --help
+$ punica deploy --help
 Usage: punica deploy [OPTIONS]
 
   Deploys the specified contracts to specified chain.
 
 Options:
-  --network TEXT   Specify which network the contract will be deployed.
-  --avm TEXT       Specify which avm file will be deployed.
-  --wallet TEXT    Specify which wallet file will be used.
-  -h, --help       Show this message and exit.
+  --network TEXT  Specify which network the contracts will be deployed.
+  --avm TEXT      Specify which avm file will be deployed.
+  --wallet TEXT   Specify which wallet file will be used.
+  --config TEXT   Specify which deploy config file will be used.
+  -h, --help      Show this message and exit.
 ```
 
 **Note**:

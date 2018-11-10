@@ -60,13 +60,14 @@ def handle_deploy_config(project_dir_path: str, config: str = ''):
     except FileNotFoundError:
         raise PunicaException(PunicaError.config_file_not_found)
     try:
+        wallet_file = config['defaultWallet']
         deploy_information = config['deployConfig']
         password_information = config['password']
     except KeyError:
         raise PunicaException(PunicaError.config_file_error)
     if not isinstance(deploy_information, dict):
         raise PunicaException(PunicaError.config_file_error)
-    return deploy_information, password_information
+    return wallet_file, deploy_information, password_information
 
 
 def handle_invoke_config(project_dir_path: str, config: str):
@@ -89,10 +90,11 @@ def handle_invoke_config(project_dir_path: str, config: str):
     except FileNotFoundError:
         raise PunicaException(PunicaError.config_file_not_found)
     try:
+        wallet_file = config['defaultWallet']
         invoke_config = config['invokeConfig']
         password_config = config['password']
     except KeyError:
         raise PunicaException(PunicaError.other_error('the config file lack invokeConfig or password'))
     if not isinstance(invoke_config, dict):
         raise PunicaException(PunicaError.config_file_error)
-    return invoke_config, password_config
+    return wallet_file, invoke_config, password_config

@@ -172,14 +172,15 @@ contacts
 For more usage, you can use `punica compile --help` command.
 
 ```shell
-punica compile --help
+$ punica compile --help
 Usage: punica compile [OPTIONS] CONTRACT_NAME
 
   Compile the specified contracts to avm and abi file.
 
 Options:
-  --contracts Only compile the specified contract
-  -h, --help  Show this message and exit.
+  --contracts TEXT  Compile specified contracts files in contracts dir.
+  --local BOOLEAN   Use local compiler.
+  -h, --help        Show this message and exit.
 ```
 
 **Note**: If you not run punica cli in you project root directory, you need to use `-p` or `--project` option to specify your DApp project's path.
@@ -189,7 +190,7 @@ Options:
 To deploy your contract, run the following:
 
 ```shell
-punica deploy
+$ punica deploy
 ```
 
 This will deploy your smart contract in `bin` directory.

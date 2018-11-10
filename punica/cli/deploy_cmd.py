@@ -27,10 +27,11 @@ def deploy_cmd(ctx, network, avm, wallet, config):
         tx_hash = Deploy.deploy_smart_contract(project_dir, network, avm, wallet, config)
         if tx_hash is not None:
             hex_contract_address = Deploy.generate_contract_address(project_dir, avm)
-            print('\tDeploy to: 0x{}'.format(hex_contract_address))
+            print('\tDeploy to: {}'.format(hex_contract_address))
             if Deploy.check_deploy_state(tx_hash, project_dir, network):
                 print('Deploy successful to network...')
-                print('\t... 0x{}'.format(tx_hash))
+                print('\t Contract address is {}'.format(hex_contract_address))
+                print('\t Txhash is {}'.format(tx_hash))
             else:
                 print('Deploy unsuccessfully...')
     except (PunicaException, SDKException) as e:

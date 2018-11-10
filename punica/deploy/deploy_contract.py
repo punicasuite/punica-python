@@ -111,4 +111,4 @@ class Deploy:
         else:
             print('\tDeploy failed...')
             print('\tContract has been deployed...')
-            print('\tContract address is 0x{}...'.format(hex_contract_address))
+            print('\tContract address is {}'.format(hex_contract_address))

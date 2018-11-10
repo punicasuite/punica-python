@@ -42,3 +42,5 @@ class PunicaError:
     file_exist_error = get_error.__func__(30000, 'something already exists at the destination.')
     permission_error = get_error.__func__(30001, 'permission denied, please check your file path.')
     dir_path_error = get_error.__func__(30002, 'dir path not exist, please check your dir path.')
+
+    parameter_type_error = get_error.__func__(40000, 'parameter type is wrong.')

@@ -148,44 +148,48 @@ class Invoke:
             if isinstance(param, list):
                 if len(param) == 0:
                     continue
+                list_params_not_dict = list()
                 for i in range(len(param)):
                     list_params2 = list()
                     if isinstance(param[i], dict):
                         for p in param[i].values():
                             if isinstance(p, str):
-                                list_p = p.split(':')
-                                if len(list_p) != 2:
-                                    raise PunicaError.other_error('parameters error')
-                                if list_p[0] == 'ByteArray':
-                                    if len(list_p[1]) == 34:
-                                        list_params2.append(Address.b58decode(list_p[1]).to_array())
-                                    else:
-                                        list_params2.append(list_p[1].encode())
-                                elif list_p[0] == 'String':
-                                    list_params2.append(list_p[1])
+                                Invoke.handle_param_str(list_params2, p)
                             elif isinstance(p, int):
                                 list_params2.append(p)
-                    list_params.append(list_params2)
+                        list_params.append(list_params2)
+                    elif isinstance(param[i], int):
+                        list_params_not_dict.append(param[i])
+                    elif isinstance(param[i], str):
+                        Invoke.handle_param_str(list_params_not_dict, param[i])
+                    else:
+                        raise PunicaException(PunicaError.parameter_type_error)
+                if len(list_params_not_dict) == 1:
+                    list_params = list_params_not_dict
+                elif len(list_params_not_dict) >= 2:
+                    list_params.append(list_params_not_dict)
             elif isinstance(param, str):
                 if param == '':
-                    raise RuntimeError("parameters value error")
-                list_p = param.split(':')
-                if len(list_p) != 2:
-                    raise PunicaError.other_error("parameters error")
-                if list_p[0] == 'ByteArray':
-                    if len(list_p[1]) == 34:
-                        try:
-                            bs =  Address.b58decode(list_p[1]).to_array()
-                            list_params.append(bs)
-                        except SDKException:
-                            list_params.append(list_p[1].encode())
-                    else:
-                        list_params.append(list_p[1].encode())
-                elif list_p[0] == 'String':
-                    list_params.append(list_p[1])
+                    raise PunicaException(PunicaError.parameter_type_error)
+                Invoke.handle_param_str(list_params, param)
             elif isinstance(param, int):
                 list_params.append(param)
         return list_params
+
+    @staticmethod
+    def handle_param_str(list_params2: list, p: str):
+        list_p = p.split(':')
+        if len(list_p) != 2:
+            raise PunicaError.other_error('parameters error')
+        if list_p[0] == 'ByteArray':
+            if len(list_p[1]) == 34:
+                list_params2.append(Address.b58decode(list_p[1]).to_array())
+            else:
+                list_params2.append(list_p[1].encode())
+        elif list_p[0] == 'String':
+            list_params2.append(list_p[1])
+        else:
+            raise PunicaException(PunicaError.other_error("parameter type is wrong"))
 
     @staticmethod
     def invoke_all_function_in_list(wallet_file_name: str = '', project_dir_path: str = '', network: str = '',
@@ -257,11 +261,11 @@ class Invoke:
             try:
                 params = function_information['params']
                 params = Invoke.params_normalize(params)
+                print('params********:', params)
                 if len(abi_function.parameters) == 0:
                     pass
                 elif len(abi_function.parameters) == 1:
                     abi_function.set_params_value((params,))
-
                 elif len(abi_function.parameters) == len(params):
                     abi_function.set_params_value(tuple(params))
                 else:
@@ -276,7 +280,10 @@ class Invoke:
                         if isinstance(result, list):
                             print('Invoke result: {}'.format(list(map(lambda r: "0x" + r, result))))
                         else:
-                            print('Invoke result: {}'.format("0x" + result))
+                            if result is None:
+                                print('Invoke result: {}'.format(''))
+                            else:
+                                print('Invoke result: {}'.format("0x" + result))
                     else:
                         b58_payer_address = function_information.get('payer', default_b58_payer_address)
                         if b58_payer_address == default_b58_payer_address:
@@ -311,10 +318,12 @@ class Invoke:
                             tx_hash = ontology.rpc.send_raw_transaction(tx)
                             if tx_hash == '':
                                 print('Invoke failed...')
+                                print('txHash: 0x{}'.format(tx.hash256_explorer()))
                             else:
                                 print('Invoke successful')
                                 print('txHash: 0x{}'.format(tx_hash))
                         except SDKException as e:
+                            print('txHash: 0x{}'.format(tx.hash256_explorer()))
                             print('\tInvoke failed, {}'.format(e.args[1].replace('Other Error, ', '')))
 
             except (KeyError, RuntimeError) as e:

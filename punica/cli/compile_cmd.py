@@ -29,7 +29,7 @@ def compile_contract(contract_dir, contract_name, avm, abi, local):
 @click.option('--contracts', nargs=1, type=str, default='', help='Compile specified contracts files in contracts dir.')
 # @click.option('--avm', nargs=1, type=str, default=False, help='Only generate avm file flag.')
 # @click.option('--abi', nargs=1, type=str, default=False, help='Only generate abi file flag.')
-@click.option('--local', nargs=1, type=str, default=False, help='Use local compiler.')
+@click.option('--local', nargs=1, type=bool, default=False, help='Use local compiler.')
 @click.pass_context
 def compile_cmd(ctx, contracts, local):
     """
@@ -41,7 +41,13 @@ def compile_cmd(ctx, contracts, local):
         if contracts != '':
             contract_file_path = os.path.join(project_dir, contracts)
             if not os.path.exists(contract_file_path):
+                if os.path.dirname(contracts) != '':
+                    print(contracts, 'not found')
+                    return
                 contract_file_path = os.path.join(project_dir, 'contracts', contracts)
+                if not os.path.exists(contract_file_path):
+                    print(contracts, 'not found')
+                    return
             if contracts.endswith('.py') or contracts.endswith('.cs'):
                 compile_contract(os.path.dirname(contract_file_path), os.path.basename(contract_file_path), False, False, local)
             else:

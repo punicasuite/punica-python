@@ -13,7 +13,7 @@ class TestUnbox(unittest.TestCase):
     def test_compile(self):
         contract_path = os.path.join(os.getcwd(), 'test_file', 'test_compile_cmd')
         runner = CliRunner()
-        result = runner.invoke(main, ['-p', '/Users/sss/dev/localgit/test', 'compile', '--contracts', 'contracts/hello_ontology.py'])
+        result = runner.invoke(main, ['-p', '/Users/sss/dev/temp3', 'compile', '--local', 'true'])
         self.assertEqual(0, result.exit_code)
 
 

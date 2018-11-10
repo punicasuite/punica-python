@@ -46,7 +46,7 @@ class Invoke:
     def list_all_functions(project_dir: str, config_name: str):
         if config_name == '':
             config_name = DEFAULT_CONFIG
-        invoke_config, password_config = handle_invoke_config(project_dir, config_name)
+        wallet_file, invoke_config, password_config = handle_invoke_config(project_dir, config_name)
         try:
             abi_file_name = invoke_config['abi']
         except KeyError:
@@ -148,26 +148,26 @@ class Invoke:
             if isinstance(param, list):
                 if len(param) == 0:
                     continue
-                list_params_not_dict = list()
+                temp_params_list = list()
                 for i in range(len(param)):
-                    list_params2 = list()
                     if isinstance(param[i], dict):
+                        list_params2 = list()
                         for p in param[i].values():
                             if isinstance(p, str):
                                 Invoke.handle_param_str(list_params2, p)
                             elif isinstance(p, int):
                                 list_params2.append(p)
-                        list_params.append(list_params2)
+                        temp_params_list.append(list_params2)
                     elif isinstance(param[i], int):
-                        list_params_not_dict.append(param[i])
+                        temp_params_list.append(param[i])
                     elif isinstance(param[i], str):
-                        Invoke.handle_param_str(list_params_not_dict, param[i])
+                        Invoke.handle_param_str(temp_params_list, param[i])
                     else:
                         raise PunicaException(PunicaError.parameter_type_error)
-                if len(list_params_not_dict) == 1:
-                    list_params = list_params_not_dict
-                elif len(list_params_not_dict) >= 2:
-                    list_params.append(list_params_not_dict)
+                if len(temp_params_list) == 1:
+                    list_params = temp_params_list
+                elif len(temp_params_list) >= 2:
+                    list_params.append(temp_params_list)
             elif isinstance(param, str):
                 if param == '':
                     raise PunicaException(PunicaError.parameter_type_error)
@@ -180,7 +180,7 @@ class Invoke:
     def handle_param_str(list_params2: list, p: str):
         list_p = p.split(':')
         if len(list_p) != 2:
-            raise PunicaError.other_error('parameters error')
+            raise PunicaException(PunicaError.parameter_type_error)
         if list_p[0] == 'ByteArray':
             if len(list_p[1]) == 34:
                 list_params2.append(Address.b58decode(list_p[1]).to_array())
@@ -188,8 +188,10 @@ class Invoke:
                 list_params2.append(list_p[1].encode())
         elif list_p[0] == 'String':
             list_params2.append(list_p[1])
+        elif list_p[0] == 'Address':
+            list_params2.append(Address.b58decode(list_p[1]).to_array())
         else:
-            raise PunicaException(PunicaError.other_error("parameter type is wrong"))
+            raise PunicaException(PunicaError.parameter_type_error)
 
     @staticmethod
     def invoke_all_function_in_list(wallet_file_name: str = '', project_dir_path: str = '', network: str = '',
@@ -198,11 +200,18 @@ class Invoke:
             project_dir_path = os.getcwd()
         if not os.path.isdir(project_dir_path):
             raise PunicaException(PunicaError.dir_path_error)
-        invoke_config, password_config = handle_invoke_config(project_dir_path, config_name)
+        try:
+            wallet_file, invoke_config, password_config = handle_invoke_config(project_dir_path, config_name)
+        except PunicaException as e:
+            print(e.args)
+            return
         ontology = OntologySdk()
         rpc_address = handle_network_config(project_dir_path, network)
         ontology.rpc.set_address(rpc_address)
-        ontology.wallet_manager = read_wallet(project_dir_path, wallet_file_name)
+        if wallet_file_name !='':
+            ontology.wallet_manager = read_wallet(project_dir_path, wallet_file_name)
+        else:
+            ontology.wallet_manager = read_wallet(project_dir_path, wallet_file)
         try:
             abi_file_name = invoke_config['abi']
         except KeyError:
@@ -257,11 +266,14 @@ class Invoke:
                     break
             if function_information is None:
                 print('there is not the function: ', function_name)
-                os._exit(0)
+                return
             try:
                 params = function_information['params']
-                params = Invoke.params_normalize(params)
-                print('params********:', params)
+                try:
+                    params = Invoke.params_normalize(params)
+                except PunicaException as e:
+                    print(e.args)
+                    return
                 if len(abi_function.parameters) == 0:
                     pass
                 elif len(abi_function.parameters) == 1:
@@ -278,12 +290,13 @@ class Invoke:
                         result = ontology.rpc.send_raw_transaction_pre_exec(tx)
                         print('Invoke successful')
                         if isinstance(result, list):
-                            print('Invoke result: {}'.format(list(map(lambda r: "0x" + r, result))))
+                            print('Invoke result: {}'.format(result))
+                            # print('Invoke result: {}'.format(list(map(lambda r: "0x" + r, result))))
                         else:
                             if result is None:
                                 print('Invoke result: {}'.format(''))
                             else:
-                                print('Invoke result: {}'.format("0x" + result))
+                                print('Invoke result: {}'.format(result))
                     else:
                         b58_payer_address = function_information.get('payer', default_b58_payer_address)
                         if b58_payer_address == default_b58_payer_address:

@@ -187,6 +187,9 @@ Options:
 
 ### 4.3. Deployment
 
+Before deploying, you need to refine both configuration files. One configuration is punica-config.json in which we configure the
+blockchain network we use, another is default-config.json in which we configure the contract information.
+
 To deploy your contract, run the following:
 
 ```shell
@@ -234,138 +237,106 @@ Options:
 ### 4.4. Invocation
 
 If you want to invoke a list of function in your deployed smart contract, a convenience way is to use `Invoke` command.
+before we invoke , we should first configure the default-config.json.
 
 Support we have an invoke config in our `default-config.json`:
 
 ```json
-"invokeConfig":{
-    "abi": "oep4_token_abi.json",
-    "defaultPayer": "ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
-    "gasPrice": 0,
-    "gasLimit": 21000000,
-    "functions": [
-        {   
-	    "name": "Name",
-            "params": {},
-            "signers": {},
-            "preExec": true
-        },
-	{
-            "name": "Symbol",
-            "params": {},
-            "signers": {},
-            "preExec": true
-        },
-	{
-            "name": "Decimal",
-            "params": {},
-            "signers": {},
-            "preExec": true
-        },
-        {
-	    "name": "TotalSupply",
-            "params": {},
-            "signers": {},
-            "preExec": true
-        },
-        {
-	    "name":"BalanceOf",
-            "params": {
-                "account": "ByteArray:ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6"
+"abi": "hello_ontology_abi.json",
+        "defaultPayer": "AUr5QUfeBADq6BMY6Tp5yuMsUNGpsD7nLZ",
+        "gasPrice": 0,
+        "gasLimit": 20000,
+        "functions": [
+            {
+                "name": "hello",
+                "params": {
+                    "msg": "Address:AUr5QUfeBADq6BMY6Tp5yuMsUNGpsD7nLZ"
+                },
+                "signers": {
+                    "m": 1,
+                    "signer": [
+                        "AUr5QUfeBADq6BMY6Tp5yuMsUNGpsD7nLZ"
+                    ]
+                },
+                "preExec": true
             },
-            "signers": {},
-            "preExec": true
-        },
-        {
-	    "name": "Transfer",
-            "params": {
-                "from_acct": "ByteArray:ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
-                "to_acct": "ByteArray:AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve",
-                "amount": 1
+            {
+                "name": "testListNum",
+                "params": {
+                    "msg": [1,2,3,4,5]
+                },
+                "signers": {},
+                "preExec": true
             },
-            "signers": {
-                "m": 1,
-                "signer": ["ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6"]
+            {
+                "name": "testListNum2",
+                "params": {
+                    "msgList": [1,2,3,4,5],
+                    "msg": "String:test"
+                },
+                "signers": {},
+                "preExec": true
             },
-            "preExec": false
-        },
-        {
-	    "name": "TransferMulti",
-            "params": {
-                "args": [
-                    {
-                        "from": "ByteArray:ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
-                        "to": "ByteArray:AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve",
-                        "amount": 1
-                    },
-                    {
-                        "from": "ByteArray:AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve",
-                        "to": "ByteArray:Ad4H6AB3iY7gBGNukgBLgLiB6p3v627gz1",
-                        "amount": 2
-                    }
-                ]
+            {
+                "name": "testListStr",
+                "params": {
+                    "msgList": [
+                        "String:hello",
+                        "String:world"
+                    ],
+                    "msg":"String:test"
+                },
+                "signers": {},
+                "preExec": true
             },
-            "signers": {
-                "m": 1,
-                "signer": ["ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6", "AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve"]
+            {
+                "name": "testListByteArray",
+                "params": {
+                    "msgList": [
+                        "ByteArray:Hello",
+                        "ByteArray:world"
+                    ],
+                    "msg": "String:hello"
+                },
+                "signers": {},
+                "preExec": true
             },
-            "payer": "ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
-            "preExec": false
-        },
-        {
-	    "name": "Allowance",
-            "params": {
-                "owner": "ByteArray:ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
-                "spender": "ByteArray:AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve"
-            },
-            "signers": {
-                "m": 1,
-                "signer": ["ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6"]
-            },
-            "preExec": false
-        },
-        {
-	    "name": "TransferFrom",
-            "params": {
-                "sender": "ByteArray:AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve",
-                "from_acct": "ByteArray:ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
-                "to_acct": "ByteArray:Ad4H6AB3iY7gBGNukgBLgLiB6p3v627gz1",
-                "amount": 1
-            },
-            "signers": {
-                "m": 1,
-                "signer": ["ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6"]
-            },
-            "preExec": false
-        },
-        {
-	    "name": "Init",
-            "params": {},
-            "signers": {},
-            "preExec": true
-        }
-    ]
-}
+            {
+                "name": "testListStruct",
+                "params": {
+                    "msgList": [
+                        {
+                            "name": "String:hello",
+                            "age": 1
+                        },
+                        {
+                            "name": "String:hello2",
+                            "age": 2
+                        }
+                    ],
+                    "msg": "String:test"
+                },
+                "signers": {},
+                "preExec": true
+            }
+        ]
+    }
 ```
 View the functions that can be called
 
 ```shell
-punica list
+punica invoke list
 ```
 
 The following output we will get:
 ```shell
 All Functions:
-         Init
-         Name
-         Symbol
-         Decimal
-         TotalSupply
-         BalanceOf
-         Transfer
-         TransferMulti
-         Allowance
-         TransferFrom
+	 hello
+	 testListNum
+	 testListNum2
+	 testListStr
+	 testListByteArray
+	 testListStruct
 ```
 
 To run our invoke function list, run the following:
@@ -375,33 +346,50 @@ To run our invoke function list, run the following:
 The following output we will get:
 
 ```shell
-Running invocation: oep4.json
-Using network 'testNet'.
+$ punica invoke
+Using network 'privateNet'.
 
+Running invocation: hello_ontology_abi.json
 Unlock default payer account...
-	Unlock account: ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6
-    Please input account password: 
-	Unlock successful...
-Invoking Name...
-	Invoke successful...
-		... Invoke result: 546f6b656e4e616d65
-Invoking Symbol......
+Invoking  hello
+Invoke successful
+Invoke result: ['8f651d459b4f146380dab28e7cfb9d4bb9c3fcd1']
+Invoking  testListNum
+Invoke successful
+Invoke result: [['01', '02', '03', '04', '05']]
+Invoking  testListNum2
+Invoke successful
+Invoke result: [['01', '02', '03', '04', '05'], '74657374']
+Invoking  testListStr
+Invoke successful
+Invoke result: [['68656c6c6f', '776f726c64'], '74657374']
+Invoking  testListByteArray
+Invoke successful
+Invoke result: [['48656c6c6f', '776f726c64'], '68656c6c6f']
+Invoking  testListStruct
+Invoke successful
+Invoke result: [['68656c6c6f', '01'], ['68656c6c6f32', '02'], '74657374']
 	
 ```
 
 For more usage, you can use `punica invoke --help` command.
 
 ```shell
-punica invoke --help
-Usage: punica invoke [OPTIONS]
+$ punica invoke --help
+Usage: punica invoke [OPTIONS] COMMAND [ARGS]...
 
-  Invoke the function list in punica-config.
+  Invoke the function list in default-config or specify config.
 
 Options:
-  --network TEXT   Specify which network the contract will be deployed.
-  --wallet TEXT    Specify which wallet file will be used.
-  --functions Text Specify which function will be used.
-  -h, --help       Show this message and exit.
+  --network TEXT    Specify which network the contracts will be deployed.
+  --wallet TEXT     Specify which wallet file will be used.
+  --functions TEXT  Specify which function will be executed.
+  --config TEXT     Specify which config file will be used.
+  --preexec TEXT    preExec the function.
+  -h, --help        Show this message and exit.
+
+Commands:
+  list  List all the function in default-config or...
 ```
 
 **Note**:
@@ -412,7 +400,7 @@ Options:
 ### 4.5 Node
 
 ```shell
-sss:test sss$ punica node
+$ punica node
 Usage: punica node [OPTIONS]
 
    Ontology Blockchain private net in test mode. please download from
@@ -425,7 +413,7 @@ Options:
 ### 4.6. Scpm
 
 ```shell
-sss:test sss$ punica scpm
+$ punica scpm
 Usage: punica scpm [OPTIONS]
 
    smart contract package manager，support download and publish.
@@ -437,7 +425,7 @@ Options:
 ### 4.7  Smartx
 
 ```shell
-sss:test sss$ punica smartx
+$ punica smartx
 
 Please go to Smartx for debugging smart contracts:
 http://smartx.ont.io/#/
@@ -445,7 +433,7 @@ http://smartx.ont.io/#/
 ### 4.8  Test
 
 ```shell
-sss:test sss$ punica test -h
+$ punica test -h
 Usage: punica test [OPTIONS] COMMAND [ARGS]...
 
   Unit test with specified smart contract
@@ -460,7 +448,7 @@ Commands:
 ### 4.9  Wallet
 
 ```shell
-sss:test sss$ punica wallet
+$ punica wallet
 Usage: punica wallet [OPTIONS] COMMAND [ARGS]...
 
    Manager your asset, ontid, account.
@@ -480,14 +468,14 @@ Commands:
 ### 5.1. Checkout Version
 
 ```shell
-C:\tutorialtoken> punica -v
-0.0.7
+$ punica -v
+0.0.9
 ```
 
 ### 5.2. Unbox Tutorialtoken
 
 ```shell
-C:\tutorialtoken> punica unbox tutorialtoken
+$ punica unbox tutorialtoken
 Downloading...
 Unpacking...
 Unbox successful. Enjoy it!
@@ -496,8 +484,8 @@ Unbox successful. Enjoy it!
 ### 5.3. Compile Contract
 
 ```shell
-C:\tutorialtoken> tree
-C:.
+$ tree
+.
 ├─contracts
 │     └─build
 │
@@ -511,7 +499,7 @@ C:.
 ```
 
 ```shell
-C:\tutorialtoken> punica compile
+$ punica compile
 Compile...
         Compile oep4_token.py...
         Generate abi file and avm file successful...
@@ -520,8 +508,8 @@ Now we are finished :)
 ```
 
 ```shell
-C:\tutorialtoken> tree
-C:.
+$ tree
+.
 │
 ├─contracts
 │     └─build
@@ -536,8 +524,8 @@ C:.
 ```
 
 ```shell
-C:\tutorialtoken> tree build /F
-C:\TUTORIALTOKEN\BUILD
+$ tree build /F
+\TUTORIALTOKEN\BUILD
     oep4_token.avm
     oep4_token_abi.json
 ```
@@ -547,7 +535,7 @@ C:\TUTORIALTOKEN\BUILD
 After compile successful, you can deploy your smart contract into a Ontolog Network.
 
 ```shell
-C:\tutorialtoken> punica deploy
+$ punica deploy
 Using network 'testNet'.
 
 Running deployment: oep4_token.avm
@@ -563,7 +551,7 @@ Enjoy your contract!
 If the contract has been deployed into the current network, you will get the following output.
 
 ```shell
-C:\tutorialtoken> punica deploy
+$ punica deploy
 Using network 'testNet'.
 
 Running deployment: oep4_token.avm
@@ -576,7 +564,7 @@ Enjoy your contract:)
 ### 5.5. Invoke Function in Smart Contract
 
 ```shell
-C:\tutorialtoken> punica invoke
+$ punica invoke
 Using network 'testNet'.
 
 Running invocation: oep4_token_abi.json

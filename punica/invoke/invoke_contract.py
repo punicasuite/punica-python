@@ -188,6 +188,8 @@ class Invoke:
                 list_params2.append(list_p[1].encode())
         elif list_p[0] == 'String':
             list_params2.append(list_p[1])
+        elif list_p[0] == 'Address':
+            list_params2.append(Address.b58decode(list_p[1]).to_array())
         else:
             raise PunicaException(PunicaError.parameter_type_error)
 
@@ -264,7 +266,7 @@ class Invoke:
                     break
             if function_information is None:
                 print('there is not the function: ', function_name)
-                os._exit(0)
+                return
             try:
                 params = function_information['params']
                 try:
@@ -295,7 +297,6 @@ class Invoke:
                                 print('Invoke result: {}'.format(''))
                             else:
                                 print('Invoke result: {}'.format(result))
-                        print('\n')
                     else:
                         b58_payer_address = function_information.get('payer', default_b58_payer_address)
                         if b58_payer_address == default_b58_payer_address:

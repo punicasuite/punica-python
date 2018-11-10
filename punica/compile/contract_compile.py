@@ -97,6 +97,7 @@ class PunicaCompiler:
         try:
             PunicaCompiler.generate_avm_file(contract_path, avm_save_path)
             PunicaCompiler.generate_abi_file(contract_path, abi_save_path)
+            print('Compiled, Thank you')
         except PermissionError as error:
             if error.args[0] == 13:
                 raise PunicaException(PunicaError.permission_error)
@@ -138,7 +139,7 @@ class PunicaCompiler:
                     abi = str(r.lstrip('b\''))
                     temp = abi.rstrip('\'')
                     f2.write(temp.replace(' ', ''))
-                print("compiled, Thank you")
+                print("Compiled, Thank you")
                 invoke_config_path = os.path.join(path, DEFAULT_CONFIG)
                 if os.path.exists(invoke_config_path):
                     PunicaCompiler.update_invoke_config(abi_save_path, invoke_config_path)

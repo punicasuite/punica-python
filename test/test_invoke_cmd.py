@@ -13,7 +13,7 @@ class TestInvokeCmd(unittest.TestCase):
         project_path = os.path.join(os.getcwd(), 'test_file', 'test_invoke')
         password.return_value = 'password'
         runner = CliRunner()
-        result = runner.invoke(main, ['-p', '/Users/sss/dev/localgit/test', 'invoke', 'list'])
+        result = runner.invoke(main, ['-p', '/Users/sss/dev/temp3', 'invoke', '--functions', 'hello'])
         self.assertEqual(0, result.exit_code)
 
 

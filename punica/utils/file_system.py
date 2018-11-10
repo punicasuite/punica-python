@@ -93,16 +93,21 @@ def read_wallet(project_path: str, wallet_file_name: str = '') -> WalletManager:
     if not os.path.isdir(project_path):
         raise PunicaException(PunicaError.directory_error)
     wallet_manager = WalletManager()
-    if wallet_file_name == '':
+    if wallet_file_name == '' or wallet_file_name == '"':
         wallet_dir_path = os.path.join(project_path, 'wallet')
         dir_list = os.listdir(wallet_dir_path)
         if len(dir_list) == 1:
             wallet_path = os.path.join(wallet_dir_path, dir_list[0])
+        elif os.path.exists(os.path.join(wallet_dir_path, 'wallet.json')):
+            print('Use the default wallet file: wallet.json')
+            wallet_path = os.path.join(wallet_dir_path, 'wallet.json')
         else:
             raise PunicaException(PunicaError.wallet_file_unspecified)
     else:
         wallet_path = os.path.join(project_path, wallet_file_name)
         if not os.path.exists(wallet_path):
+            if os.path.dirname(wallet_file_name) != '':
+                raise PunicaException(PunicaError.other_error(wallet_file_name + ' not found'))
             wallet_path = os.path.join(project_path, 'wallet', wallet_file_name)
             if not os.path.exists(wallet_path):
                 raise PunicaError.other_error(wallet_path, ' is error')

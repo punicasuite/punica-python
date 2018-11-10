@@ -73,17 +73,17 @@ def handle_invoke_config(project_dir_path: str, config: str):
     try:
         if config != '':
             config_path = os.path.join(project_dir_path, config)
-            if os.path.exists(config_path):
-                if not os.path.isfile(config_path):
-                    raise PunicaError.other_error(config_path, ' is not file')
-            else:
-                config_path = os.path.join(project_dir_path, 'contracts', config)
-                if not os.path.exists(config_path):
-                    raise PunicaError.other_error(config_path, ' not exist')
+            if not os.path.exists(config_path):
+                if os.path.dirname(config) != '':
+                    raise PunicaException(PunicaError.other_error(config + ' not found'))
+                else:
+                    config_path = os.path.join(project_dir_path, 'contracts', config)
+                    if not os.path.exists(config_path):
+                        raise PunicaException(PunicaError.other_error(config_path + ' not exist'))
         else:
             config_path = os.path.join(project_dir_path, 'contracts', DEFAULT_CONFIG)
         if not os.path.exists(config_path):
-            raise PunicaError.other_error(config_path, " not exist")
+            raise PunicaException(PunicaError.other_error(config_path + ' not found'))
         with open(config_path, 'r') as f:
             config = json.load(f)
     except FileNotFoundError:

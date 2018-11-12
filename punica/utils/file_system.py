@@ -113,6 +113,6 @@ def read_wallet(project_path: str, wallet_file_name: str = '') -> WalletManager:
                 raise PunicaError.other_error(wallet_path, ' is error')
     try:
         wallet_manager.open_wallet(wallet_path)
-    except SDKException:
+    except SDKException as e:
         raise PunicaException(PunicaError.wallet_file_error)
     return wallet_manager

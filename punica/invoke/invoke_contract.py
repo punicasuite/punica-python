@@ -46,13 +46,21 @@ class Invoke:
     def list_all_functions(project_dir: str, config_name: str):
         if config_name == '':
             config_name = DEFAULT_CONFIG
-        wallet_file, invoke_config, password_config = handle_invoke_config(project_dir, config_name)
+        try:
+            wallet_file, invoke_config, password_config = handle_invoke_config(project_dir, config_name)
+        except Exception as e:
+            print(e.args)
+            return
         try:
             abi_file_name = invoke_config['abi']
         except KeyError:
             raise PunicaException(PunicaError.config_file_error)
         abi_dir_path = os.path.join(project_dir, 'contracts', 'build')
-        dict_abi = read_abi(abi_dir_path, abi_file_name)
+        try:
+            dict_abi = read_abi(abi_dir_path, abi_file_name)
+        except PunicaException as e:
+            print(e.args)
+            return
         try:
             func_in_abi_list = dict_abi['functions']
         except KeyError:
@@ -83,9 +91,10 @@ class Invoke:
         return abi_info
 
     @staticmethod
-    def generate_unsigned_invoke_transaction(contract_address: bytearray, abi_func: AbiFunction, payer_base58: bytearray, gas_price: int,
+    def generate_unsigned_invoke_transaction(contract_address: bytearray, params_list: list, payer_base58: bytearray, gas_price: int,
                                              gas_limit: int):
-        params = BuildParams.serialize_abi_function(abi_func)
+        # params = BuildParams.serialize_abi_function(abi_func)
+        params = BuildParams.create_code_params_script(params_list)
         tx = NeoVm.make_invoke_transaction(contract_address, bytearray(params), payer_base58, gas_limit, gas_price)
         return tx
 
@@ -140,8 +149,25 @@ class Invoke:
         return Invoke.unlock_account(b58_address, ontology.wallet_manager)
 
     @staticmethod
+    def params_build(func_name: str, params: list) -> list:
+        params_list = list()
+        params_list.append(func_name.encode())
+        temp_list = list()
+        for param in params:
+            if isinstance(param, list):
+                temp_param_list = []
+                for p in param:
+                    temp_param_list.append(p)
+                temp_list.append(temp_param_list)
+            else:
+                temp_list.append(param)
+        params_list.append(temp_list)
+        return params_list
+
+    @staticmethod
     def params_normalize(dict_params: dict) -> list:
         list_params = list()
+        isfirst = False
         if len(dict_params) == 0:
             return list_params
         for param in dict_params.values():
@@ -159,15 +185,17 @@ class Invoke:
                                 list_params2.append(p)
                         temp_params_list.append(list_params2)
                     elif isinstance(param[i], int):
+                        isfirst = True
                         temp_params_list.append(param[i])
                     elif isinstance(param[i], str):
+                        isfirst = True
                         Invoke.handle_param_str(temp_params_list, param[i])
                     else:
                         raise PunicaException(PunicaError.parameter_type_error)
-                if len(temp_params_list) == 1:
-                    list_params = temp_params_list
-                elif len(temp_params_list) >= 2:
+                if len(temp_params_list) >= 2 and isfirst:
                     list_params.append(temp_params_list)
+                else:
+                    list_params = temp_params_list
             elif isinstance(param, str):
                 if param == '':
                     raise PunicaException(PunicaError.parameter_type_error)
@@ -208,7 +236,7 @@ class Invoke:
         ontology = OntologySdk()
         rpc_address = handle_network_config(project_dir_path, network)
         ontology.rpc.set_address(rpc_address)
-        if wallet_file_name !='':
+        if wallet_file_name != '':
             ontology.wallet_manager = read_wallet(project_dir_path, wallet_file_name)
         else:
             ontology.wallet_manager = read_wallet(project_dir_path, wallet_file)
@@ -271,21 +299,24 @@ class Invoke:
                 params = function_information['params']
                 try:
                     params = Invoke.params_normalize(params)
+                    print("param: ", params)
+                    params_list = Invoke.params_build(function_name, params)
+                    print("params_list: ", params_list)
                 except PunicaException as e:
                     print(e.args)
                     return
-                if len(abi_function.parameters) == 0:
-                    pass
-                elif len(abi_function.parameters) == 1:
-                    abi_function.set_params_value((params,))
-                elif len(abi_function.parameters) == len(params):
-                    abi_function.set_params_value(tuple(params))
-                else:
-                    abi_function = None
-                    print('\tInvoke failed, params mismatching with the abi file')
+                # if len(abi_function.parameters) == 0:
+                #     pass
+                # elif len(abi_function.parameters) == 1:
+                #     abi_function.set_params_value(tuple(params))
+                # elif len(abi_function.parameters) == len(params):
+                #     abi_function.set_params_value(tuple(params))
+                # else:
+                #     abi_function = None
+                #     print('\tInvoke failed, params mismatching with the abi file')
                 if abi_function is not None:
                     if function_information['preExec'] or pre_exec == 'true':
-                        tx = Invoke.generate_unsigned_invoke_transaction(contract_address, abi_function, bytearray(),
+                        tx = Invoke.generate_unsigned_invoke_transaction(contract_address, params_list, bytearray(),
                                                                          gas_price, gas_limit)
                         result = ontology.rpc.send_raw_transaction_pre_exec(tx)
                         print('Invoke successful')
@@ -303,7 +334,7 @@ class Invoke:
                             payer_acct = default_payer_acct
                         else:
                             payer_acct = Invoke.get_account(ontology, password_config, b58_payer_address)
-                        tx = Invoke.generate_unsigned_invoke_transaction(contract_address, abi_function,
+                        tx = Invoke.generate_unsigned_invoke_transaction(contract_address, params_list,
                                                                          payer_acct.get_address().to_array(), gas_price,
                                                                          gas_limit)
                         ontology.add_sign_transaction(tx, payer_acct)
@@ -313,7 +344,7 @@ class Invoke:
                             print('Unlock signers account...')
                             for b58_signer_address in dict_signers['signer']:
                                 if b58_signer_address == b58_payer_address:
-                                    pass
+                                    continue
                                 else:
                                     signer = Invoke.get_account(ontology, password_config, b58_signer_address)
                                     signer_list.append(signer)

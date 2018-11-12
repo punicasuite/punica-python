@@ -46,6 +46,8 @@ class Deploy:
         if password == '':
             password = getpass.getpass('\tPlease input payer account password: ')
         payer_acct = wallet_manager.get_account(b58_payer_address, password)
+        if payer_acct is None:
+            raise PunicaException(PunicaError.other_error(b58_payer_address + ' not found'))
         ontology.sign_transaction(tx, payer_acct)
         return tx
 
@@ -105,7 +107,12 @@ class Deploy:
         ontology.rpc.set_address(rpc_address)
         contract = ontology.rpc.get_smart_contract(hex_contract_address)
         if contract == 'unknow contract' or contract == 'unknow contracts':
-            tx = Deploy.generate_signed_deploy_transaction(hex_avm_code, project_dir, wallet_file_name, config)
+            try:
+                tx = Deploy.generate_signed_deploy_transaction(hex_avm_code, project_dir, wallet_file_name, config)
+            except PunicaException as e:
+                print('\tDeploy failed...')
+                print('\t', e.args)
+                return
             print('Running deployment: {}'.format(avm_file_name))
             print('\tDeploying...')
             ontology.rpc.set_address(rpc_address)

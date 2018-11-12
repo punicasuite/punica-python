@@ -46,13 +46,21 @@ class Invoke:
     def list_all_functions(project_dir: str, config_name: str):
         if config_name == '':
             config_name = DEFAULT_CONFIG
-        wallet_file, invoke_config, password_config = handle_invoke_config(project_dir, config_name)
+        try:
+            wallet_file, invoke_config, password_config = handle_invoke_config(project_dir, config_name)
+        except Exception as e:
+            print(e.args)
+            return
         try:
             abi_file_name = invoke_config['abi']
         except KeyError:
             raise PunicaException(PunicaError.config_file_error)
         abi_dir_path = os.path.join(project_dir, 'contracts', 'build')
-        dict_abi = read_abi(abi_dir_path, abi_file_name)
+        try:
+            dict_abi = read_abi(abi_dir_path, abi_file_name)
+        except PunicaException as e:
+            print(e.args)
+            return
         try:
             func_in_abi_list = dict_abi['functions']
         except KeyError:
@@ -271,13 +279,14 @@ class Invoke:
                 params = function_information['params']
                 try:
                     params = Invoke.params_normalize(params)
+                    print("param: ", params)
                 except PunicaException as e:
                     print(e.args)
                     return
                 if len(abi_function.parameters) == 0:
                     pass
                 elif len(abi_function.parameters) == 1:
-                    abi_function.set_params_value((params,))
+                    abi_function.set_params_value(tuple(params))
                 elif len(abi_function.parameters) == len(params):
                     abi_function.set_params_value(tuple(params))
                 else:

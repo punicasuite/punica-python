@@ -196,7 +196,7 @@ To deploy your contract, run the following:
 $ punica deploy
 ```
 
-This will deploy your smart contract in `bin` directory.
+This will deploy your smart contract to blockchain.
 
 A simple deployment process looks like this:
 

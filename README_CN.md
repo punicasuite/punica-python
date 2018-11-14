@@ -176,4 +176,271 @@ Options:
 
 ### 部署
 
-部署之前，你要关心两个配置文件，一个是`punica-config.json`,该文件配置使用的区块链网络，另一个配置文件是
+部署之前，你要关心两个配置文件，一个是`punica-config.json`,该文件配置使用的区块链网络，另一个配置文件是contracts目录下面的default-config.json文件，
+该文件用于配置部署合约的参数信息和调用合约中函数的参数。
+
+部署命令
+
+```shell
+$ punica deploy
+```
+
+例子：
+```shell
+$ punica deploy
+Using network 'privateNet'.
+
+Running deployment: hello_ontology.avm
+	Deploying...
+	Deploy to: cb9f3b7c6fb1cf2c13a40637c189bdd066a272b4
+Deploy successful to network...
+	 Contract address is cb9f3b7c6fb1cf2c13a40637c189bdd066a272b4
+	 Txhash is 041db938710e0c2977bbb8af1bdf97a3efae8256baa0ec74980c98734e25f650
+```
+
+如果你想知道更多的用法你可以使用
+
+```shell
+sss:punica-init-default-box sss$ punica deploy -h
+Usage: punica deploy [OPTIONS]
+
+  Deploys the specified contracts to specified chain.
+
+Options:
+  --network TEXT  Specify which network the contracts will be deployed.
+  --avm TEXT      Specify which avm file will be deployed.
+  --wallet TEXT   Specify which wallet file will be used.
+  --config TEXT   Specify which deploy config file will be used.
+  -h, --help      Show this message and exit.
+```
+
+- `--network TEXT` 用于指定使用的网络,默认使用punica-config.json里的配置文件
+- `--avm TEXT` 用于指定使用的avm，默认使用defaul-config.json中配置的avm文件
+- `--wallet TEXT`用于指定使用的钱包文件，默认使用wallet文件夹下的wallet.json文件
+- `--config TEXT`用于指定使用的配置文件，默认使用defaul-config.json
+
+### 调用
+
+调用之前，请确保default-config.json文件中已经配好合约方法需要的参数。
+
+`default-config.json`配置例子,省略了部分内容，完整内容请看[init box](https://github.com/punica-box/punica-init-default-box/blob/master/contracts/default-config.json)
+
+```json
+{
+    "defaultWallet": "wallet.json",
+    "password": {
+        "AUr5QUfeBADq6BMY6Tp5yuMsUNGpsD7nLZ": "password",
+        "AecaeSEBkt5GcBCxwz1F41TvdjX3dnKBkJ": "password",
+        "AQvZMDecMoCi2y4V6QKdJBtHW1eV7Vbaof": "password"
+    },
+    "deployConfig": {
+        "name": "contract name ",
+        "version": "contract version",
+        "author": "the author of contract",
+        "email": "email address",
+        "desc": "a description for your contract",
+        "needStorage": true,
+        "payer": "AUr5QUfeBADq6BMY6Tp5yuMsUNGpsD7nLZ",
+        "gasPrice": 0,
+        "gasLimit": 31000000
+    },
+    "invokeConfig": {
+        "abi": "hello_ontology_abi.json",
+        "defaultPayer": "AUr5QUfeBADq6BMY6Tp5yuMsUNGpsD7nLZ",
+        "gasPrice": 0,
+        "gasLimit": 20000,
+        "functions": [
+            {
+                "operation": "testByteArrayListAndStr", //合约中函数名
+                "args": [                               //合约中需要的参数
+                    {
+                        "bytearrayList": [
+                            "ByteArray:Hello",
+                            "ByteArray:world"
+                        ]
+                    },
+                    {
+                        "msgStr": "String:hello"
+                    }
+                ],
+                "signers": {},
+                "preExec": true
+            },
+            {
+                "operation": "testStructList",
+                "args": [
+                  {
+                      "structList": [
+                        [
+                          "String:hello",
+                          1
+                        ],
+                        [
+                          "String:hello2",
+                          2
+                        ]
+                      ]
+                  }
+                ],
+                "signers": {},
+                "preExec": true
+            },
+            {
+                "operation": "testStructListAndStr",
+                "args": [
+                  {
+                      "structList": [
+                          [
+                            "String:hello",
+                             1
+                          ],
+                          [
+                            "String:hello2",
+                             2
+                          ]
+                      ]
+                  },
+                  {
+                    "msgStr": "String:test"
+                  }
+                ],
+                "signers": {},
+                "preExec": true
+            }
+        ]
+    }
+}
+```
+
+请注意参数值的配置，
+- "String:test", "String"表示合约中的函数需要的参数类型是String。
+- "ByteArry:test", "ByteArray"表示合约中的函数需要的参数类型是ByteArray。
+- "Address:AUr5QUfeBADq6BMY6Tp5yuMsUNGpsD7nLZ",表示将参数`AUr5QUfeBADq6BMY6Tp5yuMsUNGpsD7nLZ`按照Address的格式转换成字节数组。
+- "Hex:0a"表示将参数`0a`按照hex的形式转换成字节数组
+
+
+`default-config.json`配置完成后，可以通过下面的命令查看可以调用的函数
+
+
+```shell
+punica invoke list
+```
+
+输出结果是
+
+```shell
+sss:punica-init-default-box sss$ punica invoke list
+All Functions:
+	 testHello
+	 testNumList
+	 testNumListAndStr
+	 testStrListAndStr
+	 testByteArrayListAndStr
+	 testStructList
+	 testStructListAndStr
+```
+
+使用下面的命令运行指定函数
+```shell
+sss$ punica invoke --functions testHello
+Using network 'privateNet'.
+
+Running invocation: hello_ontology_abi.json
+Unlock default payer account...
+Invoking  testHello
+Invoke successful
+Invoke result: ['01', '64', '74657374', '74657374', '0a', '8f651d459b4f146380dab28e7cfb9d4bb9c3fcd1']
+```
+
+如果你想查看invoke更多的信息，你可以执行下面的命令
+```shell
+$ punica invoke -h
+Usage: punica invoke [OPTIONS] COMMAND [ARGS]...
+
+  Invoke the function list in default-config or specify config.
+
+Options:
+  --network TEXT    Specify which network the contracts will be deployed.
+  --wallet TEXT     Specify which wallet file will be used.
+  --functions TEXT  Specify which function will be executed.
+  --config TEXT     Specify which config file will be used.
+  --preexec TEXT    preExec the function.
+  -h, --help        Show this message and exit.
+
+Commands:
+  list  List all the function in default-config or...
+```
+
+- `--functions TEXT`表示指定要执行的函数，可以一次指定多个函数，例如：`punica invoke --functions testHello,testNumList`
+- `--preexec TEXT`表示预执行，预执行表示不会将状态更新到区块链，适合于查询的函数。
+其他的配置信息请参看上面的讲解。
+
+
+### Node
+
+
+```shell
+$ punica node
+Usage: punica node [OPTIONS]
+
+   Ontology Blockchain private net in test mode. please download from
+   https://github.com/punicasuite/solo-chain/releases
+
+Options:
+   -h, --help  Show this message and exit.
+```
+
+### Scpm
+
+```shell
+$ punica scpm
+Usage: punica scpm [OPTIONS]
+
+   smart contract package manager，support download and publish.
+
+Options:
+   -h, --help  Show this message and exit.
+
+```
+### Smartx
+
+```shell
+$ punica smartx
+
+Please go to Smartx for debugging smart contracts:
+http://smartx.ont.io/#/
+```
+### 测试
+
+```shell
+$ punica test -h
+Usage: punica test [OPTIONS] COMMAND [ARGS]...
+
+  Unit test with specified smart contract
+
+Options:
+  --file TEXT  Specify which test file will be used.
+  -h, --help   Show this message and exit.
+
+Commands:
+  template  generate test template file
+```
+
+### 钱包
+
+```shell
+$ punica wallet
+Usage: punica wallet [OPTIONS] COMMAND [ARGS]...
+
+   Manager your asset, ontid, account.
+
+Options:
+   -h, --help  Show this message and exit.
+
+Commands:
+   account  Manager your account.
+   asset    Manager your asset, transfer, balance,...
+   ontid    Manager your ont_id, list or add.
+
+```
+

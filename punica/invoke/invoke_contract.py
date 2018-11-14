@@ -369,9 +369,7 @@ class Invoke:
                 try:
                     # params = Invoke.params_normalize(paramsList)
                     params = Invoke.params_normalize2(paramList)
-                    print("param: ", params)
                     params_list = Invoke.params_build(function_name, params)
-                    print("params_list: ", params_list)
                 except PunicaException as e:
                     print(e.args)
                     return

@@ -209,21 +209,21 @@ class PunicaCompiler:
         all_funcs = dict_invoke['invokeConfig']['functions']
         all_func_name_list = list()
         for func_information in all_funcs:
-            all_func_name_list.append(func_information['name'])
-        for func in dict_abi['functions']:
-            if func['name'] not in all_func_name_list:
-                if func['name'] == 'Main':
+            all_func_name_list.append(func_information['operation'])
+        for func_abi in dict_abi['functions']:
+            if func_abi['name'] not in all_func_name_list:
+                if func_abi['name'] == 'Main':
                     continue
                 is_need_update = True
                 dict_func_info = dict()
-                dict_param = dict()
-                if len(func['parameters']) != 0:
-                    for param in func['parameters']:
+                list_param = list()
+                if len(func_abi['parameters']) != 0:
+                    for param in func_abi['parameters']:
                         if param['name'] == '':
                             continue
-                        dict_param[param['name']] = ''
-                dict_func_info['name'] = func['name']
-                dict_func_info['params'] = dict_param
+                        list_param.append(param['name'])
+                dict_func_info['operation'] = func_abi['name']
+                dict_func_info['args'] = list_param
                 dict_func_info['signers'] = dict()
                 dict_func_info['preExec'] = True
                 dict_invoke['invokeConfig']['functions'].append(dict_func_info)

@@ -75,8 +75,8 @@ class Invoke:
         print("All Functions:")
         invoke_function_list = invoke_config['functions']
         for function_information in invoke_function_list:
-            if function_information['name'] in func_name_in_abi_list:
-                print('\t', function_information['name'])
+            if function_information['operation'] in func_name_in_abi_list:
+                print('\t', function_information['operation'])
 
     @staticmethod
     def generate_abi_info(dict_abi: dict) -> AbiInfo:
@@ -165,6 +165,54 @@ class Invoke:
         return params_list
 
     @staticmethod
+    def params_normalize2(list_param: list):
+        list_params = list()
+        for param in list_param:
+            if isinstance(param, dict):
+                for item in param.values():
+                    if isinstance(item, bool):
+                        list_params.append(item)
+                    elif isinstance(item, int):
+                        list_params.append(item)
+                    elif isinstance(item, str):
+                        list_params.append(Invoke.handle_param_str2(item))
+                    elif isinstance(item, list):
+                        list_params.append(Invoke.params_normalize3(item))
+                    else:
+                        raise PunicaException(PunicaError.other_error('not support data type'))
+        return list_params
+
+    @staticmethod
+    def params_normalize3(list_param: list):
+        list_params = list()
+        for param in list_param:
+            if isinstance(param, dict):
+                temp_list = []
+                for item in param.values():
+                    if isinstance(item, bool):
+                        temp_list.append(item)
+                    elif isinstance(item, int):
+                        temp_list.append(item)
+                    elif isinstance(item, str):
+                        temp_list.append(Invoke.handle_param_str2(item))
+                    elif isinstance(item, list):
+                        temp_list.append(Invoke.params_normalize3(item))
+                    else:
+                        raise PunicaException(PunicaError.other_error('not support data type'))
+                list_params.append(temp_list)
+            elif isinstance(param, bool):
+                list_params.append(param)
+            elif isinstance(param, int):
+                list_params.append(param)
+            elif isinstance(param, str):
+                Invoke.handle_param_str(list_params, param)
+            elif isinstance(param, list):
+                list_params.append(Invoke.params_normalize3(param))
+            else:
+                raise PunicaException(PunicaError.other_error('not support data type'))
+        return list_params
+
+    @staticmethod
     def params_normalize(dict_params: dict) -> list:
         list_params = list()
         isfirst = False
@@ -205,6 +253,25 @@ class Invoke:
         return list_params
 
     @staticmethod
+    def handle_param_str2(p: str):
+        list_p = p.split(':')
+        if len(list_p) != 2:
+            raise PunicaException(PunicaError.parameter_type_error)
+        if list_p[0] == 'ByteArray':
+            if len(list_p[1]) == 34:
+                return Address.b58decode(list_p[1]).to_array()
+            else:
+                return list_p[1].encode()
+        elif list_p[0] == 'String':
+            return list_p[1]
+        elif list_p[0] == 'Address':
+            return Address.b58decode(list_p[1]).to_array()
+        elif list_p[0] == 'Hex':
+            return bytearray.fromhex(list_p[1])
+        else:
+            raise PunicaException(PunicaError.parameter_type_error)
+
+    @staticmethod
     def handle_param_str(list_params2: list, p: str):
         list_p = p.split(':')
         if len(list_p) != 2:
@@ -218,6 +285,8 @@ class Invoke:
             list_params2.append(list_p[1])
         elif list_p[0] == 'Address':
             list_params2.append(Address.b58decode(list_p[1]).to_array())
+        elif list_p[0] == 'Hex':
+            list_params2.append(bytearray.fromhex(list_p[1]))
         else:
             raise PunicaException(PunicaError.parameter_type_error)
 
@@ -270,7 +339,7 @@ class Invoke:
         invoke_function_list = invoke_config.get('functions', list())
         invoke_function_name_list = list()
         for invoke_function in invoke_function_list:
-            invoke_function_name_list.append(invoke_function['name'])
+            invoke_function_name_list.append(invoke_function['operation'])
         all_exec_func_list = list()
         if exec_func_str != '':
             all_exec_func_list = exec_func_str.split(',')
@@ -289,16 +358,17 @@ class Invoke:
                 raise PunicaException(PunicaError.other_error('\"' + function_name + '\"' + 'not found in the abi file'))
             function_information = None
             for invoke_function in invoke_function_list:
-                if invoke_function['name'] == function_name:
+                if invoke_function['operation'] == function_name:
                     function_information = invoke_function
                     break
             if function_information is None:
                 print('there is not the function: ', function_name)
                 return
             try:
-                params = function_information['params']
+                paramList = function_information['args']
                 try:
-                    params = Invoke.params_normalize(params)
+                    # params = Invoke.params_normalize(paramsList)
+                    params = Invoke.params_normalize2(paramList)
                     print("param: ", params)
                     params_list = Invoke.params_build(function_name, params)
                     print("params_list: ", params_list)

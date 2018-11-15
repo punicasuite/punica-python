@@ -23,13 +23,14 @@
     - [4.9.  钱包](#49-钱包)
 
 ## 1. 概览
-欢迎使用Punica! Punica 机会拥有一切开发dapp所需要的功能。
+
+欢迎使用Punica! Punica 几乎拥有一切开发dapp所需要的功能。
 
 ### 特点
 * Punica-Cli 支持智能合约编译，部署，调用，测试。
 * Punica-Cli 实现了Python和TypeScript版本。
 * Punica 网站提供了健全的文档和合约模板。
-* 自动化生成dapp工程目录，提供多种box，是的开发者很容易的基于Punica-Boxes进行开发。
+* 自动化生成dapp工程目录，提供多种box，使得开发者很容易的基于Punica-Boxes进行开发。
 * 智能合约测试配置与smartx有相同的配置标准。
 * 提供智能合约包管理工具。
 
@@ -75,7 +76,7 @@ python setup.py install
 
 ## 3. 快速开始
 
-如果想使用Punica更多的命令，请先创建一个Punica 项目。
+如果想使用Punica更多的命令，请先创建一个Punica项目。
 
 
 ```shell
@@ -146,6 +147,7 @@ test
 - `wallet/`: 用于存放钱包文件.
 - `punica-config.json` 用于配置区块链网络
 
+
 #### 4.1.2 创建一个Box项目
 
 Punica Box 是punica dapp模板库，你可以下载你感兴趣的项目，然后基于该项目进行创建你的dapp。
@@ -212,8 +214,10 @@ Options:
   -h, --help        Show this message and exit.
 ```
 
-`--contracts`选项用于指定编译哪个合约文件
-`--local`选项用于指定使用哪个编译器
+- `--contracts`选项用于指定编译哪个合约文件
+
+- `--local`选项用于指定使用哪个编译器
+
 
 ### 4.3 部署
 
@@ -292,8 +296,8 @@ Options:
         "gasLimit": 20000,
         "functions": [
             {
-                "operation": "testByteArrayListAndStr", //合约中函数名
-                "args": [                               //合约中需要的参数
+                "operation": "testByteArrayListAndStr",
+                "args": [
                     {
                         "bytearrayList": [
                             "ByteArray:Hello",

@@ -295,7 +295,7 @@ Options:
         "functions": [
             {
                 "operation": "testByteArrayListAndStr",
-                "args": [                              
+                "args": [
                     {
                         "bytearrayList": [
                             "ByteArray:Hello",

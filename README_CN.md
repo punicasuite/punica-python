@@ -212,8 +212,10 @@ Options:
   -h, --help        Show this message and exit.
 ```
 
-`--contracts`选项用于指定编译哪个合约文件
-`--local`选项用于指定使用哪个编译器
+- `--contracts`选项用于指定编译哪个合约文件
+
+- `--local`选项用于指定使用哪个编译器
+
 
 ### 4.3 部署
 

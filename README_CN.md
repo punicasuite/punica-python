@@ -30,7 +30,7 @@
 * Punica-Cli 支持智能合约编译，部署，调用，测试。
 * Punica-Cli 实现了Python和TypeScript版本。
 * Punica 网站提供了健全的文档和合约模板。
-* 自动化生成dapp工程目录，提供多种box，是的开发者很容易的基于Punica-Boxes进行开发。
+* 自动化生成dapp工程目录，提供多种box，使得开发者很容易的基于Punica-Boxes进行开发。
 * 智能合约测试配置与smartx有相同的配置标准。
 * 提供智能合约包管理工具。
 
@@ -76,7 +76,7 @@ python setup.py install
 
 ## 3. 快速开始
 
-如果想使用Punica更多的命令，请先创建一个Punica 项目。
+如果想使用Punica更多的命令，请先创建一个Punica项目。
 
 
 ```shell
@@ -146,6 +146,7 @@ test
 - `test/`: 合约代码测试文件.
 - `wallet/`: 用于存放钱包文件.
 - `punica-config.json` 用于配置区块链网络
+
 
 #### 4.1.2 创建一个Box项目
 

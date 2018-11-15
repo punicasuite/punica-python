@@ -7,6 +7,8 @@
 
 [Punica](https://punica.ont.io/)
 
+[Punica-python](https://github.com/punicasuite/punica-python)
+
 [Punnica Doc](http://dev-docs.ont.io/#/docs-en/Punica/punica)
 
 [Ontology](http://dev-docs.ont.io/#/docs-en/DeveloperGuide/introduction)

@@ -6,6 +6,8 @@
 
 # Punica Cli
 
+[English](./README.md)|[中文版](./README_CN.md)
+
 - [1. 概览](#1-概览)
 - [2. 安装](#2-安装)
 - [3. 快速开始](#3-快速开始)
@@ -132,13 +134,22 @@ Unbox successful. Enjoy it!
 生成的项目结构如下：
 
 ```shell
-$ ls
-punica-config.json
-wallet
-README.md
-src
-contracts
-test
+sss:temp2 sss$ tree
+.
+├── LICENSE
+├── README.md
+├── contracts
+│   ├── default-config.json
+│   └── hello_ontology.py
+├── punica-config.json
+├── src
+│   ├── hello.py
+│   └── static
+│       └── index.html
+├── test
+│   └── test_template.py
+└── wallet
+    └── wallet.json
 ```
 
 - `contracts/`: 用于存放合约文件.

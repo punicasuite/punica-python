@@ -294,8 +294,8 @@ Options:
         "gasLimit": 20000,
         "functions": [
             {
-                "operation": "testByteArrayListAndStr", //合约中函数名
-                "args": [                               //合约中需要的参数
+                "operation": "testByteArrayListAndStr",
+                "args": [                              
                     {
                         "bytearrayList": [
                             "ByteArray:Hello",

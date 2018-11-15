@@ -20,9 +20,9 @@
     - [4.4. 调用](#44-调用)
     - [4.5. Node](#45-node)
     - [4.6. Scpm](#46-scpm)
-    - [4.7.  Smartx](#47-smartx)
-    - [4.8.  测试](#48-测试)
-    - [4.9.  钱包](#49-钱包)
+    - [4.7. Smartx](#47-smartx)
+    - [4.8. 测试](#48-测试)
+    - [4.9. 钱包](#49-钱包)
 
 ## 1. 概览
 
@@ -466,7 +466,7 @@ $ punica smartx
 Please go to Smartx for debugging smart contracts:
 http://smartx.ont.io/#/
 ```
-### 测试
+### 4.8 测试
 
 ```shell
 $ punica test -h
@@ -482,7 +482,7 @@ Commands:
   template  generate test template file
 ```
 
-### 4.8 钱包
+### 4.9 钱包
 
 ```shell
 $ punica wallet

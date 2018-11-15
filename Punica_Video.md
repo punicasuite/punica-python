@@ -9,13 +9,7 @@
 
 [Punica-python](https://github.com/punicasuite/punica-python)
 
-[Punnica Doc](http://dev-docs.ont.io/#/docs-en/Punica/punica)
-
-[Ontology](http://dev-docs.ont.io/#/docs-en/DeveloperGuide/introduction)
-
-[Developer Guide](http://dev-docs.ont.io/#/docs-en/DeveloperGuide/00-developer-guide)
-
-[Quick Guide](http://dev-docs.ont.io/#/docs-en/Tutorials/00-dapp_development)
+[Punica Doc](http://dev-docs.ont.io/#/docs-en/Punica/punica)
 
 
 ## 如何安装punica

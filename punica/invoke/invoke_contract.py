@@ -383,7 +383,7 @@ class Invoke:
                 #     abi_function = None
                 #     print('\tInvoke failed, params mismatching with the abi file')
                 if abi_function is not None:
-                    if function_information['preExec'] or pre_exec == 'true':
+                    if (function_information['preExec'] and pre_exec == '') or (pre_exec == 'true'):
                         tx = Invoke.generate_unsigned_invoke_transaction(contract_address, params_list, bytearray(),
                                                                          gas_price, gas_limit)
                         result = ontology.rpc.send_raw_transaction_pre_exec(tx)

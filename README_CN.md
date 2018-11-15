@@ -6,12 +6,23 @@
 
 # Punica Cli
 
-- [概览](#概览)
-- [安装](#安装)
-- [快速开始](#快速开始)
-- [开始](#开始)
+- [1. 概览](#1-概览)
+- [2. 安装](#2-安装)
+- [3. 快速开始](#3-快速开始)
+- [4. 开始](#4-开始)
+    - [4.1. 创建一个项目](#41-创建一个项目)
+        - [4.1.1. 初始化一个新项目](#411-初始化一个新项目)
+	    - [4.1.2. 创建一个Box项目](#412-创建一个Box项目)
+    - [4.2. 编译](#42-编译)
+    - [4.3. 部署](#43-部署)
+    - [4.4. 调用](#44-调用)
+    - [4.5. Node](#45-node)
+    - [4.6. Scpm](#46-scpm)
+    - [4.7.  Smartx](#47-smartx)
+    - [4.8.  测试](#48-测试)
+    - [4.9.  钱包](#49-钱包)
 
-## 概览
+## 1. 概览
 欢迎使用Punica! Punica 机会拥有一切开发dapp所需要的功能。
 
 ### 特点
@@ -44,7 +55,7 @@ Commands:
   wallet   Manager your ontid, account, asset.
 ```
 
-## 安装
+## 2. 安装
 
 安装之前请先确保下面的工具已经安装
 
@@ -62,13 +73,39 @@ or
 python setup.py install
 ```
 
-## 快速开始
+## 3. 快速开始
 
-为了使用Punica命令，你需要先创建一个Punicax项目。
+如果想使用Punica更多的命令，请先创建一个Punica 项目。
 
-### 创建Punica项目
 
-#### 初始化一个新项目
+```shell
+$ punica
+Usage: punica [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  -p, --project PATH  Specify a punica project directory.
+  -v, --version       Show the version and exit.
+  -h, --help          Show this message and exit.
+
+Commands:
+  compile  Compile the specified contracts to avm and...
+  deploy   Deploys the specified contracts to specified...
+  init     Initialize new and empty Ontology DApp...
+  invoke   Invoke the function list in default-config or...
+  node     Ontology Blockchain private net in test mode.
+  scpm     Smart contract package manager，support...
+  smartx   Ontology smart contract IDE,SmartX...
+  test     Unit test with specified smart contract
+  unbox    Download a Punica Box, a pre-built Ontology...
+  wallet   Manager your ontid, account, asset.
+```
+
+## 4. 开始
+
+
+### 4.1 创建一个项目
+
+#### 4.1.1 初始化一个新项目
 
 可以使用`punica init`命令创建一个空项目
 
@@ -89,7 +126,6 @@ sss$ punica init
 Downloading...
 Unpacking...
 Unbox successful. Enjoy it!
-sss$
 ```
 
 生成的项目结构如下：
@@ -110,9 +146,9 @@ test
 - `wallet/`: 用于存放钱包文件.
 - `punica-config.json` 用于配置区块链网络
 
-#### 创建一个Box项目
+#### 4.1.2 创建一个Box项目
 
-Punica Box 是punica dapp模板库，你可以下载你感兴趣的下载，然后基于该项目进行创建你的dapp。
+Punica Box 是punica dapp模板库，你可以下载你感兴趣的项目，然后基于该项目进行创建你的dapp。
 
 - 创建一个新文件夹
 
@@ -143,7 +179,7 @@ Options:
 - 你可以使用`punica unbox <box-name>`免费下载任意的Box项目。
 - 你可以在你的项目根目录使用punica的其他命令，也可以`-p` or `--project` 选项指定使用哪个项目。
 
-### 编译
+### 4.2 编译
 
 使用下面的命令编译你的合约
 
@@ -179,7 +215,7 @@ Options:
 `--contracts`选项用于指定编译哪个合约文件
 `--local`选项用于指定使用哪个编译器
 
-### 部署
+### 4.3 部署
 
 部署之前，你要关心两个配置文件，一个是`punica-config.json`,该文件配置使用的区块链网络，另一个配置文件是contracts目录下面的default-config.json文件，
 该文件用于配置部署合约的参数信息和调用合约中函数的参数。
@@ -224,7 +260,7 @@ Options:
 - `--wallet TEXT`用于指定使用的钱包文件，默认使用wallet文件夹下的wallet.json文件
 - `--config TEXT`用于指定使用的配置文件，默认使用defaul-config.json
 
-### 调用
+### 4.4 调用
 
 调用之前，请确保default-config.json文件中已经配好合约方法需要的参数。
 
@@ -381,7 +417,7 @@ Commands:
 其他的配置信息请参看上面的讲解。
 
 
-### Node
+### 4.5 Node
 
 
 ```shell
@@ -395,7 +431,7 @@ Options:
    -h, --help  Show this message and exit.
 ```
 
-### Scpm
+### 4.6 Scpm
 
 ```shell
 $ punica scpm
@@ -407,7 +443,7 @@ Options:
    -h, --help  Show this message and exit.
 
 ```
-### Smartx
+### 4.7 Smartx
 
 ```shell
 $ punica smartx
@@ -431,7 +467,7 @@ Commands:
   template  generate test template file
 ```
 
-### 钱包
+### 4.8 钱包
 
 ```shell
 $ punica wallet

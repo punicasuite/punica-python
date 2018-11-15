@@ -6,7 +6,7 @@
 
 # Punica Cli
 
-[English](./README.md) | [中文版]
+[English](./README.md) | 中文版
 
 - [1. 概览](#1-概览)
 - [2. 安装](#2-安装)

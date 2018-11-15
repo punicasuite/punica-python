@@ -6,7 +6,7 @@
 
 # Punica python
 
-[English] | [中文版](./README_CN.md)
+English | [中文版](./README_CN.md)
 
 - [1. Overview](#1-overview)
 - [2. Installation](#2-installation)

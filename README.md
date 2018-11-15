@@ -11,9 +11,9 @@
 
 
 - [1. Overview](#1-overview)
-- [2. Setting up the development environment](#2-setting-up-the-development-environment)
-- [3. Install](#3-install)
-- [4. Quickstart](#4-quickstart)
+- [2. Installation](#2-installation)
+- [3. Quickstart](#3-quickstart)
+- [4. Getting started](#4-getting-started)
     - [4.1. Create a Project](#41-create-a-project)
         - [4.1.1. Initializing a New Project](#411-initializing-a-new-project)
 	- [4.1.2. Creating a Box Project](#412-creating-a-box-project)
@@ -49,6 +49,35 @@ Welcome to Punica! Punica has (almost) everything you need for Ontology DApp dev
 * The contract test configuration and test function in SmartX use the same standard.
 * Smart contract package management tools provided.
 
+
+
+## 2. Installation
+
+### Setting up the development environment
+
+There are a few technical requirements before we start. Please install the following:
+
+- [Python 3.7](https://www.python.org/downloads/release/python-370/)
+- [Git](https://git-scm.com/)
+
+
+
+
+### Install punica
+
+```shell
+pip install punica
+```
+or 
+
+```shell
+python setup.py install
+```
+
+## 3. Quickstart
+
+To use most Punica commands, you need to run them against an existing Punica project. So the first step is to create a Punica project.
+
 ```shell
 punica
 Usage: punica [OPTIONS] COMMAND [ARGS]...
@@ -70,26 +99,16 @@ Commands:
   unbox    Download a Punica Box, a pre-built Ontology...
   wallet   Manager your ontid, account, asset.
 ```
+You can create a bare Punica project with no smart contracts included, use `punica init` command.
 
-## 2. Setting up the development environment
+Once this operation is completed, you'll now have a project structure with the following items:
 
-There are a few technical requirements before we start. Please install the following:
+- `contracts/`: Directory for Ontology smart contracts.
+- `src/`: Directory for DApp source file.
+- `test/`: Directory for test files for testing your application and contracts.
+- `wallet/`: Directory for save Ontology wallet file.
 
-- [Python 3.7](https://www.python.org/downloads/release/python-370/)
-- [Git](https://git-scm.com/)
-
-## 3. Install
-
-```shell
-pip install punica
-```
-or 
-
-```shell
-python setup.py install
-```
-
-## 4. Quickstart
+## 4. Getting started
 
 To use most Punica commands, you need to run them against an existing Punica project. So the first step is to create a Punica project.
 

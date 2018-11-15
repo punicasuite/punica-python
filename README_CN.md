@@ -1,10 +1,15 @@
+<div align="center">
+  <img src="https://raw.githubusercontent.com/punicasuite/punica-python/master/punica.png" height="200" width="200"><br><br>
+</div>
+
+---
 
 # Punica Cli
 
--[概览](#概览)
--[安装](#安装)
--[快速开始](#快速开始)
--[开始](#开始)
+- [概览](#概览)
+- [安装](#安装)
+- [快速开始](#快速开始)
+- [开始](#开始)
 
 ## 概览
 欢迎使用Punica! Punica 机会拥有一切开发dapp所需要的功能。

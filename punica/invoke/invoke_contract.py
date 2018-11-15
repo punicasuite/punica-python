@@ -169,17 +169,17 @@ class Invoke:
         list_params = list()
         for param in list_param:
             if isinstance(param, dict):
-                for item in param.values():
-                    if isinstance(item, bool):
-                        list_params.append(item)
-                    elif isinstance(item, int):
-                        list_params.append(item)
-                    elif isinstance(item, str):
-                        list_params.append(Invoke.handle_param_str2(item))
-                    elif isinstance(item, list):
-                        list_params.append(Invoke.params_normalize3(item))
-                    else:
-                        raise PunicaException(PunicaError.other_error('not support data type'))
+                item = param.get('value', '')
+                if isinstance(item, bool):
+                    list_params.append(item)
+                elif isinstance(item, int):
+                    list_params.append(item)
+                elif isinstance(item, str):
+                    list_params.append(Invoke.handle_param_str2(item))
+                elif isinstance(item, list):
+                    list_params.append(Invoke.params_normalize3(item))
+                else:
+                    raise PunicaException(PunicaError.other_error('not support data type'))
         return list_params
 
     @staticmethod

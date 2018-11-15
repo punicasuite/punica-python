@@ -184,7 +184,8 @@ class PunicaCompiler:
                 for param in func['parameters']:
                     if param['name'] == '':
                         continue
-                    dict_param[param['name']] = ''
+                    dict_param['name'] = param['name']
+                    dict_param['value'] = ''
             dict_func_info['name'] = func['name']
             dict_func_info['params'] = dict_param
             dict_func_info['signers'] = dict()
@@ -221,7 +222,10 @@ class PunicaCompiler:
                     for param in func_abi['parameters']:
                         if param['name'] == '':
                             continue
-                        list_param.append(param['name'])
+                        dict_param = dict()
+                        dict_param['name'] = param['name']
+                        dict_param['value'] = ''
+                        list_param.append(dict_param)
                 dict_func_info['operation'] = func_abi['name']
                 dict_func_info['args'] = list_param
                 dict_func_info['signers'] = dict()

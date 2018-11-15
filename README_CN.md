@@ -23,6 +23,12 @@
     - [4.7. Smartx](#47-smartx)
     - [4.8. 测试](#48-测试)
     - [4.9. 钱包](#49-钱包)
+- [5. 例子](#5-例子)
+    - [5.1 检查版本号](#51-检查版本号)
+    - [5.2 下载Box](#52-下载Box)
+    - [5.3 编译合约](#53-编译合约)
+    - [5.4 部署合约](#54-部署合约)
+    - [5.5 调用合约](#55-调用合约)
 
 ## 1. 概览
 
@@ -502,3 +508,161 @@ Commands:
 
 ```
 
+## 5. 例子
+
+### 5.1 检查版本号
+
+```shell
+$ punica -v
+0.0.9
+```
+
+### 5.2 下载Box
+
+```shell
+$ punica unbox tutorialtoken
+Downloading...
+Unpacking...
+Unbox successful. Enjoy it!
+```
+
+### 5.3 编译合约
+
+
+```shell
+$ tree
+.
+├─contracts
+│     └─build
+│
+├─src
+│  └─static
+│      ├─css
+│      │  └─fonts
+│      ├─html
+│      └─js
+└─wallet
+```
+
+```shell
+$ punica compile
+Compile...
+        Compile oep4_token.py...
+        Generate abi file and avm file successful...
+        Enjoy your contract:)
+Now we are finished :)
+```
+
+```shell
+$ tree
+.
+│
+├─contracts
+│     └─build
+│
+├─src
+│  └─static
+│      ├─css
+│      │  └─fonts
+│      ├─html
+│      └─js
+└─wallet
+```
+
+```shell
+$ tree build /F
+\TUTORIALTOKEN\BUILD
+    oep4_token.avm
+    oep4_token_abi.json
+```
+
+
+### 5.4 部署合约
+
+编译成功后，可以部署合约到Ontology网络
+
+```shell
+$ punica deploy
+Using network 'testNet'.
+
+Running deployment: oep4_token.avm
+        Deploying...
+        ... 0x0131c56b6a00527ac46a51527ac46a00c3044e616d659c6409006599096c7566
+        Please input payer account password:
+        Deploy to: 0xe4d6db237a830ce10f7476e410e61aad41bf9244
+Deploy successful to network...
+        ... 0x05a2502f7b8283f02915ba3ec7f712304fcce83ed98360fa3193a0b9e19ef87f
+Enjoy your contract!
+```
+如果合约已经部署过，将会得到下面的输出。
+
+```shell
+$ punica deploy
+Using network 'testNet'.
+
+Running deployment: oep4_token.avm
+        Deploy failed...
+        Contract has been deployed...
+        Contract address is 0xcb9f3b7c6fb1cf2c13a40637c189bdd066a272b4...
+Enjoy your contract:)
+```
+
+### 5.5 调用合约
+
+
+```shell
+$ punica invoke
+Using network 'testNet'.
+
+Running invocation: oep4_token_abi.json
+Unlock default payer account...
+        Unlock account: ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6
+        Please input account password:
+        Unlock successful...
+Invoking Name...
+        Invoke successful...
+                ... Invoke result: 4458546f6b656e
+Invoking Symbol...
+        Invoke successful...
+                ... Invoke result: 4458
+Invoking Decimal...
+        Invoke successful...
+                ... Invoke result: 08
+Invoking TotalSupply...
+        Invoke successful...
+                ... Invoke result: 000080f64ae1c7022d15
+Invoking BalanceOf...
+        Invoke successful...
+                ... Invoke result:
+Invoking Transfer...
+Unlock signers account...
+        Unlock account: ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6
+        Please input account password:
+        Unlock successful...
+        Invoke successful...
+                ... txHash: 0x8bfcebe076576bb35833d97ca0b80cffe82872a6545fccf36266702ba6b65c8b
+Invoking TransferMulti...
+Unlock signers account...
+        Unlock account: ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6
+        Please input account password:
+        Unlock successful...
+        Unlock account: AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve
+        Please input account password:
+        Unlock successful...
+		            ... txHash: 0xc6c4fc178b3598ad329986782d8c6ffdc4858ae208d48c7ce429532cec39fc68
+Invoking Allowance...
+Unlock signers account...
+        Unlock account: ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6
+        Please input account password:
+        Unlock successful...
+        Invoke successful...
+                ... txHash: 0x05e78cf0d97d8b8f86ea934f051140bb840b728d8117b177d54d24ecceef3b8b
+Invoking TransferFrom...
+Unlock signers account...
+        Unlock account: ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6
+        Please input account password:
+        Unlock successful...
+        Invoke successful...
+                ... txHash: 0xc3e8bfe31321f27f6b0c49204bf94fc3c4715d4a5dc3e9e96b3c2cf21c5fa998
+
+```

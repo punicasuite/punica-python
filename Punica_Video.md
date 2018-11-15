@@ -5,15 +5,15 @@
 
 ## Punnica相关资料网站介绍
 
-[Punica](#https://punica.ont.io/)
+[Punica](https://punica.ont.io/)
 
-[Punnica Doc](#http://dev-docs.ont.io/#/docs-en/Punica/punica)
+[Punnica Doc](http://dev-docs.ont.io/#/docs-en/Punica/punica)
 
-[Ontology](#http://dev-docs.ont.io/#/docs-en/DeveloperGuide/introduction)
+[Ontology](http://dev-docs.ont.io/#/docs-en/DeveloperGuide/introduction)
 
-[Developer Guide](#http://dev-docs.ont.io/#/docs-en/DeveloperGuide/00-developer-guide)
+[Developer Guide](http://dev-docs.ont.io/#/docs-en/DeveloperGuide/00-developer-guide)
 
-[Quick Guide](#http://dev-docs.ont.io/#/docs-en/Tutorials/00-dapp_development)
+[Quick Guide](http://dev-docs.ont.io/#/docs-en/Tutorials/00-dapp_development)
 
 
 ## 如何安装punica

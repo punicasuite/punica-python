@@ -427,7 +427,9 @@ Commands:
   list  List all the function in default-config or...
 ```
 
-- `--functions TEXT`表示指定要执行的函数，可以一次指定多个函数，例如：`punica invoke --functions testHello,testNumList`
+- `--functions TEXT`表示指定要执行的函数，可以一次指定多个函数，例如：
+`punica invoke --functions testHello,testNumList`
+
 - `--preexec TEXT`表示预执行，预执行表示不会将状态更新到区块链，适合于查询的函数。
 其他的配置信息请参看上面的讲解。
 

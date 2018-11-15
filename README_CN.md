@@ -6,12 +6,12 @@
 
 # Punica Cli
 
-[English](./README.md)|[中文版](./README_CN.md)
+[English](./README.md) | 中文版
 
 - [1. 概览](#1-概览)
 - [2. 安装](#2-安装)
 - [3. 快速开始](#3-快速开始)
-- [4. 开始](#4-开始)
+- [4. 开始使用](#4-开始使用)
     - [4.1. 创建一个项目](#41-创建一个项目)
         - [4.1.1. 初始化一个新项目](#411-初始化一个新项目)
 	    - [4.1.2. 创建一个Box项目](#412-创建一个Box项目)
@@ -20,9 +20,9 @@
     - [4.4. 调用](#44-调用)
     - [4.5. Node](#45-node)
     - [4.6. Scpm](#46-scpm)
-    - [4.7.  Smartx](#47-smartx)
-    - [4.8.  测试](#48-测试)
-    - [4.9.  钱包](#49-钱包)
+    - [4.7. Smartx](#47-smartx)
+    - [4.8. 测试](#48-测试)
+    - [4.9. 钱包](#49-钱包)
 
 ## 1. 概览
 
@@ -103,7 +103,7 @@ Commands:
   wallet   Manager your ontid, account, asset.
 ```
 
-## 4. 开始
+## 4. 开始使用
 
 
 ### 4.1 创建一个项目
@@ -466,7 +466,7 @@ $ punica smartx
 Please go to Smartx for debugging smart contracts:
 http://smartx.ont.io/#/
 ```
-### 测试
+### 4.8 测试
 
 ```shell
 $ punica test -h
@@ -482,7 +482,7 @@ Commands:
   template  generate test template file
 ```
 
-### 4.8 钱包
+### 4.9 钱包
 
 ```shell
 $ punica wallet

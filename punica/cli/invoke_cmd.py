@@ -16,7 +16,7 @@ from punica.exception.punica_exception import PunicaException
 @click.option('--wallet', nargs=1, type=str, default='', help='Specify which wallet file will be used.')
 @click.option('--functions', nargs=1, type=str, default='', help='Specify which function will be executed.')
 @click.option('--config', nargs=1, type=str, default='', help='Specify which config file will be used.')
-@click.option('--preexec', nargs=1, type=str, default='', help='preExec the function.')
+@click.option('--preexec', nargs=1, type=str, default='', help='PreExec the function.')
 @click.pass_context
 def invoke_cmd(ctx, network, wallet, functions, config, preexec):
     """

@@ -36,7 +36,15 @@ English | [中文版](./README_CN.md)
 
 ## 1. Overview
 
-Welcome to Punica! Punica has (almost) everything you need for Ontology DApp development.
+[Punica Suite](https://punica.ont.io) is Ontology's dApp development framework and has (almost) everything you need to start developing your Ontology based dApp.
+
+Punica provides developers with a complete set of open-source development tools for dApp development, will allow developers to develop their projects quickly and easily for use on the Ontology blockchain.  Please see below for a list of open-source tools and resources to help get you started.
+
+* [Punica Python CLI](https://github.com/punicasuite/punica-python) or [Punica TypeScript CLI](https://github.com/punicasuite/punica-ts) - used to download, compile, deploy and invoke smart contracts
+* [Punica boxes](http://punica.ont.io/boxes/) - pre-configured smart contract templates
+* [Solo-chain](https://github.com/punicasuite/solo-chain/releases) - a prebuilt private-net for development 
+
+
 
 ### Features
 * Punica-Cli supports smart contract compilation, deployment, invocation, testing, and one line commands.
@@ -61,7 +69,7 @@ There are a few technical requirements before we start. Please install the follo
 
 
 
-### Install punica
+### Install punica cli
 
 ```shell
 pip install punica

@@ -36,7 +36,7 @@ English | [中文版](./README_CN.md)
 
 ## 1. Overview
 
-[Punica Suite](https://punica.ont.io) is Ontology's dApp development framework and has (almost) everything you need to start developing your Ontology based dApp.
+[Punica Suite](https://punica.ont.io) is [Ontology](https://ont.io)'s dApp development framework and has (almost) everything you need to start developing your Ontology based dApp.
 
 Punica provides developers with a complete set of open-source development tools for dApp development, will allow developers to develop their projects quickly and easily for use on the Ontology blockchain.  Please see below for a list of open-source tools and resources to help get you started.
 

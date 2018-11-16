@@ -32,37 +32,23 @@
 
 ## 1. 概览
 
-欢迎使用Punica! Punica 几乎拥有一切开发dapp所需要的功能。
+[Punica Suite](https://punica.ont.io) 是基于本体的第一个dApp开发框架， 为开发者提供了一整套开发工具，主要包括：
 
-### 特点
-* Punica-Cli 支持智能合约编译，部署，调用，测试。
-* Punica-Cli 实现了Python和TypeScript版本。
-* Punica 网站提供了健全的文档和合约模板。
-* 自动化生成dapp工程目录，提供多种box，使得开发者很容易的基于Punica-Boxes进行开发。
-* 智能合约测试配置与smartx有相同的配置标准。
-* 提供智能合约包管理工具。
+* [Punica Python CLI](https://github.com/punicasuite/punica-python) 和 [Punica TypeScript CLI](https://github.com/punicasuite/punica-ts) - 作为命令行工具，可以与主网、测试网或私网连接，能够让开发者便捷地使用本体智能合约，支持编译、部署、调用和测试功能。
+* [Punica boxes](https://punica.ont.io/boxes/) - 提供多款dApp模板和应用案例。
+* [Solo-chain](https://github.com/punicasuite/solo-chain/releases) - 本体的一键式（私有）区块链，便于开发者本地测试。 
 
-```shell
-punica
-Usage: punica [OPTIONS] COMMAND [ARGS]...
+Punica致力于提供完善的工具与整合的资源，让开发者快速上手dApp开发。
 
-Options:
-  -p, --project PATH  Specify a punica project directory.
-  -v, --version       Show the version and exit.
-  -h, --help          Show this message and exit.
+优势：
+* Punica是本体第一套dApp开发框架，大大节省开发时间，让使用者事半功倍；
+* 提供大量教材文档与教学视频，方便初学者快速上手并全面了解；
+* 开发了智能合约测试框架，支持单元测试和功能测试，相比SDK测试更加容易便捷；
+* 智能合约编译部署测试为一体，节省开发时间。SmartX中已集成debug功能，后续将支持命令行debug功能；
+* Solo-chain方便用户实时查看链上数据，比在测试网或搭建本地网效率更高许多；
+* 提供多种SDK和dAPI的案例，适用于各种用户群。
 
-Commands:
-  compile  Compile the specified contracts to avm and...
-  deploy   Deploys the specified contracts to specified...
-  init     Initialize new and empty Ontology DApp...
-  invoke   Invoke the function list in default-config or...
-  node     Ontology Blockchain private net in test mode.
-  scpm     Smart contract package manager，support...
-  smartx   Ontology smart contract IDE,SmartX...
-  test     Unit test with specified smart contract
-  unbox    Download a Punica Box, a pre-built Ontology...
-  wallet   Manager your ontid, account, asset.
-```
+
 
 ## 2. 安装
 

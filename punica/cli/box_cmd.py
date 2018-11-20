@@ -20,6 +20,7 @@ def unbox_cmd(ctx, box_name):
     project_dir = ctx.obj['PROJECT_DIR']
     try:
         Box.unbox(box_name, project_dir)
-    except (PunicaException, SDKException):
+    except (PunicaException, SDKException) as e:
         print('An error occur...')
+        print(e.args)
         exit(1)

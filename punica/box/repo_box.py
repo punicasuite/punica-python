@@ -37,6 +37,8 @@ class Box:
     def git_clone(repo_url: str, repo_to_path: str = ''):
         if repo_to_path == '':
             repo_to_path = os.getcwd()
+        if os.listdir(repo_to_path):
+            raise PunicaException(PunicaError.file_exist_error)
         print('Downloading...')
         try:
             git.Repo.clone_from(url=repo_url, to_path=repo_to_path, depth=1)
@@ -77,7 +79,8 @@ class Box:
         except PunicaException as e:
             if e.args[0] == 59000:
                 print('Please check out your box name.')
-            else:
+            elif e.args[0]:
+                print('This current folder is not NUll.')
                 print('Please check out your environment.')
             return
         try:

@@ -36,7 +36,11 @@ class Deploy:
         author = deploy_information.get('author', '')
         email = deploy_information.get('email', '')
         desc = deploy_information.get('desc', '')
-        b58_payer_address = deploy_information.get('payer', wallet_manager.get_default_account().get_address())
+        b58_payer_address = deploy_information.get('payer', '')
+        if b58_payer_address == '':
+            b58_payer_address = wallet_manager.get_default_account().get_address()
+        if b58_payer_address == '':
+            raise PunicaException(PunicaError.other_error('payer address should not be None'))
         gas_limit = deploy_information.get('gasLimit', 21000000)
         gas_price = deploy_information.get('gasPrice', 500)
         ontology = OntologySdk()

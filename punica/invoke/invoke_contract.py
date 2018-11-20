@@ -398,10 +398,13 @@ class Invoke:
                                 print('Invoke result: {}'.format(result))
                     else:
                         b58_payer_address = function_information.get('payer', default_b58_payer_address)
-                        if b58_payer_address == default_b58_payer_address:
+                        if default_b58_payer_address != '' and b58_payer_address == default_b58_payer_address:
                             payer_acct = default_payer_acct
                         else:
                             payer_acct = Invoke.get_account(ontology, password_config, b58_payer_address)
+                        if payer_acct is None or payer_acct == '':
+                            print('defaultPayer is None in invokeConfig')
+                            return
                         tx = Invoke.generate_unsigned_invoke_transaction(contract_address, params_list,
                                                                          payer_acct.get_address().to_array(), gas_price,
                                                                          gas_limit)

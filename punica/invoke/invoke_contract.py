@@ -3,11 +3,11 @@
 import binascii
 import getpass
 import os
+import time
 
 from ontology.common.address import Address
 from ontology.exception.exception import SDKException
 from ontology.ont_sdk import OntologySdk
-from ontology.smart_contract.neo_contract.abi.abi_function import AbiFunction
 from ontology.smart_contract.neo_contract.abi.abi_info import AbiInfo
 from ontology.smart_contract.neo_contract.abi.build_params import BuildParams
 from ontology.smart_contract.neo_vm import NeoVm
@@ -299,6 +299,7 @@ class Invoke:
             raise PunicaException(PunicaError.dir_path_error)
         try:
             wallet_file, invoke_config, password_config = handle_invoke_config(project_dir_path, config_name)
+            sleep_time = invoke_config.get('sleepTime', 6)
         except PunicaException as e:
             print(e.args)
             return
@@ -431,6 +432,7 @@ class Invoke:
                         ontology.rpc.set_address(rpc_address)
                         try:
                             tx_hash = ontology.rpc.send_raw_transaction(tx)
+                            time.sleep(sleep_time)
                             if tx_hash == '':
                                 print('Invoke failed...')
                                 print('txHash: 0x{}'.format(tx.hash256_explorer()))

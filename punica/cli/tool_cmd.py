@@ -32,8 +32,8 @@ def tool_cmd(ctx):
 @click.option('--addresstohex', nargs=1, type=str, default='', help='transform address to hex.')
 @click.option('--stringtohex', nargs=1, type=str, default='', help='transform string to hex.')
 @click.option('--hexreverse', nargs=1, type=str, default='', help='hex string reverse.')
-@click.option('--numtohex', nargs=1, type=int, default=0, help='transform num to hex.')
-def transform_cmd(addresstohex, stringtohex, hexreverse, numtohex):
+@click.option('--inttohex', nargs=1, type=int, default=0, help='transform int to hex.')
+def transform_cmd(addresstohex, stringtohex, hexreverse, inttohex):
     """
     transform data
     """
@@ -43,8 +43,8 @@ def transform_cmd(addresstohex, stringtohex, hexreverse, numtohex):
         Tool.str_to_hex(stringtohex)
     elif hexreverse != '':
         Tool.hex_reverse(hexreverse)
-    elif numtohex != '':
-        Tool.num_to_hex(numtohex)
+    elif inttohex != 0:
+        Tool.num_to_hex(inttohex)
     else:
         print('Usage: punica tool transform [OPTIONS]')
         print('')
@@ -57,14 +57,6 @@ def transform_cmd(addresstohex, stringtohex, hexreverse, numtohex):
         print('  ', '--numtohex TEXT      transform num to hex.')
         print('  ', '-h, --help           Show this message and exit.')
         print()
-
-
-@tool_cmd.command('generateprivatekey')
-def decryptprivatekey_cmd(key, address, salt, n, password):
-    """
-    generate random privatekey
-    """
-    Tool.generate_random_private_key()
 
 
 @tool_cmd.command('decryptprivatekey')

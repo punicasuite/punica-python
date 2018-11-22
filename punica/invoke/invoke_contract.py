@@ -261,6 +261,8 @@ class Invoke:
             return bytearray.fromhex(list_p[1])
         elif list_p[0] == 'String':
             return list_p[1]
+        elif list_p[0] == 'Address':
+            return Address.b58decode(list_p[1]).to_array()
         else:
             raise PunicaException(PunicaError.parameter_type_error)
 

@@ -23,6 +23,7 @@ English | [中文版](./README_CN.md)
     - [4.7  Smartx](#47-smartx)
     - [4.8  Test](#48-test)
     - [4.9  Wallet](#49-wallet)
+    - [4.10 Tool](#410-tool)
 - [5. Example](#5-example)
     - [5.1. Checkout Version](#51-checkout-version)
     - [5.2. Unbox Tutorialtoken](#52-unbox-tutorialtoken)
@@ -109,6 +110,7 @@ Commands:
   scpm     Smart contract package manager，support...
   smartx   Ontology smart contract IDE,SmartX...
   test     Unit test with specified smart contract
+  tool     Data format conversion tool
   unbox    Download a Punica Box, a pre-built Ontology...
   wallet   Manager your ontid, account, asset.
 ```
@@ -286,9 +288,9 @@ Support we have an invoke config in our `default-config.json`:
                 "params": {
                     "msg": "Address:AUr5QUfeBADq6BMY6Tp5yuMsUNGpsD7nLZ"
                 },
-                "signers": {
+                "signature": {
                     "m": 1,
-                    "signer": [
+                    "signers": [
                         "AUr5QUfeBADq6BMY6Tp5yuMsUNGpsD7nLZ"
                     ]
                 },
@@ -299,7 +301,7 @@ Support we have an invoke config in our `default-config.json`:
                 "params": {
                     "msg": [1,2,3,4,5]
                 },
-                "signers": {},
+                "signature": {},
                 "preExec": true
             },
             {
@@ -308,7 +310,7 @@ Support we have an invoke config in our `default-config.json`:
                     "msgList": [1,2,3,4,5],
                     "msg": "String:test"
                 },
-                "signers": {},
+                "signature": {},
                 "preExec": true
             },
             {
@@ -320,7 +322,7 @@ Support we have an invoke config in our `default-config.json`:
                     ],
                     "msg":"String:test"
                 },
-                "signers": {},
+                "signature": {},
                 "preExec": true
             },
             {
@@ -332,7 +334,7 @@ Support we have an invoke config in our `default-config.json`:
                     ],
                     "msg": "String:hello"
                 },
-                "signers": {},
+                "signature": {},
                 "preExec": true
             },
             {
@@ -350,7 +352,7 @@ Support we have an invoke config in our `default-config.json`:
                     ],
                     "msg": "String:test"
                 },
-                "signers": {},
+                "signature": {},
                 "preExec": true
             }
         ]
@@ -495,6 +497,59 @@ Commands:
    asset    Manager your asset, transfer, balance,...
    ontid    Manager your ont_id, list or add.
 
+```
+
+### 4.10 Tool
+
+```shell
+$ punica tool
+Usage: punica tool [OPTIONS] COMMAND [ARGS]...
+
+   Data format conversion tool.
+
+Options:
+   -h, --help  Show this message and exit.
+
+Commands:
+   decryptprivatekey  decrypt privatekey
+   transform          transform data
+```
+
+- `decryptprivatekey` decrypt privatekey
+
+```shell
+$ punica tool decryptprivatekey
+Usage: punica tool decryptprivatekey [OPTIONS]
+
+   decrypt privatekey
+
+Options:
+   --key TEXT       encrypted private key.
+   --address TEXT   address.
+   --salt TEXT      salt.
+   --n TEXT         n.
+   --password TEXT  password.
+   -h, --help       Show this message and exit.
+```
+
+- `transform` transform data format
+   - `--addresstohex` transform address to hex string
+   - `--stringtohex` transform string to hex string
+   - `--hexreverse`  reverse hex string
+   - `--inttohex` transform int to hex string
+
+```shell
+$ punica tool transform
+Usage: punica tool transform [OPTIONS]
+
+   transform data.
+
+Options:
+   --addresstohex TEXT  transform address to hex.
+   --stringtohex TEXT   transform string to hex.
+   --hexreverse TEXT    hex string reverse.
+   --inttohex TEXT      transform int to hex.
+   -h, --help           Show this message and exit.
 ```
 
 ## 5. Example

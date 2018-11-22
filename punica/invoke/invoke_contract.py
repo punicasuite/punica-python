@@ -258,16 +258,9 @@ class Invoke:
         if len(list_p) != 2:
             raise PunicaException(PunicaError.parameter_type_error)
         if list_p[0] == 'ByteArray':
-            if len(list_p[1]) == 34:
-                return Address.b58decode(list_p[1]).to_array()
-            else:
-                return list_p[1].encode()
+            return bytearray.fromhex(list_p[1])
         elif list_p[0] == 'String':
             return list_p[1]
-        elif list_p[0] == 'Address':
-            return Address.b58decode(list_p[1]).to_array()
-        elif list_p[0] == 'Hex':
-            return bytearray.fromhex(list_p[1])
         else:
             raise PunicaException(PunicaError.parameter_type_error)
 
@@ -410,11 +403,11 @@ class Invoke:
                                                                          payer_acct.get_address().to_array(), gas_price,
                                                                          gas_limit)
                         ontology.add_sign_transaction(tx, payer_acct)
-                        dict_signers = function_information.get('signers', dict())
+                        dict_signers = function_information.get('signature', dict())
                         signer_list = list()
                         if len(dict_signers) != 0:
                             print('Unlock signers account...')
-                            for b58_signer_address in dict_signers['signer']:
+                            for b58_signer_address in dict_signers['signers']:
                                 if b58_signer_address == b58_payer_address:
                                     continue
                                 else:

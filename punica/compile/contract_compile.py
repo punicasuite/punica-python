@@ -188,7 +188,7 @@ class PunicaCompiler:
                     dict_param['value'] = ''
             dict_func_info['name'] = func['name']
             dict_func_info['params'] = dict_param
-            dict_func_info['signers'] = dict()
+            dict_func_info['signature'] = dict()
             dict_func_info['preExec'] = True
             dict_invoke_functions.append(dict_func_info)
         dict_invoke_detail['functions'] = dict_invoke_functions

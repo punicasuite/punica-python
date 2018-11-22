@@ -403,11 +403,11 @@ class Invoke:
                                                                          payer_acct.get_address().to_array(), gas_price,
                                                                          gas_limit)
                         ontology.add_sign_transaction(tx, payer_acct)
-                        dict_signers = function_information.get('signers', dict())
+                        dict_signers = function_information.get('signature', dict())
                         signer_list = list()
                         if len(dict_signers) != 0:
                             print('Unlock signers account...')
-                            for b58_signer_address in dict_signers['signer']:
+                            for b58_signer_address in dict_signers['signers']:
                                 if b58_signer_address == b58_payer_address:
                                     continue
                                 else:

@@ -13,7 +13,7 @@ class TestToolCmd(unittest.TestCase):
         project_path = os.path.join(os.getcwd(), 'test_file', 'test_invoke')
         password.return_value = 'password'
         runner = CliRunner()
-        result = runner.invoke(main, ['-p', '/Users/sss/dev/punicaboxdemo/initdemo', 'tool', 'transform', '--addresstohex', 'AHX1wzvdw9Yipk7E9MuLY4GGX4Ym9tHeDe'])
+        result = runner.invoke(main, ['-p', '/Users/sss/dev/punicaboxdemo/initdemo', 'tool', 'transform'])
         self.assertEqual(0, result.exit_code)
 
 

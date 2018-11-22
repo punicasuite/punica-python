@@ -1,3 +1,5 @@
+import base64
+
 from Cryptodome import Random
 from ontology.account.account import Account
 from ontology.common.address import Address
@@ -38,8 +40,12 @@ class Tool:
 
     @staticmethod
     def decrypt_private_key(key, address, salt, n, password):
-        if n == 0:
-            n = 16384
-        private_key = Account.get_gcm_decoded_private_key(key, password, address, salt, n, SignatureScheme.SHA256withECDSA)
+        try:
+            saltbytes = base64.b64decode(salt)
+        except Exception:
+            print('Error:')
+            print('salt is error')
+            return
+        private_key = Account.get_gcm_decoded_private_key(key, password, address, saltbytes, n, SignatureScheme.SHA256withECDSA)
         print('Result is:')
         print('\t', private_key)

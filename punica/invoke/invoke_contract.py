@@ -411,6 +411,7 @@ class Invoke:
                             print('Unlock signers account...')
                             for b58_signer_address in dict_signers['signers']:
                                 if b58_signer_address == b58_payer_address:
+                                    signer_list.append(payer_acct)
                                     continue
                                 else:
                                     signer = Invoke.get_account(ontology, password_config, b58_signer_address)

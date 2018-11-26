@@ -178,6 +178,8 @@ class Invoke:
                     list_params.append(Invoke.handle_param_str2(item))
                 elif isinstance(item, list):
                     list_params.append(Invoke.params_normalize3(item))
+                elif isinstance(item, dict):
+                    list_params.append(BuildParams.get_map_bytes(item))
                 else:
                     raise PunicaException(PunicaError.other_error('not support data type'))
         return list_params

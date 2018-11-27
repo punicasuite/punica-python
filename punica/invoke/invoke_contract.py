@@ -179,10 +179,22 @@ class Invoke:
                 elif isinstance(item, list):
                     list_params.append(Invoke.params_normalize3(item))
                 elif isinstance(item, dict):
-                    list_params.append(BuildParams.get_map_bytes(item))
+                    item_temp = Invoke.dict_handle(item)
+                    list_params.append(BuildParams.get_map_bytes(item_temp))
                 else:
                     raise PunicaException(PunicaError.other_error('not support data type'))
         return list_params
+
+    @staticmethod
+    def dict_handle(dict_param: dict):
+        dict_param2 = dict()
+        for key, value in dict_param.items():
+            if isinstance(value, str):
+                v = Invoke.handle_param_str2(value)
+                dict_param2[key] = v
+            else:
+                dict_param2[key] = value
+        return dict_param2
 
     @staticmethod
     def params_normalize3(list_param: list):

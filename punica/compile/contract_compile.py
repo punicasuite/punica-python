@@ -228,7 +228,7 @@ class PunicaCompiler:
                         list_param.append(dict_param)
                 dict_func_info['operation'] = func_abi['name']
                 dict_func_info['args'] = list_param
-                dict_func_info['signers'] = dict()
+                dict_func_info['signature'] = dict()
                 dict_func_info['preExec'] = True
                 dict_invoke['invokeConfig']['functions'].append(dict_func_info)
         if is_need_update:

@@ -177,56 +177,39 @@ class Invoke:
                 elif isinstance(item, str):
                     list_params.append(Invoke.handle_param_str2(item))
                 elif isinstance(item, list):
-                    list_params.append(Invoke.params_normalize3(item))
+                    list_temp = list()
+                    for i in item:
+                        list_temp.append(Invoke.parse_param(i))
+                    list_params.append(list_temp)
                 elif isinstance(item, dict):
-                    item_temp = Invoke.dict_handle(item)
-                    list_params.append(BuildParams.get_map_bytes(item_temp))
+                    dict_temp = dict()
+                    for k, v in item.items():
+                        dict_temp[k] = Invoke.parse_param(v)
+                    list_params.append(dict_temp)
                 else:
                     raise PunicaException(PunicaError.other_error('not support data type'))
         return list_params
 
     @staticmethod
-    def dict_handle(dict_param: dict):
-        dict_param2 = dict()
-        for key, value in dict_param.items():
-            # paramtype maybe list
-            # TODO
-            if isinstance(value, str):
-                v = Invoke.handle_param_str2(value)
-                dict_param2[key] = v
-            else:
-                dict_param2[key] = value
-        return dict_param2
-
-    @staticmethod
-    def params_normalize3(list_param: list):
-        list_params = list()
-        for param in list_param:
-            if isinstance(param, dict):
-                temp_list = []
-                for item in param.values():
-                    if isinstance(item, bool):
-                        temp_list.append(item)
-                    elif isinstance(item, int):
-                        temp_list.append(item)
-                    elif isinstance(item, str):
-                        temp_list.append(Invoke.handle_param_str2(item))
-                    elif isinstance(item, list):
-                        temp_list.append(Invoke.params_normalize3(item))
-                    else:
-                        raise PunicaException(PunicaError.other_error('not support data type'))
-                list_params.append(temp_list)
-            elif isinstance(param, bool):
-                list_params.append(param)
-            elif isinstance(param, int):
-                list_params.append(param)
-            elif isinstance(param, str):
-                Invoke.handle_param_str(list_params, param)
-            elif isinstance(param, list):
-                list_params.append(Invoke.params_normalize3(param))
-            else:
-                raise PunicaException(PunicaError.other_error('not support data type'))
-        return list_params
+    def parse_param(param):
+        if isinstance(param, bool):
+            return param
+        elif isinstance(param, int):
+            return param
+        elif isinstance(param, str):
+            return Invoke.handle_param_str2(param)
+        elif isinstance(param, list):
+            list_temp = list()
+            for i in param:
+                list_temp.append(Invoke.parse_param(i))
+            return list_temp
+        elif isinstance(param, dict):
+            dict_temp = dict()
+            for k, v in param.items():
+                dict_temp[k] = Invoke.parse_param(v)
+            return dict_temp
+        else:
+            raise PunicaException(PunicaError.other_error('not support data type'))
 
     @staticmethod
     def params_normalize(dict_params: dict) -> list:
@@ -381,6 +364,7 @@ class Invoke:
                 try:
                     # params = Invoke.params_normalize(paramsList)
                     params = Invoke.params_normalize2(paramList)
+                    print("params:", params)
                     params_list = Invoke.params_build(function_name, params)
                 except PunicaException as e:
                     print(e.args)

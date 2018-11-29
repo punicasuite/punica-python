@@ -189,6 +189,8 @@ class Invoke:
     def dict_handle(dict_param: dict):
         dict_param2 = dict()
         for key, value in dict_param.items():
+            # paramtype maybe list
+            # TODO
             if isinstance(value, str):
                 v = Invoke.handle_param_str2(value)
                 dict_param2[key] = v

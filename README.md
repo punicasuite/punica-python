@@ -80,7 +80,7 @@ There are a few technical requirements before we start. Please install the follo
 ### Install punica cli
 
 ```shell
-pip install punica
+pip3 install punica
 ```
 or 
 

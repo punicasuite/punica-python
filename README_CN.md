@@ -60,7 +60,7 @@ Punica致力于提供完善的工具与整合的资源，让开发者快速上�
 然后，执行下面的命令进行安装
 
 ```shell
-pip install punica
+pip3 install punica
 ```
 or
 

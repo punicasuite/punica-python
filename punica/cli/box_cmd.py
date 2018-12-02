@@ -24,3 +24,11 @@ def unbox_cmd(ctx, box_name):
         print('An error occur...')
         print(e.args)
         exit(1)
+
+
+@main.command('boxes')
+@click.pass_context
+def boxes_cmd(ctx):
+    boxes = Box.list_boxes()
+    for box in boxes:
+        print('\t\t', box)

@@ -6,6 +6,7 @@ import re
 import json
 
 import git
+import requests
 
 from punica.exception.punica_exception import PunicaError, PunicaException
 from punica.utils.file_system import (
@@ -89,3 +90,14 @@ class Box:
             print('Clean work abort...')
             return
         print('Unbox successful. Enjoy it!')
+
+    @staticmethod
+    def list_boxes():
+        repos_url = 'https://api.github.com/users/punica-box/repos'
+        response = requests.get(repos_url).content.decode()
+        repos = json.loads(response)
+        name_list = []
+        for repo in repos:
+            name = repo.get('name', '')
+            name_list.append(name)
+        return name_list

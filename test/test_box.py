@@ -47,6 +47,10 @@ class TestCompiler(unittest.TestCase):
         Box.unbox(box_name, box_to_path)
         shutil.rmtree(box_to_path)
 
+    def test_list_boxes(self):
+        boxes = Box.list_boxes()
+        self.assertIn('interplanetary-album-box', boxes)
+
 
 if __name__ == '__main__':
     unittest.main()

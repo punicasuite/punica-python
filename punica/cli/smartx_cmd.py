@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import click
+import webbrowser
 
 from .main import main
 
@@ -12,6 +13,4 @@ def smartx_cmd(ctx):
     """
     Ontology smart contract IDE,SmartX (http://smartx.ont.io/)
     """
-    print()
-    print('Please go to Smartx for debugging smart contracts: \nhttp://smartx.ont.io/#/')
-    print()
+    webbrowser.open("https://smartx.ont.io/")

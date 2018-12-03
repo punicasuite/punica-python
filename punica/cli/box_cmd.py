@@ -29,6 +29,10 @@ def unbox_cmd(ctx, box_name):
 @main.command('boxes')
 @click.pass_context
 def boxes_cmd(ctx):
+    """
+    List all available punica box.
+    """
     boxes = Box.list_boxes()
+    print('Various punica boxes is waiting for your:')
     for box in boxes:
-        print('\t\t', box)
+        print('\t', box)

@@ -13,7 +13,7 @@ class Tool:
             print('address is none')
             return
         print('Result is:')
-        print('\t', Address.b58decode(address).to_array().hex())
+        print('\t', Address.b58decode(address).to_bytes().hex())
 
     @staticmethod
     def str_to_hex(any_str: str):

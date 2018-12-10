@@ -261,7 +261,7 @@ class Invoke:
         elif list_p[0] == 'String':
             return list_p[1]
         elif list_p[0] == 'Address':
-            return Address.b58decode(list_p[1]).to_array()
+            return Address.b58decode(list_p[1]).to_bytes()
         else:
             raise PunicaException(PunicaError.parameter_type_error)
 
@@ -272,13 +272,13 @@ class Invoke:
             raise PunicaException(PunicaError.parameter_type_error)
         if list_p[0] == 'ByteArray':
             if len(list_p[1]) == 34:
-                list_params2.append(Address.b58decode(list_p[1]).to_array())
+                list_params2.append(Address.b58decode(list_p[1]).to_bytes())
             else:
                 list_params2.append(list_p[1].encode())
         elif list_p[0] == 'String':
             list_params2.append(list_p[1])
         elif list_p[0] == 'Address':
-            list_params2.append(Address.b58decode(list_p[1]).to_array())
+            list_params2.append(Address.b58decode(list_p[1]).to_bytes())
         elif list_p[0] == 'Hex':
             list_params2.append(bytearray.fromhex(list_p[1]))
         else:
@@ -401,7 +401,7 @@ class Invoke:
                             print('defaultPayer is None in invokeConfig')
                             return
                         tx = Invoke.generate_unsigned_invoke_transaction(contract_address, params_list,
-                                                                         payer_acct.get_address().to_array(), gas_price,
+                                                                         payer_acct.get_address().to_bytes(), gas_price,
                                                                          gas_limit)
                         ontology.add_sign_transaction(tx, payer_acct)
                         dict_signers = function_information.get('signature', dict())

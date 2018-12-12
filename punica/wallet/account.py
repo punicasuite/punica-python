@@ -38,7 +38,7 @@ class Account:
     def delete_account(project_path, address: str):
         wallet_manager = Account.get_wallet_manager(project_path)
         for account in wallet_manager.wallet_in_mem.accounts:
-            if account.address == address:
+            if account.get_b58_address() == address:
                 pwd = getpass.getpass('Please input password: ')
                 try:
                     wallet_manager.get_account(address, pwd)
@@ -57,7 +57,7 @@ class Account:
         wallet_manager = Account.get_wallet_manager(project_path)
         print('Account:')
         for account in wallet_manager.wallet_in_mem.accounts:
-            print('\t{}'.format(account.address))
+            print('\t{}'.format(account.get_b58_address()))
 
     @staticmethod
     def add_account(project_path):
@@ -83,8 +83,3 @@ class Account:
             else:
                 print("password not match")
                 raise PunicaException(PunicaError.other_error('password not match'))
-
-
-
-
-

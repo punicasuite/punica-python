@@ -12,10 +12,12 @@ class Account:
     @staticmethod
     def import_account(project_path, private_key):
         wallet_path_dir = os.path.join(project_path, 'wallet')
+        # TODO: the file name 'wallet.json' should be custom defined here
         wallet_path = os.path.join(wallet_path_dir, 'wallet.json')
         if not os.path.exists(wallet_path):
             os.makedirs(wallet_path_dir)
         wallet_manager = WalletManager()
+        wallet_manager.open_wallet(wallet_path)
         pwd = Account.get_password()
         try:
             wallet_manager.create_account_from_private_key('', pwd, private_key)

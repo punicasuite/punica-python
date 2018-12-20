@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import webbrowser
 
 import click
 
@@ -22,7 +23,7 @@ def unbox_cmd(ctx, box_name):
         Box.unbox(box_name, project_dir)
     except (PunicaException, SDKException) as e:
         print('An error occur...')
-        print(e.args)
+        print(e.args[1])
         exit(1)
 
 
@@ -32,7 +33,11 @@ def boxes_cmd(ctx):
     """
     List all available punica box.
     """
-    boxes = Box.list_boxes()
+    try:
+        boxes = Box.list_boxes()
+    except (PunicaException, SDKException) as e:
+        webbrowser.open('https://punica.ont.io/boxes/')
+        return
     print('Various punica boxes are waiting for your:')
     for box in boxes:
         print('\t', box)

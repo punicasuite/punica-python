@@ -96,6 +96,10 @@ class Box:
         repos_url = 'https://api.github.com/users/punica-box/repos'
         response = requests.get(repos_url).content.decode()
         repos = json.loads(response)
+        if isinstance(repos, dict):
+            message = repos.get('message', '')
+            if 'API rate limit exceeded' in message:
+                raise PunicaException(PunicaError.other_error(message))
         name_list = []
         for repo in repos:
             name = repo.get('name', '')

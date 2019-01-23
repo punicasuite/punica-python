@@ -51,7 +51,6 @@ pip install punica
 
 如果想使用Punica更多的命令，请先创建一个Punica项目。
 
-
 ```shell
 $ punica
 Usage: punica [OPTIONS] COMMAND [ARGS]...
@@ -75,7 +74,6 @@ Commands:
 ```
 
 ## 4. 开始使用
-
 
 ### 4.1 创建一个项目
 
@@ -199,7 +197,6 @@ Options:
 - `--contracts`选项用于指定编译哪个合约文件
 
 - `--local`选项用于指定使用哪个编译器
-
 
 ### 4.3 部署
 

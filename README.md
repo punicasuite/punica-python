@@ -36,6 +36,8 @@ There are a few technical requirements before we start. Please install the follo
 - [Python 3.7](https://www.python.org/downloads/release/python-370/)
 - [Git](https://git-scm.com/)
 
+Then, execute the following command to install your tool:
+
 ```shell
 pip install punica
 ```

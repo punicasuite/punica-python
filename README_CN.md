@@ -36,12 +36,12 @@ Punica Python是一个dApp开发命令行工具，它具有（几乎）开始基
 
 ## 2. 安装
 
-安装之前请先确保下面的工具已经安装
+安装之前请先确保下面的工具已经安装：
 
 - [Python 3.7](https://www.python.org/downloads/release/python-370/)
 - [Git](https://git-scm.com/)
 
-然后，执行下面的命令进行安装
+然后，执行下面的命令进行安装你的工具：
 
 ```shell
 pip install punica

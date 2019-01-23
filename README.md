@@ -2,90 +2,42 @@
   <img src="https://raw.githubusercontent.com/punicasuite/punica-python/master/punica.png" height="200" width="200"><br><br>
 </div>
 
-<!-- TOC -->
-
-# Punica python
-
-English | [中文版](./README_CN.md)
-
 - [1. Overview](#1-overview)
 - [2. Installation](#2-installation)
 - [3. Quickstart](#3-quickstart)
 - [4. Getting started](#4-getting-started)
-    - [4.1. Create a Project](#41-create-a-project)
-        - [4.1.1. Initializing a New Project](#411-initializing-a-new-project)
-	- [4.1.2. Creating a Box Project](#412-creating-a-box-project)
-    - [4.2. Compiling](#42-compiling)
-    - [4.3. Deployment](#43-deployment)
-    - [4.4. Invocation](#44-invocation)
-    - [4.5. Node](#45-node)
-    - [4.6. Scpm](#46-scpm)
-    - [4.7  Smartx](#47-smartx)
-    - [4.8  Test](#48-test)
-    - [4.9  Wallet](#49-wallet)
-    - [4.10 Tool](#410-tool)
+  - [4.1. Create a Project](#41-create-a-project)
+    - [4.1.1. Initializing a New Project](#411-initializing-a-new-project)
+    - [4.1.2. Creating a Box Project](#412-creating-a-box-project)
+  - [4.2. Compiling](#42-compiling)
+  - [4.3. Deployment](#43-deployment)
+  - [4.4. Invocation](#44-invocation)
+  - [4.5. Node](#45-node)
+  - [4.6. Scpm](#46-scpm)
+  - [4.7. Smartx](#47-smartx)
+  - [4.8. Test](#48-test)
+  - [4.9. Wallet](#49-wallet)
+  - [4.10. Tool](#410-tool)
 - [5. Example](#5-example)
-    - [5.1. Checkout Version](#51-checkout-version)
-    - [5.2. Unbox Tutorialtoken](#52-unbox-tutorialtoken)
-    - [5.3. Compile Contract](#53-compile-contract)
-    - [5.4. Deploy Smart Contract](#54-deploy-smart-contract)
-    - [5.5. Invoke Function in Smart Contract](#55-invoke-function-in-smart-contract)
-
-<!-- /TOC -->
-
-
+  - [5.1. Checkout Version](#51-checkout-version)
+  - [5.2. Unbox Tutorialtoken](#52-unbox-tutorialtoken)
+  - [5.3. Compile Contract](#53-compile-contract)
+  - [5.4. Deploy Smart Contract](#54-deploy-smart-contract)
+  - [5.5. Invoke Function in Smart Contract](#55-invoke-function-in-smart-contract)
 
 ## 1. Overview
 
-[Punica Suite](https://punica.ont.io) is [Ontology](https://ont.io)'s dApp development framework and has (almost) everything you need to start developing your Ontology based dApp.
-
-Punica provides developers with a complete set of open-source development tools for dApp development, will allow developers to develop their projects quickly and easily for use on the Ontology blockchain.  Please see below for a list of open-source tools and resources to help get you started.
-
-* [Punica Python CLI](https://github.com/punicasuite/punica-python) or [Punica TypeScript CLI](https://github.com/punicasuite/punica-ts) - used to download, compile, deploy and invoke smart contracts
-* [Punica boxes](http://punica.ont.io/boxes/) - pre-configured smart contract templates
-* [Solo-chain](https://github.com/punicasuite/solo-chain/releases) - a prebuilt private-net for development 
-
-
-
-### Features
-* Punica-Cli supports smart contract compilation, deployment, invocation, testing, and one line commands.
-* Punica-Cli implements both Python and TypeScript versions for different language developers.
-* The Punica website offers a wealth of documentation and contract templates.
-* Solo chain has a UI test node for easy viewing of blocks, transactions, contracts, contract notify, and more.
-* Automatically generate dApp project directory, provide various types of boxes, easily develop dApps based on Punica-Boxes.
-* The contract test configuration and test function in SmartX use the same standard.
-* Smart contract package management tools provided.
-
-### Advantages：
-
-* Punica is the first dApp development framework for the ontology, which greatly saves development time and allows users to do more with less;
-* Provide a large number of teaching materials and teaching videos, so that beginners can quickly get started and fully understand;
-* Developed a smart contract testing framework that supports unit testing and functional testing, making it easier and more convenient than SDK testing;
-* Smart contract compilation and deployment testing as one, saving development time. The debug function has been integrated in SmartX, and the command line debug function will be supported later.
-* Solo-chain allows users to view data on the chain in real time, which is more efficient than test network or building a private network.
-* A variety of SDK and dAPI cases are available for a variety of developers.
+Punica Python is a dApp development command line tool which has (almost) everything you need to start developing your dApp based on Ontology network.
 
 ## 2. Installation
-
-### Setting up the development environment
 
 There are a few technical requirements before we start. Please install the following:
 
 - [Python 3.7](https://www.python.org/downloads/release/python-370/)
 - [Git](https://git-scm.com/)
 
-
-
-
-### Install punica cli
-
 ```shell
-pip3 install punica
-```
-or 
-
-```shell
-python setup.py install
+pip install punica
 ```
 
 ## 3. Quickstart
@@ -433,7 +385,7 @@ Commands:
 - If you not run punica cli in you project root directory, you need to use `-p` or `--project` option to specify your DApp project's path.
 - If multi wallet file exist in your `wallet` directory, you may need to use `--wallet` option to specify which wallet you want to use. otherwise, a random wallet file in `wallet` directory will be used.
 
-### 4.5 Node
+### 4.5. Node
 
 ```shell
 $ punica node
@@ -458,7 +410,7 @@ Options:
    -h, --help  Show this message and exit.
 
 ```
-### 4.7  Smartx
+### 4.7. Smartx
 
 ```shell
 $ punica smartx
@@ -466,7 +418,7 @@ $ punica smartx
 Please go to Smartx for debugging smart contracts:
 http://smartx.ont.io/#/
 ```
-### 4.8  Test
+### 4.8. Test
 
 ```shell
 $ punica test -h
@@ -481,7 +433,7 @@ Options:
 Commands:
   template  generate test template file
 ```
-### 4.9  Wallet
+### 4.9. Wallet
 
 ```shell
 $ punica wallet
@@ -499,7 +451,7 @@ Commands:
 
 ```
 
-### 4.10 Tool
+### 4.10. Tool
 
 ```shell
 $ punica tool

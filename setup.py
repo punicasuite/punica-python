@@ -25,7 +25,6 @@ setup(
     install_requires=[
         'Click',
         'GitPython',
-        'punica-neo-boa',
         'ontology-python-sdk',
     ],
     license="MIT",

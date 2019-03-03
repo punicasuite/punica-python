@@ -38,7 +38,7 @@ class Deploy:
         desc = deploy_information.get('desc', '')
         b58_payer_address = deploy_information.get('payer', '')
         if b58_payer_address == '':
-            b58_payer_address = wallet_manager.get_default_account().get_address()
+            b58_payer_address = wallet_manager.get_default_account_data().b58_address
         if b58_payer_address == '':
             raise PunicaException(PunicaError.other_error('payer address should not be None'))
         gas_limit = deploy_information.get('gasLimit', 21000000)
@@ -49,10 +49,10 @@ class Deploy:
         password = password_information.get(b58_payer_address, '')
         if password == '':
             password = getpass.getpass('\tPlease input payer account password: ')
-        payer_acct = wallet_manager.get_account(b58_payer_address, password)
+        payer_acct = wallet_manager.get_account_by_b58_address(b58_payer_address, password)
         if payer_acct is None:
             raise PunicaException(PunicaError.other_error(b58_payer_address + ' not found'))
-        ontology.sign_transaction(tx, payer_acct)
+        tx.sign_transaction(payer_acct)
         return tx
 
     @staticmethod
@@ -75,7 +75,7 @@ class Deploy:
         ontology = OntologySdk()
         ontology.rpc.set_address(rpc_address)
         time.sleep(6)
-        tx = ontology.rpc.get_raw_transaction(tx_hash)
+        tx = ontology.rpc.get_transaction_by_tx_hash(tx_hash)
         if tx == 'unknown transaction':
             return False
         else:

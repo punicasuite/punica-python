@@ -8,13 +8,12 @@ from click.testing import CliRunner
 from punica.cli import main
 
 
-class TestUnbox(unittest.TestCase):
-    def test_unbox(self):
+class TestVersion(unittest.TestCase):
+    def test_version(self):
         runner = CliRunner()
-        result = runner.invoke(main, ['-h'])
-        print(result.output)
         result = runner.invoke(main, ['-v'])
-        print(result.output)
+        self.assertEqual(0, result.exit_code)
+        self.assertTrue(isinstance(result.output, str))
 
 
 if __name__ == '__main__':

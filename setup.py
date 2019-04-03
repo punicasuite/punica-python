@@ -10,13 +10,13 @@ with open(path.join(getcwd(), 'README.md'), mode='r', encoding='utf-8') as f:
 
 setup(
     name='punica',
-    version='0.0.21',
+    version='0.0.23',
     description="""Ontology DApp Development Framework""",
     long_description=long_description,
     long_description_content_type="text/markdown",
     author='NashMiao',
     author_email='wdx7266@outlook.com',
-    url='https://github.com/ontio-community/punica-python',
+    url='https://github.com/punicasuite/punica-python',
     maintainer='NashMiao',
     maintainer_email='wdx7266@outlook.com',
     # include_package_data=True,

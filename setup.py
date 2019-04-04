@@ -24,6 +24,7 @@ setup(
     python_requires='>=3.6,<4',
     install_requires=[
         'Click',
+        'requests',
         'GitPython',
         'ontology-python-sdk',
     ],

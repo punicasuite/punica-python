@@ -1,5 +1,0 @@
-ontology-python-sdk
-punica-neo-boa
-click
-coverage
-GitPython

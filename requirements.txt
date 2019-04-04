@@ -1,3 +1,4 @@
+requests
 click
 gitpython>=2.1.11
 ontology-python-sdk

@@ -6,6 +6,7 @@ import re
 import json
 
 import git
+import click
 import requests
 
 from punica.exception.punica_exception import PunicaError, PunicaException
@@ -18,7 +19,7 @@ from punica.utils.file_system import (
 class Box:
     @staticmethod
     def handle_ignorance(repo_to_path: str = ''):
-        print('Unpacking...')
+        click.echo('Unpacking...')
         box_ignore_file_path = os.path.join(repo_to_path, 'punica-box.json')
         try:
             with open(box_ignore_file_path, 'r') as f:
@@ -40,7 +41,7 @@ class Box:
             repo_to_path = os.getcwd()
         if os.listdir(repo_to_path):
             raise PunicaException(PunicaError.file_exist_error)
-        print('Downloading...')
+        click.echo('Downloading...')
         try:
             git.Repo.clone_from(url=repo_url, to_path=repo_to_path, depth=1)
         except git.GitCommandError as e:
@@ -60,7 +61,7 @@ class Box:
         repo_url = 'https://github.com/punica-box/punica-init-default-box'
         Box.git_clone(repo_url, init_to_path)
         Box.handle_ignorance(init_to_path)
-        print('Unbox successful. Enjoy it!')
+        click.echo('Unbox successful. Enjoy it!')
 
     @staticmethod
     def generate_repo_url(box_name: str) -> str:
@@ -79,17 +80,17 @@ class Box:
             Box.git_clone(repo_url, repo_to_path)
         except PunicaException as e:
             if e.args[0] == 59000:
-                print('Please check out your box name.')
+                click.echo('Please check out your box name.')
             elif e.args[0]:
-                print('This current folder is not NUll.')
-                print('Please check out your environment.')
+                click.echo('This current folder is not NUll.')
+                click.echo('Please check out your environment.')
             return
         try:
             Box.handle_ignorance(repo_to_path)
         except PunicaException as e:
-            print('Clean work abort...')
+            click.echo('Clean work abort...')
             return
-        print('Unbox successful. Enjoy it!')
+        click.echo('Unbox successful. Enjoy it!')
 
     @staticmethod
     def list_boxes():

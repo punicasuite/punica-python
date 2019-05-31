@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import json
 import os
-
-from punica.common.define import DEFAULT_CONFIG
+import json
 
 from punica.exception.punica_exception import PunicaException, PunicaError
+
+DEFAULT_CONFIG = 'default-config.json'
 
 
 def handle_network_config(config_dir_path: str, network: str = '', is_print: bool = True) -> str:

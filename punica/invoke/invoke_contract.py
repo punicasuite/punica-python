@@ -6,11 +6,10 @@ import os
 import time
 
 from ontology.common.address import Address
+from ontology.contract.neo.abi.abi_info import AbiInfo
+from ontology.contract.neo.abi.build_params import BuildParams
+from ontology.contract.neo.vm import NeoVm
 from ontology.exception.exception import SDKException
-from ontology.ont_sdk import OntologySdk
-from ontology.smart_contract.neo_contract.abi.abi_info import AbiInfo
-from ontology.smart_contract.neo_contract.abi.build_params import BuildParams
-from ontology.smart_contract.neo_vm import NeoVm
 from ontology.wallet.wallet_manager import WalletManager
 
 from punica.common.define import DEFAULT_CONFIG
@@ -91,11 +90,10 @@ class Invoke:
         return abi_info
 
     @staticmethod
-    def generate_unsigned_invoke_transaction(contract_address: bytearray, params_list: list, payer_base58: bytearray, gas_price: int,
-                                             gas_limit: int):
-        # params = BuildParams.serialize_abi_function(abi_func)
+    def generate_unsigned_invoke_transaction(contract_address: bytearray, params_list: list, payer_base58: bytearray,
+                                             gas_price: int, gas_limit: int):
         params = BuildParams.create_code_params_script(params_list)
-        tx = NeoVm.make_invoke_transaction(contract_address, bytearray(params), payer_base58, gas_limit, gas_price)
+        tx = NeoVm.make_invoke_transaction(contract_address, payer_base58, gas_price, gas_limit)
         return tx
 
     @staticmethod
@@ -297,7 +295,7 @@ class Invoke:
         except PunicaException as e:
             print(e.args)
             return
-        ontology = OntologySdk()
+        ontology = Ontology()
         rpc_address = handle_network_config(project_dir_path, network)
         ontology.rpc.set_address(rpc_address)
         if wallet_file_name != '':
@@ -350,7 +348,8 @@ class Invoke:
             print('Invoking ', function_name)
             abi_function = abi_info.get_function(function_name)
             if abi_function is None:
-                raise PunicaException(PunicaError.other_error('\"' + function_name + '\"' + 'not found in the abi file'))
+                raise PunicaException(
+                    PunicaError.other_error('\"' + function_name + '\"' + 'not found in the abi file'))
             function_information = None
             for invoke_function in invoke_function_list:
                 if invoke_function['operation'] == function_name:

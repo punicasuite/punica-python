@@ -1,7 +1,8 @@
 import getpass
 import os
 
-from ontology.ont_sdk import OntologySdk
+from ontology.sdk import Ontology
+
 from punica.invoke.invoke_contract import Invoke
 
 from punica.utils.handle_config import handle_network_config
@@ -21,7 +22,7 @@ class Asset:
         if not os.path.isdir(project_dir_path):
             raise PunicaException(PunicaError.dir_path_error)
         rpc_address = handle_network_config(project_dir_path, network)
-        sdk = OntologySdk()
+        sdk = Ontology()
         sdk.rpc.set_address(rpc_address)
         balance = sdk.native_vm().asset().query_balance(asset, address)
         print(address + '  Balance: ', balance)
@@ -33,7 +34,7 @@ class Asset:
         if not os.path.isdir(project_dir_path):
             raise PunicaException(PunicaError.dir_path_error)
         rpc_address = handle_network_config(project_dir_path, network)
-        sdk = OntologySdk()
+        sdk = Ontology()
         sdk.rpc.set_address(rpc_address)
         balance = sdk.native_vm().asset().query_unbound_ong(address)
         print(address + '  UnboundOng: ', balance)
@@ -48,8 +49,8 @@ class Asset:
         if not os.path.isdir(project_dir_path):
             raise PunicaException(PunicaError.dir_path_error)
         rpc_address = handle_network_config(project_dir_path, network)
-        sdk = OntologySdk()
-        sdk.set_rpc(rpc_address)
+        sdk = Ontology()
+        sdk.rpc.set_address(rpc_address)
         wallet_manager = Account.get_wallet_manager(project_dir_path)
         if len(wallet_manager.wallet_in_mem.accounts) == 0:
             print('there is not account in the wallet.json')
@@ -76,7 +77,7 @@ class Asset:
         if not os.path.isdir(project_dir_path):
             raise PunicaException(PunicaError.dir_path_error)
         rpc_address = handle_network_config(project_dir_path, network)
-        sdk = OntologySdk()
+        sdk = Ontology()
         sdk.rpc.set_address(rpc_address)
         sdk.wallet_manager = Account.get_wallet_manager(project_dir_path)
         if len(sdk.wallet_manager.wallet_in_mem.accounts) == 0:

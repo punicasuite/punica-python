@@ -1,7 +1,6 @@
 import getpass
 import os
 
-from ontology.ont_sdk import OntologySdk
 from ontology.wallet.wallet_manager import WalletManager
 
 from punica.exception.punica_exception import PunicaException, PunicaError
@@ -43,7 +42,7 @@ class Account:
             if account.get_b58_address() == address:
                 pwd = getpass.getpass('Please input password: ')
                 try:
-                    wallet_manager.get_account(address, pwd)
+                    wallet_manager.get_account_by_b58_address(address, pwd)
                 except Exception:
                     print('password is wrong')
                     return

@@ -5,8 +5,8 @@ import os
 import time
 import getpass
 
+from ontology.sdk import Ontology
 from ontology.common.address import Address
-from ontology.ont_sdk import OntologySdk
 
 from punica.utils.file_system import (
     read_avm,
@@ -43,7 +43,7 @@ class Deploy:
             raise PunicaException(PunicaError.other_error('payer address should not be None'))
         gas_limit = deploy_information.get('gasLimit', 21000000)
         gas_price = deploy_information.get('gasPrice', 500)
-        ontology = OntologySdk()
+        ontology = Ontology()
         tx = ontology.neo_vm().make_deploy_transaction(hex_avm_code, need_storage, name, version, author, email,
                                                        desc, b58_payer_address, gas_limit, gas_price)
         password = password_information.get(b58_payer_address, '')
@@ -62,7 +62,7 @@ class Deploy:
         if not os.path.isdir(avm_dir_path):
             raise PunicaException(PunicaError.dir_path_error)
         hex_avm_code = read_avm(avm_dir_path, avm_file_name)[0]
-        hex_contract_address = Address.address_from_vm_code(hex_avm_code).to_reverse_hex_str()
+        hex_contract_address = Address.from_avm_code(hex_avm_code).hex(little_endian=False)
         return hex_contract_address
 
     @staticmethod
@@ -72,7 +72,7 @@ class Deploy:
         if not os.path.isdir(project_path):
             raise PunicaException(PunicaError.dir_path_error)
         rpc_address = handle_network_config(project_path, network, False)
-        ontology = OntologySdk()
+        ontology = Ontology()
         ontology.rpc.set_address(rpc_address)
         time.sleep(6)
         tx = ontology.rpc.get_transaction_by_tx_hash(tx_hash)
@@ -107,9 +107,9 @@ class Deploy:
         if hex_avm_code == '':
             raise PunicaException(PunicaError.avm_file_empty)
         hex_contract_address = Deploy.generate_contract_address(avm_dir_path, avm_file_name)
-        ontology = OntologySdk()
+        ontology = Ontology()
         ontology.rpc.set_address(rpc_address)
-        contract = ontology.rpc.get_smart_contract(hex_contract_address)
+        contract = ontology.rpc.get_contract(hex_contract_address)
         if contract == 'unknow contract' or contract == 'unknow contracts':
             try:
                 tx = Deploy.generate_signed_deploy_transaction(hex_avm_code, project_dir, wallet_file_name, config)

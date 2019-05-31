@@ -7,21 +7,23 @@ import unittest
 from click.testing import CliRunner
 
 from punica.cli import main
+from punica.utils.file_system import ensure_remove_dir_if_exists
 
 
 class TestUnbox(unittest.TestCase):
     def test_unbox(self):
         box_name = 'tutorialtoken'
-        unbox_to_path = os.path.join(os.getcwd(), box_name)
+        project_path = os.path.join(os.getcwd(), 'test_file', 'test_unbox', box_name)
         try:
-            os.makedirs(unbox_to_path)
-        except FileExistsError:
-            pass
-        runner = CliRunner()
-        result = runner.invoke(main, ['unbox', '-h'])
-        print(result.output)
-        result = runner.invoke(main, ['-p', unbox_to_path, 'unbox', 'tutorialtoken'])
-        print(result)
+            runner = CliRunner()
+            result = runner.invoke(main, ['unbox', '-h'])
+            info_list = result.output.split('\n')
+            print(info_list)
+            result = runner.invoke(main, ['-p', project_path, 'unbox', box_name])
+            info_list = result.output.split('\n')
+            print(info_list)
+        finally:
+            ensure_remove_dir_if_exists(project_path)
 
 
 if __name__ == '__main__':

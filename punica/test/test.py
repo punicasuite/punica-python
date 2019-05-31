@@ -1,15 +1,8 @@
-import json
 import os
 
 from punica.invoke.invoke_contract import Invoke
 
 from punica.utils.file_system import read_abi
-
-from punica.utils.handle_config import handle_invoke_config
-
-from punica.common.define import DEFAULT_CONFIG
-
-from punica.exception.punica_exception import PunicaException, PunicaError
 
 
 class Test:

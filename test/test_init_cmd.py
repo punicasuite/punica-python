@@ -9,24 +9,27 @@ from click.testing import CliRunner
 
 from punica.cli import main
 from punica.config.punica_config import InitConfig
+from punica.utils.file_system import ensure_remove_dir_if_exists
 
 
 class TestInit(unittest.TestCase):
-    def test_initializing_empty_project(self):
-        init_to_path = os.path.join(os.getcwd(), 'init_to_path')
+    def setUp(self):
+        self.runner = CliRunner()
+
+    def test_init_empty_project(self):
+        project_path = os.path.join(os.path.dirname(__file__), 'test_file', 'test_init_empty')
         try:
-            os.makedirs(init_to_path)
-        except FileExistsError:
-            pass
-        runner = CliRunner()
-        result = runner.invoke(main, ['-p', init_to_path, 'init'])
-        self.assertEqual(0, result.exit_code)
-        init_config = InitConfig(init_to_path)
-        self.assertTrue(os.path.exists(init_config.src_path()))
-        self.assertTrue(os.path.exists(init_config.test_path()))
-        self.assertTrue(os.path.exists(init_config.wallet_path()))
-        self.assertTrue(os.path.exists(init_config.contract_path()))
-        shutil.rmtree(init_to_path)
+            result = self.runner.invoke(main, ['--project', project_path, 'init'])
+            info_list = result.output.split('\n')
+            print(info_list)
+            self.assertEqual(0, result.exit_code)
+            init_config = InitConfig(project_path)
+            self.assertTrue(os.path.exists(init_config.src_path()))
+            self.assertTrue(os.path.exists(init_config.test_path()))
+            self.assertTrue(os.path.exists(init_config.wallet_path()))
+            self.assertTrue(os.path.exists(init_config.contract_path()))
+        finally:
+            ensure_remove_dir_if_exists(project_path)
 
 
 if __name__ == '__main__':

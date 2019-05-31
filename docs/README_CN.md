@@ -1,40 +1,8 @@
-<div align="center">
-  <img src="https://raw.githubusercontent.com/punicasuite/punica-python/master/punica.png" height="200" width="200"><br><br>
-</div>
-
-<!-- TOC -->
-
-# Punica Cli
-
-[English](./README.md) | 中文版
-
-- [1. 概览](#1-概览)
-- [2. 安装](#2-安装)
-- [3. 快速开始](#3-快速开始)
-- [4. 开始使用](#4-开始使用)
-  - [4.1 创建一个项目](#41-创建一个项目)
-    - [4.1.1 初始化一个新项目](#411-初始化一个新项目)
-    - [4.1.2 创建一个Box项目](#412-创建一个box项目)
-  - [4.2 编译](#42-编译)
-  - [4.3 部署](#43-部署)
-  - [4.4 调用](#44-调用)
-  - [4.5 Node](#45-node)
-  - [4.6 Scpm](#46-scpm)
-  - [4.7 Smartx](#47-smartx)
-  - [4.8 测试](#48-测试)
-  - [4.9 钱包](#49-钱包)
-- [5. 例子](#5-例子)
-  - [5.1 检查版本号](#51-检查版本号)
-  - [5.2 下载Box](#52-下载box)
-  - [5.3 编译合约](#53-编译合约)
-  - [5.4 部署合约](#54-部署合约)
-  - [5.5 调用合约](#55-调用合约)
-
-## 1. 概览
+## 概览
 
 Punica Python是一个dApp开发命令行工具，它具有（几乎）开始基于Ontology网络开发dApp所需的一切。
 
-## 2. 安装
+## 安装
 
 安装之前请先确保下面的工具已经安装：
 
@@ -47,7 +15,7 @@ Punica Python是一个dApp开发命令行工具，它具有（几乎）开始基
 pip install punica
 ```
 
-## 3. 快速开始
+## 快速开始
 
 如果想使用Punica更多的命令，请先创建一个Punica项目。
 
@@ -73,11 +41,11 @@ Commands:
   wallet   Manager your ontid, account, asset.
 ```
 
-## 4. 开始使用
+## 开始使用
 
-### 4.1 创建一个项目
+### 创建一个项目
 
-#### 4.1.1 初始化一个新项目
+#### 初始化一个新项目
 
 可以使用`punica init`命令创建一个空项目
 
@@ -128,7 +96,7 @@ sss:temp2 sss$ tree
 - `punica-config.json` 用于配置区块链网络
 
 
-#### 4.1.2 创建一个Box项目
+#### 创建一个Box项目
 
 Punica Box 是punica dapp模板库，你可以下载你感兴趣的项目，然后基于该项目进行创建你的dapp。
 
@@ -161,7 +129,7 @@ Options:
 - 你可以使用`punica unbox <box-name>`免费下载任意的Box项目。
 - 你可以在你的项目根目录使用punica的其他命令，也可以`-p` or `--project` 选项指定使用哪个项目。
 
-### 4.2 编译
+### 编译
 
 使用下面的命令编译你的合约
 
@@ -198,7 +166,7 @@ Options:
 
 - `--local`选项用于指定使用哪个编译器
 
-### 4.3 部署
+### 部署
 
 部署之前，你要关心两个配置文件，一个是`punica-config.json`,该文件配置使用的区块链网络，另一个配置文件是contracts目录下面的default-config.json文件，
 该文件用于配置部署合约的参数信息和调用合约中函数的参数。
@@ -243,7 +211,7 @@ Options:
 - `--wallet TEXT`用于指定使用的钱包文件，默认使用wallet文件夹下的wallet.json文件
 - `--config TEXT`用于指定使用的配置文件，默认使用defaul-config.json
 
-### 4.4 调用
+### 调用
 
 调用之前，请确保default-config.json文件中已经配好合约方法需要的参数。
 
@@ -402,7 +370,7 @@ Commands:
 其他的配置信息请参看上面的讲解。
 
 
-### 4.5 Node
+### Node
 
 
 ```shell
@@ -416,7 +384,7 @@ Options:
    -h, --help  Show this message and exit.
 ```
 
-### 4.6 Scpm
+### Scpm
 
 ```shell
 $ punica scpm
@@ -428,7 +396,7 @@ Options:
    -h, --help  Show this message and exit.
 
 ```
-### 4.7 Smartx
+### Smartx
 
 ```shell
 $ punica smartx
@@ -436,7 +404,7 @@ $ punica smartx
 Please go to Smartx for debugging smart contracts:
 http://smartx.ont.io/#/
 ```
-### 4.8 测试
+### 测试
 
 ```shell
 $ punica test -h
@@ -452,7 +420,7 @@ Commands:
   template  generate test template file
 ```
 
-### 4.9 钱包
+### 钱包
 
 ```shell
 $ punica wallet
@@ -470,16 +438,16 @@ Commands:
 
 ```
 
-## 5. 例子
+## 例子
 
-### 5.1 检查版本号
+### 检查版本号
 
 ```shell
 $ punica -v
 0.0.9
 ```
 
-### 5.2 下载Box
+### 下载Box
 
 ```shell
 $ punica unbox tutorialtoken
@@ -488,7 +456,7 @@ Unpacking...
 Unbox successful. Enjoy it!
 ```
 
-### 5.3 编译合约
+### 编译合约
 
 
 ```shell
@@ -539,7 +507,7 @@ $ tree build /F
 ```
 
 
-### 5.4 部署合约
+### 部署合约
 
 编译成功后，可以部署合约到Ontology网络
 
@@ -569,7 +537,7 @@ Running deployment: oep4_token.avm
 Enjoy your contract:)
 ```
 
-### 5.5 调用合约
+### 调用合约
 
 
 ```shell

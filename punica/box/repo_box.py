@@ -9,11 +9,13 @@ import git
 import click
 import requests
 
-from punica.exception.punica_exception import PunicaError, PunicaException
 from punica.utils.file_system import (
     ensure_remove_dir_if_exists,
-    remove_file_if_exists
+    remove_file_if_exists,
+    ensure_path_exists
 )
+
+from punica.exception.punica_exception import PunicaError, PunicaException
 
 
 class Box:
@@ -58,6 +60,7 @@ class Box:
     def init(init_to_path: str):
         if init_to_path == '':
             init_to_path = os.getcwd()
+        ensure_path_exists(init_to_path)
         repo_url = 'https://github.com/punica-box/punica-init-default-box'
         Box.git_clone(repo_url, init_to_path)
         Box.handle_ignorance(init_to_path)

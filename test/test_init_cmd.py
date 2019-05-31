@@ -21,7 +21,9 @@ class TestInit(unittest.TestCase):
         try:
             result = self.runner.invoke(main, ['--project', project_path, 'init'])
             info_list = result.output.split('\n')
-            print(info_list)
+            init_empty_info = ['Downloading...', 'Unpacking...', 'Unbox successful. Enjoy it!']
+            for index, info in enumerate(init_empty_info):
+                self.assertEqual(info, info_list[index])
             self.assertEqual(0, result.exit_code)
             init_config = InitConfig(project_path)
             self.assertTrue(os.path.exists(init_config.src_path()))

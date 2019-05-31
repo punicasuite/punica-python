@@ -12,7 +12,6 @@ from ontology.contract.neo.vm import NeoVm
 from ontology.exception.exception import SDKException
 from ontology.wallet.wallet_manager import WalletManager
 
-from punica.common.define import DEFAULT_CONFIG
 from punica.exception.punica_exception import PunicaException, PunicaError
 
 from punica.utils.file_system import (
@@ -22,8 +21,8 @@ from punica.utils.file_system import (
 
 from punica.utils.handle_config import (
     handle_invoke_config,
-    handle_network_config
-)
+    handle_network_config,
+    DEFAULT_CONFIG)
 
 
 class Invoke:

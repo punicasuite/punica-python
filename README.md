@@ -23,7 +23,7 @@ pip install punica
 
 ## Documentation
 
-Read a beautiful documentation in [here](https://nashmiao.github.io/punica-python/).
+Read a beautiful documentation in [here](https://punica.gitbook.io/punica-python/).
 
 ## License
 

@@ -1,4 +1,4 @@
-requests
-click
-gitpython>=2.1.11
-ontology-python-sdk
+requests==2.22.0
+click==7.0
+gitpython==2.1.11
+ontology-python-sdk==2.0.2

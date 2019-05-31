@@ -3,17 +3,24 @@
 
 import unittest
 
-from click.testing import CliRunner
-
 from punica.cli import main
+
+from click.testing import CliRunner
 
 
 class TestVersion(unittest.TestCase):
-    def test_version(self):
-        runner = CliRunner()
-        result = runner.invoke(main, ['-v'])
+    def setUp(self):
+        self.runner = CliRunner()
+
+    def check_result(self, result):
         self.assertEqual(0, result.exit_code)
         self.assertTrue(isinstance(result.output, str))
+
+    def test_version(self):
+        result = self.runner.invoke(main, '--version')
+        self.check_result(result)
+        result = self.runner.invoke(main, '-v')
+        self.check_result(result)
 
 
 if __name__ == '__main__':

@@ -28,7 +28,7 @@ click.echo("""
     help=(
             "Specify a punica project directory."
     ),
-    type=click.Path(exists=True, dir_okay=True),
+    type=click.Path(exists=False, dir_okay=True),
 )
 @click.version_option(
     pkg_resources.get_distribution("punica").version,

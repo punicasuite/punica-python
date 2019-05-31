@@ -1,0 +1,743 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Introduction · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter active" data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >Introduction</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h2 id="overview">Overview</h2>
+<p>Punica Python is a dApp development command line tool which has (almost) everything you need to start developing your dApp based on Ontology network.</p>
+<h2 id="installation">Installation</h2>
+<p>There are a few technical requirements before we start. Please install the following:</p>
+<ul>
+<li><a href="https://www.python.org/downloads/release/python-370/" target="_blank">Python 3.7</a></li>
+<li><a href="https://git-scm.com/" target="_blank">Git</a></li>
+</ul>
+<p>Then, execute the following command to install your tool:</p>
+<pre><code class="lang-shell">pip install punica
+</code></pre>
+<h2 id="quickstart">Quickstart</h2>
+<p>To use most Punica commands, you need to run them against an existing Punica project. So the first step is to create a Punica project.</p>
+<pre><code class="lang-shell">punica
+Usage: punica [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  -p, --project PATH  Specify a punica project directory.
+  -v, --version       Show the version and exit.
+  -h, --help          Show this message and exit.
+
+Commands:
+  compile  Compile the specified contracts to avm and...
+  deploy   Deploys the specified contracts to specified...
+  init     Initialize new and empty Ontology DApp...
+  invoke   Invoke the function list in default-config or...
+  node     Ontology Blockchain private net in test mode.
+  scpm     Smart contract package manager&#xFF0C;support...
+  smartx   Ontology smart contract IDE,SmartX...
+  test     Unit test with specified smart contract
+  tool     Data format conversion tool
+  unbox    Download a Punica Box, a pre-built Ontology...
+  wallet   Manager your ontid, account, asset.
+</code></pre>
+<p>You can create a bare Punica project with no smart contracts included, use <code>punica init</code> command.</p>
+<p>Once this operation is completed, you&apos;ll now have a project structure with the following items:</p>
+<ul>
+<li><code>contracts/</code>: Directory for Ontology smart contracts.</li>
+<li><code>src/</code>: Directory for DApp source file.</li>
+<li><code>test/</code>: Directory for test files for testing your application and contracts.</li>
+<li><code>wallet/</code>: Directory for save Ontology wallet file.</li>
+</ul>
+<h2 id="getting-started">Getting started</h2>
+<p>To use most Punica commands, you need to run them against an existing Punica project. So the first step is to create a Punica project.</p>
+<h3 id="create-a-project">Create a Project</h3>
+<h4 id="initializing-a-new-project">Initializing a New Project</h4>
+<p>You can create a bare Punica project with no smart contracts included, use <code>punica init</code> command.</p>
+<p>Once this operation is completed, you&apos;ll now have a project structure with the following items:</p>
+<ul>
+<li><code>contracts/</code>: Directory for Ontology smart contracts.</li>
+<li><code>src/</code>: Directory for DApp source file.</li>
+<li><code>test/</code>: Directory for test files for testing your application and contracts.</li>
+<li><code>wallet/</code>: Directory for save Ontology wallet file.</li>
+</ul>
+<pre><code class="lang-shell">punica init --help
+Usage: punica init [OPTIONS]
+
+  Initialize new and empty Ontology DApp project.
+
+Options:
+  -h, --help  Show this message and exit.
+</code></pre>
+<p><strong>Note</strong>: If you not run punica cli in you project root directory, you need to use <code>-p</code> or <code>--project</code> option to specify your DApp project&apos;s path.</p>
+<h4 id="creating-a-box-project">Creating a Box Project</h4>
+<p>You can create a bare project template, but for those just getting started, you can use Punica Boxes, which are example applications and project templates.</p>
+<p>We&apos;ll use the <a href="https://github.com/wdx7266/ontology-tutorialtoken" target="_blank">ontology-tutorialtoken box</a>, which creates a OEP4 token that can be transferred between accounts:</p>
+<ul>
+<li>Create a new directory for your Punica project:</li>
+</ul>
+<pre><code class="lang-shell">mkdir tutorialtoken
+cd tutorialtoken
+</code></pre>
+<ul>
+<li>Download (&quot;unbox&quot;) the MetaCoin box:</li>
+</ul>
+<pre><code class="lang-shell">punica unbox tutorialtoken
+</code></pre>
+<pre><code class="lang-shell">punica unbox --help
+Usage: punica unbox [OPTIONS] BOX_NAME
+
+  Download a Punica Box, a pre-built Ontology DApp project.
+
+Options:
+  -h, --help  Show this message and exit.
+</code></pre>
+<p><strong>Note</strong>:</p>
+<ul>
+<li>You can use the <code>punica unbox &lt;box-name&gt;</code> command to download any of the other Punica Boxes.</li>
+<li>If you not run punica cli in you project root directory, you need to use <code>-p</code> or <code>--project</code> option to specify your DApp project&apos;s path.</li>
+</ul>
+<h3 id="compiling">Compiling</h3>
+<p>You can use the following command to compile your Ontology smart contracts:</p>
+<pre><code class="lang-shell">punica compile
+</code></pre>
+<p>If everything goes smoothly, you can find the <code>avm</code> and <code>abi</code> file in <code>contracts/build</code> folder.</p>
+<pre><code class="lang-shell">contacts
+    &#x251C;&#x2500;build
+    &#x2502;      contract.avm
+    &#x2502;      contract_abi.json
+</code></pre>
+<p>For more usage, you can use <code>punica compile --help</code> command.</p>
+<pre><code class="lang-shell">$ punica compile --help
+Usage: punica compile [OPTIONS] CONTRACT_NAME
+
+  Compile the specified contracts to avm and abi file.
+
+Options:
+  --contracts TEXT  Compile specified contracts files in contracts dir.
+  --local BOOLEAN   Use local compiler.
+  -h, --help        Show this message and exit.
+</code></pre>
+<p><strong>Note</strong>: If you not run punica cli in you project root directory, you need to use <code>-p</code> or <code>--project</code> option to specify your DApp project&apos;s path.</p>
+<h3 id="deployment">Deployment</h3>
+<p>Before deploying, you need to refine both configuration files. One configuration is punica-config.json in which we configure the
+blockchain network we use, another is default-config.json in which we configure the contract information.</p>
+<p>To deploy your contract, run the following:</p>
+<pre><code class="lang-shell">$ punica deploy
+</code></pre>
+<p>This will deploy your smart contract to blockchain.</p>
+<p>A simple deployment process looks like this:</p>
+<pre><code class="lang-shell">Using network &apos;privateNet&apos;.
+
+Use the default wallet file: wallet.json
+Running deployment: hello_ontology.avm
+    Deploying...
+    Deploy to: cb9f3b7c6fb1cf2c13a40637c189bdd066a272b4
+Deploy successful to network...
+     Contract address is cb9f3b7c6fb1cf2c13a40637c189bdd066a272b4
+     Txhash is 6ad673d77fee33829240ab1f197c0b7109d4fe44b6a8e46fc3d5dca93b7b289d
+</code></pre>
+<p>For more usage, you can use <code>punica deploy --help</code> command.</p>
+<pre><code class="lang-shell">$ punica deploy --help
+Usage: punica deploy [OPTIONS]
+
+  Deploys the specified contracts to specified chain.
+
+Options:
+  --network TEXT  Specify which network the contracts will be deployed.
+  --avm TEXT      Specify which avm file will be deployed.
+  --wallet TEXT   Specify which wallet file will be used.
+  --config TEXT   Specify which deploy config file will be used.
+  -h, --help      Show this message and exit.
+</code></pre>
+<p><strong>Note</strong>:</p>
+<ul>
+<li>If you not run punica cli in you project root directory, you need to use <code>-p</code> or <code>--project</code> option to specify your DApp project&apos;s path.</li>
+<li>If multi <code>avm</code> file exist in your <code>bin</code> directory, you need to use <code>--avm</code> option to specify which contract you want to deploy.</li>
+<li>If multi wallet file exist in your <code>wallet</code> directory, you may need to use <code>--wallet</code> option to specify which wallet you want to use. otherwise, a random wallet file in <code>wallet</code> directory will be used.</li>
+</ul>
+<h3 id="invocation">Invocation</h3>
+<p>If you want to invoke a list of function in your deployed smart contract, a convenience way is to use <code>Invoke</code> command.
+before we invoke , we should first configure the default-config.json.</p>
+<p>Support we have an invoke config in our <code>default-config.json</code>:</p>
+<pre><code class="lang-json"><span class="hljs-string">&quot;abi&quot;</span>: <span class="hljs-string">&quot;hello_ontology_abi.json&quot;</span>,
+        <span class="hljs-string">&quot;defaultPayer&quot;</span>: <span class="hljs-string">&quot;AUr5QUfeBADq6BMY6Tp5yuMsUNGpsD7nLZ&quot;</span>,
+        <span class="hljs-string">&quot;gasPrice&quot;</span>: <span class="hljs-number">0</span>,
+        <span class="hljs-string">&quot;gasLimit&quot;</span>: <span class="hljs-number">20000</span>,
+        <span class="hljs-string">&quot;functions&quot;</span>: [
+            {
+                <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;hello&quot;</span>,
+                <span class="hljs-string">&quot;params&quot;</span>: {
+                    <span class="hljs-string">&quot;msg&quot;</span>: <span class="hljs-string">&quot;Address:AUr5QUfeBADq6BMY6Tp5yuMsUNGpsD7nLZ&quot;</span>
+                },
+                <span class="hljs-string">&quot;signature&quot;</span>: {
+                    <span class="hljs-string">&quot;m&quot;</span>: <span class="hljs-number">1</span>,
+                    <span class="hljs-string">&quot;signers&quot;</span>: [
+                        <span class="hljs-string">&quot;AUr5QUfeBADq6BMY6Tp5yuMsUNGpsD7nLZ&quot;</span>
+                    ]
+                },
+                <span class="hljs-string">&quot;preExec&quot;</span>: <span class="hljs-literal">true</span>
+            },
+            {
+                <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;testListNum&quot;</span>,
+                <span class="hljs-string">&quot;params&quot;</span>: {
+                    <span class="hljs-string">&quot;msg&quot;</span>: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>]
+                },
+                <span class="hljs-string">&quot;signature&quot;</span>: {},
+                <span class="hljs-string">&quot;preExec&quot;</span>: <span class="hljs-literal">true</span>
+            },
+            {
+                <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;testListNum2&quot;</span>,
+                <span class="hljs-string">&quot;params&quot;</span>: {
+                    <span class="hljs-string">&quot;msgList&quot;</span>: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>],
+                    <span class="hljs-string">&quot;msg&quot;</span>: <span class="hljs-string">&quot;String:test&quot;</span>
+                },
+                <span class="hljs-string">&quot;signature&quot;</span>: {},
+                <span class="hljs-string">&quot;preExec&quot;</span>: <span class="hljs-literal">true</span>
+            },
+            {
+                <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;testListStr&quot;</span>,
+                <span class="hljs-string">&quot;params&quot;</span>: {
+                    <span class="hljs-string">&quot;msgList&quot;</span>: [
+                        <span class="hljs-string">&quot;String:hello&quot;</span>,
+                        <span class="hljs-string">&quot;String:world&quot;</span>
+                    ],
+                    <span class="hljs-string">&quot;msg&quot;</span>:<span class="hljs-string">&quot;String:test&quot;</span>
+                },
+                <span class="hljs-string">&quot;signature&quot;</span>: {},
+                <span class="hljs-string">&quot;preExec&quot;</span>: <span class="hljs-literal">true</span>
+            },
+            {
+                <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;testListByteArray&quot;</span>,
+                <span class="hljs-string">&quot;params&quot;</span>: {
+                    <span class="hljs-string">&quot;msgList&quot;</span>: [
+                        <span class="hljs-string">&quot;ByteArray:Hello&quot;</span>,
+                        <span class="hljs-string">&quot;ByteArray:world&quot;</span>
+                    ],
+                    <span class="hljs-string">&quot;msg&quot;</span>: <span class="hljs-string">&quot;String:hello&quot;</span>
+                },
+                <span class="hljs-string">&quot;signature&quot;</span>: {},
+                <span class="hljs-string">&quot;preExec&quot;</span>: <span class="hljs-literal">true</span>
+            },
+            {
+                <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;testListStruct&quot;</span>,
+                <span class="hljs-string">&quot;params&quot;</span>: {
+                    <span class="hljs-string">&quot;msgList&quot;</span>: [
+                        {
+                            <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;String:hello&quot;</span>,
+                            <span class="hljs-string">&quot;age&quot;</span>: <span class="hljs-number">1</span>
+                        },
+                        {
+                            <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;String:hello2&quot;</span>,
+                            <span class="hljs-string">&quot;age&quot;</span>: <span class="hljs-number">2</span>
+                        }
+                    ],
+                    <span class="hljs-string">&quot;msg&quot;</span>: <span class="hljs-string">&quot;String:test&quot;</span>
+                },
+                <span class="hljs-string">&quot;signature&quot;</span>: {},
+                <span class="hljs-string">&quot;preExec&quot;</span>: <span class="hljs-literal">true</span>
+            }
+        ]
+    }
+</code></pre>
+<p>View the functions that can be called</p>
+<pre><code class="lang-shell">punica invoke list
+</code></pre>
+<p>The following output we will get:</p>
+<pre><code class="lang-shell">All Functions:
+     hello
+     testListNum
+     testListNum2
+     testListStr
+     testListByteArray
+     testListStruct
+</code></pre>
+<p>To run our invoke function list, run the following:</p>
+<p><code>punica invoke</code></p>
+<p>The following output we will get:</p>
+<pre><code class="lang-shell">$ punica invoke
+Using network &apos;privateNet&apos;.
+
+Running invocation: hello_ontology_abi.json
+Unlock default payer account...
+Invoking  hello
+Invoke successful
+Invoke result: [&apos;8f651d459b4f146380dab28e7cfb9d4bb9c3fcd1&apos;]
+Invoking  testListNum
+Invoke successful
+Invoke result: [[&apos;01&apos;, &apos;02&apos;, &apos;03&apos;, &apos;04&apos;, &apos;05&apos;]]
+Invoking  testListNum2
+Invoke successful
+Invoke result: [[&apos;01&apos;, &apos;02&apos;, &apos;03&apos;, &apos;04&apos;, &apos;05&apos;], &apos;74657374&apos;]
+Invoking  testListStr
+Invoke successful
+Invoke result: [[&apos;68656c6c6f&apos;, &apos;776f726c64&apos;], &apos;74657374&apos;]
+Invoking  testListByteArray
+Invoke successful
+Invoke result: [[&apos;48656c6c6f&apos;, &apos;776f726c64&apos;], &apos;68656c6c6f&apos;]
+Invoking  testListStruct
+Invoke successful
+Invoke result: [[&apos;68656c6c6f&apos;, &apos;01&apos;], [&apos;68656c6c6f32&apos;, &apos;02&apos;], &apos;74657374&apos;]
+</code></pre>
+<p>For more usage, you can use <code>punica invoke --help</code> command.</p>
+<pre><code class="lang-shell">$ punica invoke --help
+Usage: punica invoke [OPTIONS] COMMAND [ARGS]...
+
+  Invoke the function list in default-config or specify config.
+
+Options:
+  --network TEXT    Specify which network the contracts will be deployed.
+  --wallet TEXT     Specify which wallet file will be used.
+  --functions TEXT  Specify which function will be executed.
+  --config TEXT     Specify which config file will be used.
+  --preexec TEXT    preExec the function.
+  -h, --help        Show this message and exit.
+
+Commands:
+  list  List all the function in default-config or...
+</code></pre>
+<p><strong>Note</strong>:</p>
+<ul>
+<li>If you not run punica cli in you project root directory, you need to use <code>-p</code> or <code>--project</code> option to specify your DApp project&apos;s path.</li>
+<li>If multi wallet file exist in your <code>wallet</code> directory, you may need to use <code>--wallet</code> option to specify which wallet you want to use. otherwise, a random wallet file in <code>wallet</code> directory will be used.</li>
+</ul>
+<h3 id="node">Node</h3>
+<pre><code class="lang-shell">$ punica node
+Usage: punica node [OPTIONS]
+
+   Ontology Blockchain private net in test mode. please download from
+   https://github.com/punicasuite/solo-chain/releases
+
+Options:
+   -h, --help  Show this message and exit.
+</code></pre>
+<h3 id="scpm">Scpm</h3>
+<pre><code class="lang-shell">$ punica scpm
+Usage: punica scpm [OPTIONS]
+
+   smart contract package manager&#xFF0C;support download and publish.
+
+Options:
+   -h, --help  Show this message and exit.
+</code></pre>
+<h3 id="smartx">Smartx</h3>
+<pre><code class="lang-shell">$ punica smartx
+
+Please go to Smartx for debugging smart contracts:
+http://smartx.ont.io/#/
+</code></pre>
+<h3 id="test">Test</h3>
+<pre><code class="lang-shell">$ punica test -h
+Usage: punica test [OPTIONS] COMMAND [ARGS]...
+
+  Unit test with specified smart contract
+
+Options:
+  --file TEXT  Specify which test file will be used.
+  -h, --help   Show this message and exit.
+
+Commands:
+  template  generate test template file
+</code></pre>
+<h3 id="wallet">Wallet</h3>
+<pre><code class="lang-shell">$ punica wallet
+Usage: punica wallet [OPTIONS] COMMAND [ARGS]...
+
+   Manager your asset, ontid, account.
+
+Options:
+   -h, --help  Show this message and exit.
+
+Commands:
+   account  Manager your account.
+   asset    Manager your asset, transfer, balance,...
+   ontid    Manager your ont_id, list or add.
+</code></pre>
+<h3 id="tool">Tool</h3>
+<pre><code class="lang-shell">$ punica tool
+Usage: punica tool [OPTIONS] COMMAND [ARGS]...
+
+   Data format conversion tool.
+
+Options:
+   -h, --help  Show this message and exit.
+
+Commands:
+   decryptprivatekey  decrypt privatekey
+   transform          transform data
+</code></pre>
+<ul>
+<li><code>decryptprivatekey</code> decrypt privatekey</li>
+</ul>
+<pre><code class="lang-shell">$ punica tool decryptprivatekey
+Usage: punica tool decryptprivatekey [OPTIONS]
+
+   decrypt privatekey
+
+Options:
+   --key TEXT       encrypted private key.
+   --address TEXT   address.
+   --salt TEXT      salt.
+   --n TEXT         n.
+   --password TEXT  password.
+   -h, --help       Show this message and exit.
+</code></pre>
+<ul>
+<li><code>transform</code> transform data format<ul>
+<li><code>--addresstohex</code> transform address to hex string</li>
+<li><code>--stringtohex</code> transform string to hex string</li>
+<li><code>--hexreverse</code>  reverse hex string</li>
+<li><code>--inttohex</code> transform int to hex string</li>
+</ul>
+</li>
+</ul>
+<pre><code class="lang-shell">$ punica tool transform
+Usage: punica tool transform [OPTIONS]
+
+   transform data.
+
+Options:
+   --addresstohex TEXT  transform address to hex.
+   --stringtohex TEXT   transform string to hex.
+   --hexreverse TEXT    hex string reverse.
+   --inttohex TEXT      transform int to hex.
+   -h, --help           Show this message and exit.
+</code></pre>
+<h2 id="example">Example</h2>
+<h3 id="checkout-version">Checkout Version</h3>
+<pre><code class="lang-shell">$ punica -v
+0.0.9
+</code></pre>
+<h3 id="unbox-tutorialtoken">Unbox Tutorialtoken</h3>
+<pre><code class="lang-shell">$ punica unbox tutorialtoken
+Downloading...
+Unpacking...
+Unbox successful. Enjoy it!
+</code></pre>
+<h3 id="compile-contract">Compile Contract</h3>
+<pre><code class="lang-shell">$ tree
+.
+&#x251C;&#x2500;contracts
+&#x2502;     &#x2514;&#x2500;build
+&#x2502;
+&#x251C;&#x2500;src
+&#x2502;  &#x2514;&#x2500;static
+&#x2502;      &#x251C;&#x2500;css
+&#x2502;      &#x2502;  &#x2514;&#x2500;fonts
+&#x2502;      &#x251C;&#x2500;html
+&#x2502;      &#x2514;&#x2500;js
+&#x2514;&#x2500;wallet
+</code></pre>
+<pre><code class="lang-shell">$ punica compile
+Compile...
+        Compile oep4_token.py...
+        Generate abi file and avm file successful...
+        Enjoy your contract:)
+Now we are finished :)
+</code></pre>
+<pre><code class="lang-shell">$ tree
+.
+&#x2502;
+&#x251C;&#x2500;contracts
+&#x2502;     &#x2514;&#x2500;build
+&#x2502;
+&#x251C;&#x2500;src
+&#x2502;  &#x2514;&#x2500;static
+&#x2502;      &#x251C;&#x2500;css
+&#x2502;      &#x2502;  &#x2514;&#x2500;fonts
+&#x2502;      &#x251C;&#x2500;html
+&#x2502;      &#x2514;&#x2500;js
+&#x2514;&#x2500;wallet
+</code></pre>
+<pre><code class="lang-shell">$ tree build /F
+\TUTORIALTOKEN\BUILD
+    oep4_token.avm
+    oep4_token_abi.json
+</code></pre>
+<h3 id="deploy-smart-contract">Deploy Smart Contract</h3>
+<p>After compile successful, you can deploy your smart contract into a Ontolog Network.</p>
+<pre><code class="lang-shell">$ punica deploy
+Using network &apos;testNet&apos;.
+
+Running deployment: oep4_token.avm
+        Deploying...
+        ... 0x0131c56b6a00527ac46a51527ac46a00c3044e616d659c6409006599096c7566
+        Please input payer account password:
+        Deploy to: 0xe4d6db237a830ce10f7476e410e61aad41bf9244
+Deploy successful to network...
+        ... 0x05a2502f7b8283f02915ba3ec7f712304fcce83ed98360fa3193a0b9e19ef87f
+Enjoy your contract!
+</code></pre>
+<p>If the contract has been deployed into the current network, you will get the following output.</p>
+<pre><code class="lang-shell">$ punica deploy
+Using network &apos;testNet&apos;.
+
+Running deployment: oep4_token.avm
+        Deploy failed...
+        Contract has been deployed...
+        Contract address is 0xcb9f3b7c6fb1cf2c13a40637c189bdd066a272b4...
+Enjoy your contract:)
+</code></pre>
+<h3 id="invoke-function-in-smart-contract">Invoke Function in Smart Contract</h3>
+<pre><code class="lang-shell">$ punica invoke
+Using network &apos;testNet&apos;.
+
+Running invocation: oep4_token_abi.json
+Unlock default payer account...
+        Unlock account: ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6
+        Please input account password:
+        Unlock successful...
+Invoking Name...
+        Invoke successful...
+                ... Invoke result: 4458546f6b656e
+Invoking Symbol...
+        Invoke successful...
+                ... Invoke result: 4458
+Invoking Decimal...
+        Invoke successful...
+                ... Invoke result: 08
+Invoking TotalSupply...
+        Invoke successful...
+                ... Invoke result: 000080f64ae1c7022d15
+Invoking BalanceOf...
+        Invoke successful...
+                ... Invoke result:
+Invoking Transfer...
+Unlock signers account...
+        Unlock account: ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6
+        Please input account password:
+        Unlock successful...
+        Invoke successful...
+                ... txHash: 0x8bfcebe076576bb35833d97ca0b80cffe82872a6545fccf36266702ba6b65c8b
+Invoking TransferMulti...
+Unlock signers account...
+        Unlock account: ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6
+        Please input account password:
+        Unlock successful...
+        Unlock account: AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve
+        Please input account password:
+        Unlock successful...
+                    ... txHash: 0xc6c4fc178b3598ad329986782d8c6ffdc4858ae208d48c7ce429532cec39fc68
+Invoking Allowance...
+Unlock signers account...
+        Unlock account: ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6
+        Please input account password:
+        Unlock successful...
+        Invoke successful...
+                ... txHash: 0x05e78cf0d97d8b8f86ea934f051140bb840b728d8117b177d54d24ecceef3b8b
+Invoking TransferFrom...
+Unlock signers account...
+        Unlock account: ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6
+        Please input account password:
+        Unlock successful...
+        Invoke successful...
+                ... txHash: 0xc3e8bfe31321f27f6b0c49204bf94fc3c4715d4a5dc3e9e96b3c2cf21c5fa998
+</code></pre>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Introduction","level":"1.1","depth":1,"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"README.md","mtime":"2019-05-31T09:45:25.443Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-05-31T09:48:49.000Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

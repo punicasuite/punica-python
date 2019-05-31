@@ -5,15 +5,13 @@ import json
 import binascii
 import os
 
-import re
 import urllib3
 import requests
 
 from boa.compiler import Compiler
 
-from punica.common.define import DEFAULT_CONFIG
 from punica.exception.punica_exception import PunicaException, PunicaError
-from punica.utils.file_system import ensure_path_exists, ensure_file_exists
+from punica.utils.file_system import ensure_file_exists
 
 V1_PY_CONTRACT_COMPILE_URL = "https://smartxcompiler.ont.io/api/v1.0/python/compile"
 V2_PY_CONTRACT_COMPILE_URL = "https://smartxcompiler.ont.io/api/v2.0/python/compile"

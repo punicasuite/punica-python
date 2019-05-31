@@ -20,7 +20,7 @@ class TestDeploy(unittest.TestCase):
 
     @patch('getpass.getpass')
     def test_deploy_smart_contract(self, password):
-        ontology = OntologySdk()
+        ontology = Ontology()
         rpc_address = 'http://polaris3.ont.io:20336'
         ontology.rpc.set_address(rpc_address)
         password.return_value = 'password'

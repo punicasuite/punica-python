@@ -5,6 +5,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/abcfdd2c9d364e24bf88969863a1bf88)](https://www.codacy.com/app/NashMiao/punica-python?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=punicasuite/punica-python&amp;utm_campaign=Badge_Grade)
 [![pypi-w](https://img.shields.io/pypi/wheel/punica.svg)](https://pypi.org/project/punica/)
 [![pypi-v](https://img.shields.io/pypi/v/punica.svg)](https://pypi.org/project/punica/)
+[![pypi-pyversions](https://img.shields.io/pypi/pyversions/punica.svg)](https://pypi.org/project/punica/)
 
 Punica Python is a dApp development command line tool which has (almost) everything you need to start developing your dApp based on Ontology network.
 

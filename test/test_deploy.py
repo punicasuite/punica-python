@@ -7,7 +7,7 @@ import unittest
 
 from unittest.mock import patch
 
-from ontology.ont_sdk import OntologySdk
+from ontology.sdk import Ontology
 
 from punica.deploy.deploy_contract import Deploy
 
@@ -28,7 +28,7 @@ class TestDeploy(unittest.TestCase):
         tx_hash = Deploy.deploy_smart_contract(project_path, 'test')
         if tx_hash is not None:
             time.sleep(6)
-            deploy_information = ontology.rpc.get_raw_transaction(tx_hash)['Payload']
+            deploy_information = ontology.rpc.get_transaction_by_tx_hash(tx_hash)
             self.assertEqual('Punica', deploy_information['Name'])
             self.assertEqual('1.0.0', deploy_information['CodeVersion'])
             self.assertEqual('Nash', deploy_information['Author'])

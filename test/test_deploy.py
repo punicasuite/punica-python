@@ -16,7 +16,7 @@ class TestDeploy(unittest.TestCase):
     def test_generate_contract_address(self):
         project_path = os.path.join(os.getcwd(), 'test_file', 'test_deploy')
         hex_contract_address = Deploy.generate_contract_address(project_path)
-        self.assertEqual('f9f47e6a80482eb1c8831789f46dbc5a4f606222', hex_contract_address)
+        self.assertEqual('3310277e27a0ed749a3525ca2f898ebcd7d6631e', hex_contract_address)
 
     @patch('getpass.getpass')
     def test_deploy_smart_contract(self, password):

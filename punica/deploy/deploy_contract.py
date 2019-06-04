@@ -62,7 +62,7 @@ class Deploy:
         if not os.path.isdir(avm_dir_path):
             raise PunicaException(PunicaError.dir_path_error)
         hex_avm_code = read_avm(avm_dir_path, avm_file_name)[0]
-        hex_contract_address = Address.from_avm_code(hex_avm_code).hex(little_endian=False)
+        hex_contract_address = Address.from_avm_code(hex_avm_code).hex(little_endian=True)
         return hex_contract_address
 
     @staticmethod

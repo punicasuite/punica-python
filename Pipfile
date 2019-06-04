@@ -11,6 +11,7 @@ click = "==7.0"
 gitpython = "==2.1.11"
 punica-neo-boa = "==0.4.9"
 ontology-python-sdk = "==2.0.4"
+crayons = "*"
 
 [requires]
 python_version = "3.7"

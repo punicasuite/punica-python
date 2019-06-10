@@ -7,7 +7,7 @@ class PunicaException(Exception):
         super().__init__(error['code'], error['msg'])
 
 
-class PunicaError:
+class PunicaError(object):
     @staticmethod
     def get_error(code: int, msg: str) -> dict:
         error = dict()

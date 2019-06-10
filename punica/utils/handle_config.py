@@ -6,7 +6,7 @@ import json
 
 from punica.exception.punica_exception import PunicaException, PunicaError
 
-DEFAULT_CONFIG = 'default-config.json'
+DEFAULT_CONFIG = 'config.json'
 
 
 def handle_network_config(config_dir_path: str, network: str = '', is_print: bool = True) -> str:
@@ -40,18 +40,15 @@ def handle_network_config(config_dir_path: str, network: str = '', is_print: boo
 
 
 def handle_deploy_config(project_dir_path: str, config: str = ''):
+    if len(config) == 0:
+        config = DEFAULT_CONFIG
     try:
-        if config != '':
-            config_path = os.path.join(project_dir_path, config)
-            if os.path.exists(config_path):
-                if not os.path.isfile(config_path):
-                    raise PunicaError.other_error(config_path, ' is not file')
-            else:
-                config_path = os.path.join(project_dir_path, 'contracts', config)
-                if not os.path.exists(config_path):
-                    raise PunicaError.other_error(config_path, ' not exist')
-        else:
-            config_path = os.path.join(project_dir_path, 'contracts', DEFAULT_CONFIG)
+        config_path = os.path.join(project_dir_path, 'contracts', config)
+        if not os.path.isfile(config_path):
+            raise PunicaException(PunicaError.other_error(''.join([config_path, ' is not file'])))
+        config_path = os.path.join(project_dir_path, 'contracts', config)
+        if not os.path.exists(config_path):
+            raise PunicaException(PunicaError.other_error(''.join([config_path, ' is not file'])))
         if not os.path.exists(config_path):
             print(config_path, ' not exist')
             os._exit(0)
@@ -62,12 +59,11 @@ def handle_deploy_config(project_dir_path: str, config: str = ''):
     try:
         wallet_file = config['defaultWallet']
         deploy_information = config['deployConfig']
-        password_information = config['password']
     except KeyError:
         raise PunicaException(PunicaError.config_file_error)
     if not isinstance(deploy_information, dict):
         raise PunicaException(PunicaError.config_file_error)
-    return wallet_file, deploy_information, password_information
+    return wallet_file, deploy_information
 
 
 def handle_invoke_config(project_dir_path: str, config: str):

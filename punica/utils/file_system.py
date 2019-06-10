@@ -110,7 +110,7 @@ def read_wallet(project_path: str, wallet_file_name: str = '') -> WalletManager:
                 raise PunicaException(PunicaError.other_error(wallet_file_name + ' not found'))
             wallet_path = os.path.join(project_path, 'wallet', wallet_file_name)
             if not os.path.exists(wallet_path):
-                raise PunicaError.other_error(wallet_path, ' is error')
+                raise PunicaException(PunicaError.other_error(''.join([wallet_path, ' is error'])))
     try:
         wallet_manager.open_wallet(wallet_path)
     except SDKException as e:

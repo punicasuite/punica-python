@@ -1,0 +1,14 @@
+{
+  "defaultWallet":"wallet.json",
+  "deployConfig": {
+    "name": "Punica",
+    "version": "1.0.0",
+    "author": "NashMiao",
+    "email": "wdx7266@vip.qq.com",
+    "desc": "A contract for test Punica deploy",
+    "needStorage": true,
+    "payer": "ANDfjwrUroaVtvBguDtrWKRMyxFwvVwnZD",
+    "gasPrice": 500,
+    "gasLimit": 21000000
+  }
+}

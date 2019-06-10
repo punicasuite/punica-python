@@ -4,14 +4,13 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+wheel = "*"
+twine = "*"
 
 [packages]
-requests = "==2.22.0"
-click = "==7.0"
-gitpython = "==2.1.11"
-punica-neo-boa = "==0.4.9"
-ontology-python-sdk = "==2.0.4"
+requests = "*"
+click = "*"
+gitpython = "*"
+punica-neo-boa = "*"
+ontology-python-sdk = "*"
 crayons = "*"
-
-[requires]
-python_version = "3.7"

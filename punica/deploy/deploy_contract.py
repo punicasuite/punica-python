@@ -5,6 +5,10 @@ import os
 import time
 import getpass
 
+import crayons
+from click import echo
+from click._unicodefun import click
+from ontology.exception.exception import SDKException
 from ontology.sdk import Ontology
 from ontology.common.address import Address
 
@@ -21,11 +25,11 @@ from punica.utils.handle_config import (
 from punica.exception.punica_exception import PunicaException, PunicaError
 
 
-class Deploy:
+class Deploy(object):
     @staticmethod
-    def generate_signed_deploy_transaction(hex_avm_code: str, project_path: str = '', wallet_file_name: str = '',
-                                           config: str = ''):
-        wallet_file, deploy_information, password_information = handle_deploy_config(project_path, config)
+    def generate_signed_deploy_transaction(avm_code: str, project_path: str = '', wallet_file_name: str = '',
+                                           config: str = '', password: str = ''):
+        wallet_file, deploy_information = handle_deploy_config(project_path, config)
         if wallet_file_name != '':
             wallet_manager = read_wallet(project_path, wallet_file_name)
         else:
@@ -36,19 +40,14 @@ class Deploy:
         author = deploy_information.get('author', '')
         email = deploy_information.get('email', '')
         desc = deploy_information.get('desc', '')
-        b58_payer_address = deploy_information.get('payer', '')
-        if b58_payer_address == '':
-            b58_payer_address = wallet_manager.get_default_account_data().b58_address
+        b58_payer_address = deploy_information.get('payer', wallet_manager.get_default_account_data().b58_address)
         if b58_payer_address == '':
             raise PunicaException(PunicaError.other_error('payer address should not be None'))
-        gas_limit = deploy_information.get('gasLimit', 21000000)
         gas_price = deploy_information.get('gasPrice', 500)
+        gas_limit = deploy_information.get('gasLimit', 21000000)
         ontology = Ontology()
-        tx = ontology.neo_vm().make_deploy_transaction(hex_avm_code, need_storage, name, version, author, email,
-                                                       desc, b58_payer_address, gas_limit, gas_price)
-        password = password_information.get(b58_payer_address, '')
-        if password == '':
-            password = getpass.getpass('\tPlease input payer account password: ')
+        tx = ontology.neo_vm.make_deploy_transaction(avm_code, need_storage, name, version, author, email, desc,
+                                                     gas_price, gas_limit, b58_payer_address)
         payer_acct = wallet_manager.get_account_by_b58_address(b58_payer_address, password)
         if payer_acct is None:
             raise PunicaException(PunicaError.other_error(b58_payer_address + ' not found'))
@@ -74,7 +73,7 @@ class Deploy:
         rpc_address = handle_network_config(project_path, network, False)
         ontology = Ontology()
         ontology.rpc.set_address(rpc_address)
-        time.sleep(6)
+        time.sleep(8)
         tx = ontology.rpc.get_transaction_by_tx_hash(tx_hash)
         if tx == 'unknown transaction':
             return False
@@ -83,46 +82,63 @@ class Deploy:
 
     @staticmethod
     def deploy_smart_contract(project_dir: str = '', network: str = '', avm_file_name: str = '',
-                              wallet_file_name: str = '', config: str = ''):
+                              wallet_file_name: str = '', config: str = '', password: str = '') -> str:
         if project_dir == '':
             project_dir = os.getcwd()
-        if avm_file_name != '':
+        if avm_file_name == '':
+            avm_dir_path = os.path.join(project_dir, 'contracts', 'build')
+        else:
             avm_path = os.path.join(project_dir, avm_file_name)
             if os.path.exists(avm_path):
                 avm_dir_path = os.path.dirname(avm_path)
                 avm_file_name = os.path.basename(avm_path)
             else:
                 avm_dir_path = os.path.join(project_dir, 'contracts', 'build')
-        else:
-            avm_dir_path = os.path.join(project_dir, 'contracts', 'build')
         if not os.path.exists(avm_dir_path):
-            print('there is not the avm file, please compile first')
-            return
+            click.echo(crayons.red('No avm file found in this project', bold=True))
+            return ''
         rpc_address = handle_network_config(project_dir, network)
         try:
             hex_avm_code, avm_file_name = read_avm(avm_dir_path, avm_file_name)
         except PunicaException as e:
             print(e.args)
-            return
+            return ''
         if hex_avm_code == '':
             raise PunicaException(PunicaError.avm_file_empty)
         hex_contract_address = Deploy.generate_contract_address(avm_dir_path, avm_file_name)
         ontology = Ontology()
         ontology.rpc.set_address(rpc_address)
-        contract = ontology.rpc.get_contract(hex_contract_address)
-        if contract == 'unknow contract' or contract == 'unknow contracts':
-            try:
-                tx = Deploy.generate_signed_deploy_transaction(hex_avm_code, project_dir, wallet_file_name, config)
-            except PunicaException as e:
-                print('\tDeploy failed...')
-                print('\t', e.args)
-                return
-            print('Running deployment: {}'.format(avm_file_name))
-            print('\tDeploying...')
-            ontology.rpc.set_address(rpc_address)
-            tx_hash = ontology.rpc.send_raw_transaction(tx)
-            return tx_hash
-        else:
-            print('\tDeploy failed...')
-            print('\tContract has been deployed...')
-            print('\tContract address is {}'.format(hex_contract_address))
+        try:
+            contract = ontology.rpc.get_contract(hex_contract_address)
+            click.echo('\tDeploy failed...')
+            if len(contract.get('Code', '')) != 0:
+                click.echo('\tThe contract has exist in current network...')
+                click.echo('\tThe contract address is {}'.format(hex_contract_address))
+            else:
+                click.echo('\tSomething is error... ')
+                click.echo(f'\t{contract}')
+            return ''
+        except SDKException as e:
+            if 'unknow contract' in e.args[1]:
+                pass
+            elif 'ConnectionError' in e.args[1]:
+                click.echo('\tNetwork error, please check your network first.')
+                return ''
+            else:
+                raise e
+        try:
+            if len(password) == 0:
+                password = getpass.getpass(prompt='Please input account password: ')
+            tx = Deploy.generate_signed_deploy_transaction(hex_avm_code, project_dir, wallet_file_name, config,
+                                                           password)
+        except PunicaException as e:
+            click.echo('\tDeploy failed...')
+            click.echo('\t', e.args[1])
+            return ''
+        click.echo('Running deployment: {}'.format(avm_file_name))
+        click.echo('\tDeploying...')
+        ontology.rpc.set_address(rpc_address)
+        tx_hash = ontology.rpc.send_raw_transaction(tx)
+        click.echo('\tThe transaction has been sent to network...')
+        click.echo(f'\tPlease check the status by TxHash: {tx_hash}')
+        return tx_hash

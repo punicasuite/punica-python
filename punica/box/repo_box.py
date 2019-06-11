@@ -8,6 +8,7 @@ import json
 import git
 import click
 import requests
+from halo import Halo
 
 from punica.utils.file_system import (
     ensure_remove_dir_if_exists,
@@ -39,14 +40,17 @@ class Box:
 
     @staticmethod
     def git_clone(repo_url: str, repo_to_path: str = ''):
+        spinner = Halo(text="Downloading...", spinner='dots')
+        spinner.start()
         if repo_to_path == '':
             repo_to_path = os.getcwd()
         if os.listdir(repo_to_path):
             raise PunicaException(PunicaError.file_exist_error)
-        click.echo('Downloading...')
         try:
             git.Repo.clone_from(url=repo_url, to_path=repo_to_path, depth=1)
+            spinner.succeed()
         except git.GitCommandError as e:
+            spinner.fail()
             network_error = 'Could not read from remote repository'
             file_exist_error = 'already exists and is not an empty directory'
             if network_error in str(e.args[2]):

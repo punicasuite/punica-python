@@ -5,7 +5,7 @@ import os
 import re
 import json
 
-import git
+from git import RemoteProgress, Repo, GitCommandError
 import click
 import requests
 from halo import Halo
@@ -22,12 +22,14 @@ from punica.exception.punica_exception import PunicaError, PunicaException
 class Box:
     @staticmethod
     def handle_ignorance(repo_to_path: str = ''):
-        click.echo('Unpacking...')
+        spinner = Halo(text="Unpacking...", spinner='dots')
+        spinner.start()
         box_ignore_file_path = os.path.join(repo_to_path, 'punica-box.json')
         try:
             with open(box_ignore_file_path, 'r') as f:
                 box_ignore_files = json.load(f)['ignore']
         except FileNotFoundError:
+            spinner.succeed()
             return
         remove_file_if_exists(box_ignore_file_path)
         for file in box_ignore_files:
@@ -37,20 +39,64 @@ class Box:
                 remove_file_if_exists(file_path)
             except (PermissionError, FileNotFoundError):
                 pass
+        spinner.succeed()
 
     @staticmethod
     def git_clone(repo_url: str, repo_to_path: str = ''):
-        spinner = Halo(text="Downloading...", spinner='dots')
-        spinner.start()
         if repo_to_path == '':
             repo_to_path = os.getcwd()
         if os.listdir(repo_to_path):
             raise PunicaException(PunicaError.file_exist_error)
+        download_spinner = Halo(text="Downloading...", spinner='dots')
+        receiving_spinner = Halo(spinner='dots')
+        resolving_spinner = Halo(spinner='dots')
+        counting_spinner = Halo(spinner='dots')
+        compressing_spinner = Halo(spinner='dots')
+
+        spinners = [download_spinner, receiving_spinner, resolving_spinner, counting_spinner, compressing_spinner]
+
+        def update(self, op_code, cur_count, max_count=None, message=''):
+            if download_spinner.spinner_id is not None and len(download_spinner.text) != 0:
+                download_spinner.succeed()
+            if op_code == RemoteProgress.COUNTING:
+                if counting_spinner.spinner_id is None:
+                    counting_spinner.start()
+                scale = round(cur_count / max_count * 100, 2)
+                counting_spinner.text = f'Counting objects: {scale}% ({cur_count}/{max_count})'
+                if scale == 100:
+                    counting_spinner.succeed()
+            if op_code == RemoteProgress.COMPRESSING:
+                if compressing_spinner.spinner_id is None:
+                    compressing_spinner.start()
+                scale = round(cur_count / max_count * 100, 2)
+                compressing_spinner.text = f'Compressing objects: {scale}% ({cur_count}/{max_count})'
+                if scale == 100:
+                    compressing_spinner.succeed()
+            if op_code == RemoteProgress.RECEIVING:
+                if receiving_spinner.spinner_id is None:
+                    receiving_spinner.start()
+                scale = round(cur_count / max_count * 100, 2)
+                receiving_spinner.text = f'Receiving objects: {scale}%, {message}'
+                if scale == 100:
+                    receiving_spinner.succeed()
+            if op_code == RemoteProgress.RESOLVING:
+                if resolving_spinner.spinner_id is None:
+                    resolving_spinner.start()
+                scale = round(cur_count / max_count * 100, 2)
+                resolving_spinner.text = f'Resolving deltas: {scale}%'
+                if scale == 100:
+                    resolving_spinner.succeed()
+
+        RemoteProgress.update = update
+
         try:
-            git.Repo.clone_from(url=repo_url, to_path=repo_to_path, depth=1)
-            spinner.succeed()
-        except git.GitCommandError as e:
-            spinner.fail()
+            download_spinner.start()
+            Repo.clone_from(url=repo_url, to_path=repo_to_path, depth=1, progress=RemoteProgress())
+            for spinner in spinners:
+                if spinner.spinner_id is not None and len(spinner.text) != 0:
+                    spinner.fail()
+        except GitCommandError as e:
+            download_spinner.fail()
             network_error = 'Could not read from remote repository'
             file_exist_error = 'already exists and is not an empty directory'
             if network_error in str(e.args[2]):

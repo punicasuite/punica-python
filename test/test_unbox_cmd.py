@@ -7,13 +7,14 @@ import unittest
 from click.testing import CliRunner
 
 from punica.cli import main
-from punica.utils.file_system import ensure_remove_dir_if_exists
+from punica.utils.file_system import ensure_remove_dir_if_exists, ensure_path_exists
 
 
 class TestUnbox(unittest.TestCase):
     def test_unbox(self):
         box_name = 'tutorialtoken'
         project_path = os.path.join(os.getcwd(), 'test_file', 'test_unbox', box_name)
+        ensure_path_exists(project_path)
         try:
             runner = CliRunner()
             result = runner.invoke(main, ['unbox', '-h'])

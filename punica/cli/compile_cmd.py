@@ -4,6 +4,7 @@
 import os
 
 import click
+from halo import Halo
 from ontology.exception.exception import SDKException
 
 from .main import main
@@ -29,21 +30,24 @@ def compile_cmd(ctx, contracts, local: bool):
     """
     project_dir = ctx.obj['PROJECT_DIR']
     try:
-        click.echo(f'Compiling...')
+        spinner = Halo(text='Compiling...', spinner='dots')
+        spinner.start()
         if contracts != '':
             contract_file_path = os.path.join(project_dir, contracts)
             if not os.path.exists(contract_file_path):
                 if os.path.dirname(contracts) != '':
+                    spinner.fail()
                     click.echo(f'{contracts} not founded...')
                     return
                 contract_file_path = os.path.join(project_dir, 'contracts', contracts)
                 if not os.path.exists(contract_file_path):
+                    spinner.fail()
                     click.echo(f'{contracts} not founded...')
                     return
             if contracts.endswith('.py') or contracts.endswith('.cs'):
                 compile_contract(os.path.dirname(contract_file_path), os.path.basename(contract_file_path), local)
             else:
-                click.echo('Valid file is required.')
+                spinner.fail('No contract found.')
                 exit(0)
         else:
             contract_dir = os.path.join(project_dir, 'contracts')

@@ -24,7 +24,7 @@ setup(
     python_requires='>=3.6,<4',
     install_requires=[
         'halo==0.0.26',
-        'crayons=0.2.0',
+        'crayons==0.2.0',
         'Click==7.0',
         'requests==2.22.0',
         'GitPython==2.1.11',

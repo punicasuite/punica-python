@@ -45,8 +45,6 @@ class Box:
     def git_clone(repo_url: str, repo_to_path: str = ''):
         if repo_to_path == '':
             repo_to_path = os.getcwd()
-        if os.listdir(repo_to_path):
-            raise PunicaException(PunicaError.file_exist_error)
         download_spinner = Halo(text="Downloading...", spinner='dots')
         receiving_spinner = Halo(spinner='dots')
         resolving_spinner = Halo(spinner='dots')
@@ -97,12 +95,8 @@ class Box:
                     spinner.fail()
         except GitCommandError as e:
             download_spinner.fail()
-            network_error = 'Could not read from remote repository'
-            file_exist_error = 'already exists and is not an empty directory'
-            if network_error in str(e.args[2]):
-                raise PunicaException(PunicaError.network_error)
-            elif file_exist_error in str(e.args[2]):
-                raise PunicaException(PunicaError.file_exist_error)
+            if e.status == 126:
+                click.echo('Please check your network.')
             else:
                 raise PunicaException(PunicaError.other_error(e.args[2]))
 
@@ -129,14 +123,13 @@ class Box:
     @staticmethod
     def unbox(box_name: str, repo_to_path: str = ''):
         repo_url = Box.generate_repo_url(box_name)
+        if requests.get(repo_url).status_code != 200:
+            click.echo('Please check the box name you input.')
+            return
         try:
             Box.git_clone(repo_url, repo_to_path)
         except PunicaException as e:
-            if e.args[0] == 59000:
-                click.echo('Please check out your box name.')
-            elif e.args[0]:
-                click.echo('This current folder is not NUll.')
-                click.echo('Please check out your environment.')
+            click.echo(e.args[1])
             return
         try:
             Box.handle_ignorance(repo_to_path)

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import webbrowser
+from os import listdir
 
 import click
 
@@ -20,11 +21,13 @@ def unbox_cmd(ctx, box_name):
     """
     project_dir = ctx.obj['PROJECT_DIR']
     try:
+        if listdir(project_dir):
+            click.echo('Please create an empty folder for your project.')
+            return
         Box.unbox(box_name, project_dir)
     except (PunicaException, SDKException) as e:
-        print('An error occur...')
-        print(e.args[1])
-        exit(1)
+        click.echo('An error occur...')
+        click.echo(e.args[1])
 
 
 @main.command('boxes')
@@ -38,6 +41,6 @@ def boxes_cmd(ctx):
     except (PunicaException, SDKException) as e:
         webbrowser.open('https://punica.ont.io/boxes/')
         return
-    print('Various punica boxes are waiting for your:')
+    click.echo('Various punica boxes are waiting for your:')
     for box in boxes:
-        print('\t', box)
+        click.echo('\t', box)

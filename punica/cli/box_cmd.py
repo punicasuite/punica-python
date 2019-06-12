@@ -40,4 +40,4 @@ def boxes_cmd(ctx):
         return
     click.echo('Various punica boxes are waiting for your:')
     for box in boxes:
-        click.echo('\t', box)
+        click.echo(f'\t{box}')

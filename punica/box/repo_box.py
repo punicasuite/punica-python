@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import os
 import re
 import json
 
-from git import RemoteProgress, Repo, GitCommandError
+from os import listdir, getcwd, path
+
 import click
 import requests
+
 from halo import Halo
+from git import RemoteProgress, Repo, GitCommandError
 
 from punica.utils.file_system import (
     ensure_remove_dir_if_exists,
@@ -21,41 +23,104 @@ from punica.exception.punica_exception import PunicaError, PunicaException
 
 class Box:
     @staticmethod
-    def handle_ignorance(repo_to_path: str = ''):
-        spinner = Halo(text="Unpacking...", spinner='dots')
-        spinner.start()
-        box_ignore_file_path = os.path.join(repo_to_path, 'punica-box.json')
+    def handle_ignorance(repo_to_path: str = '') -> bool:
+        unpack_spinner = Halo(text="Unpacking...", spinner='dots')
+        unpack_spinner.start()
+        box_ignore_file_path = path.join(repo_to_path, 'punica-box.json')
         try:
             with open(box_ignore_file_path, 'r') as f:
                 box_ignore_files = json.load(f)['ignore']
+            remove_file_if_exists(box_ignore_file_path)
         except FileNotFoundError:
-            spinner.succeed()
-            return
-        remove_file_if_exists(box_ignore_file_path)
+            unpack_spinner.fail()
+            return False
         for file in box_ignore_files:
             try:
-                file_path = os.path.join(repo_to_path, file)
+                file_path = path.join(repo_to_path, file)
                 ensure_remove_dir_if_exists(file_path)
                 remove_file_if_exists(file_path)
             except (PermissionError, FileNotFoundError):
-                pass
-        spinner.succeed()
+                unpack_spinner.fail()
+                return False
+        unpack_spinner.succeed()
+        return True
 
     @staticmethod
-    def git_clone(repo_url: str, repo_to_path: str = ''):
+    def prepare_download(box_name: str, to_path: str = '') -> bool:
+        prepare_spinner = Halo(text="Preparing to download", spinner='dots')
+        prepare_spinner.start()
+        if to_path == '':
+            to_path = getcwd()
+        ensure_path_exists(to_path)
+        if listdir(to_path):
+            click.echo('This directory is non-empty...')
+            prepare_spinner.fail()
+            return False
+        repo_url = Box.generate_repo_url(box_name)
+        if requests.get(repo_url).status_code != 200:
+            click.echo('Please check the box name you input.')
+            prepare_spinner.fail()
+            return False
+        prepare_spinner.succeed()
+        return True
+
+    @staticmethod
+    def init(to_path: str):
+        if not Box.prepare_download(to_path):
+            return
+        repo_url = 'https://github.com/punica-box/punica-init-default-box'
+        if Box.download_repo(repo_url, to_path):
+            Box.handle_ignorance(to_path)
+            click.echo('Unbox successful. Sweet!')
+            Box.echo_box_help_cmd()
+        else:
+            click.echo('Unbox successful. Enjoy it!')
+
+    @staticmethod
+    def unbox(box_name: str, to_path: str = '') -> bool:
+        prepare_spinner = Halo(text="Preparing to download", spinner='dots')
+        prepare_spinner.start()
+        ensure_path_exists(to_path)
+        if listdir(to_path):
+            click.echo('This directory is non-empty...')
+            prepare_spinner.fail()
+            return False
+        repo_url = Box.generate_repo_url(box_name)
+        if requests.get(repo_url).status_code != 200:
+            click.echo(f"Punica Box {box_name} doesn't exist.")
+            prepare_spinner.fail()
+            return False
+        prepare_spinner.succeed()
+        if Box.download_repo(repo_url, to_path):
+            Box.handle_ignorance(to_path)
+            click.echo('Unbox successful. Sweet!')
+            Box.echo_box_help_cmd()
+            return True
+        click.echo('Unbox failed. Sorry.')
+        return False
+
+    @staticmethod
+    def generate_repo_url(box_name: str) -> str:
+        if re.match(r'^([a-zA-Z0-9-])+$', box_name):
+            repo_url = ['https://github.com/punica-box/', box_name, '-box', '.git']
+        elif re.match(r'^([a-zA-Z0-9-])+/([a-zA-Z0-9-])+$', box_name) is None:
+            repo_url = ['https://github.com/', box_name, '.git']
+        else:
+            raise PunicaException(PunicaError.invalid_box_name)
+        return ''.join(repo_url)
+
+    @staticmethod
+    def download_repo(repo_url: str, repo_to_path: str = ''):
         if repo_to_path == '':
-            repo_to_path = os.getcwd()
-        download_spinner = Halo(text="Downloading...", spinner='dots')
+            repo_to_path = getcwd()
         receiving_spinner = Halo(spinner='dots')
         resolving_spinner = Halo(spinner='dots')
         counting_spinner = Halo(spinner='dots')
         compressing_spinner = Halo(spinner='dots')
 
-        spinners = [download_spinner, receiving_spinner, resolving_spinner, counting_spinner, compressing_spinner]
+        spinners = [receiving_spinner, resolving_spinner, counting_spinner, compressing_spinner]
 
         def update(self, op_code, cur_count, max_count=None, message=''):
-            if download_spinner.spinner_id is not None and len(download_spinner.text) != 0:
-                download_spinner.succeed()
             if op_code == RemoteProgress.COUNTING:
                 if counting_spinner.spinner_id is None:
                     counting_spinner.start()
@@ -88,55 +153,30 @@ class Box:
         RemoteProgress.update = update
 
         try:
-            download_spinner.start()
             Repo.clone_from(url=repo_url, to_path=repo_to_path, depth=1, progress=RemoteProgress())
             for spinner in spinners:
                 if spinner.spinner_id is not None and len(spinner.text) != 0:
                     spinner.fail()
+            return True
         except GitCommandError as e:
-            download_spinner.fail()
             if e.status == 126:
                 click.echo('Please check your network.')
+            elif e.status == 128:
+                click.echo('Please check your Git tool.')
             else:
                 raise PunicaException(PunicaError.other_error(e.args[2]))
+            return False
 
     @staticmethod
-    def init(init_to_path: str):
-        if init_to_path == '':
-            init_to_path = os.getcwd()
-        ensure_path_exists(init_to_path)
-        repo_url = 'https://github.com/punica-box/punica-init-default-box'
-        Box.git_clone(repo_url, init_to_path)
-        Box.handle_ignorance(init_to_path)
-        click.echo('Unbox successful. Enjoy it!')
+    def echo_box_help_cmd():
+        click.echo("""
 
-    @staticmethod
-    def generate_repo_url(box_name: str) -> str:
-        if re.match(r'^([a-zA-Z0-9-])+$', box_name):
-            repo_url = ['https://github.com/punica-box/', box_name, '-box', '.git']
-        elif re.match(r'^([a-zA-Z0-9-])+/([a-zA-Z0-9-])+$', box_name) is None:
-            repo_url = ['https://github.com/', box_name, '.git']
-        else:
-            raise PunicaException(PunicaError.invalid_box_name)
-        return ''.join(repo_url)
+        Commands:
 
-    @staticmethod
-    def unbox(box_name: str, repo_to_path: str = ''):
-        repo_url = Box.generate_repo_url(box_name)
-        if requests.get(repo_url).status_code != 200:
-            click.echo('Please check the box name you input.')
-            return
-        try:
-            Box.git_clone(repo_url, repo_to_path)
-        except PunicaException as e:
-            click.echo(e.args[1])
-            return
-        try:
-            Box.handle_ignorance(repo_to_path)
-        except PunicaException as e:
-            click.echo('Clean work abort...')
-            return
-        click.echo('Unbox successful. Enjoy it!')
+          Compile contracts: punica compile
+          Deploy contracts:  punica deploy
+          Test contracts:    punica test
+        """)
 
     @staticmethod
     def list_boxes():

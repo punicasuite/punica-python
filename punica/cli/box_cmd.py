@@ -21,9 +21,6 @@ def unbox_cmd(ctx, box_name):
     """
     project_dir = ctx.obj['PROJECT_DIR']
     try:
-        if listdir(project_dir):
-            click.echo('Please create an empty folder for your project.')
-            return
         Box.unbox(box_name, project_dir)
     except (PunicaException, SDKException) as e:
         click.echo('An error occur...')

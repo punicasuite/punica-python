@@ -16,7 +16,6 @@ install-mirror:
 	pipenv shell
 
 test:
-	pipenv shell
 	python -m unittest discover
 
 build:

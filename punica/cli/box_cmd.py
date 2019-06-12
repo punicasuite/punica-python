@@ -38,6 +38,6 @@ def boxes_cmd(ctx):
     except (PunicaException, SDKException) as e:
         webbrowser.open('https://punica.ont.io/boxes/')
         return
-    click.echo('Various punica boxes are waiting for your:')
+    click.echo('Various punica boxes are waiting for your:\n')
     for box in boxes:
         click.echo(f'\t{box}')

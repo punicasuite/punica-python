@@ -31,7 +31,7 @@ class TestCompiler(unittest.TestCase):
     def test_git_clone(self):
         repo_to_path = os.path.join(os.getcwd(), 'test_clone')
         repo_url = 'https://github.com/wdx7266/ontology-tutorialtoken.git'
-        Box.git_clone(repo_url, repo_to_path)
+        Box.download_repo(repo_url, repo_to_path)
         try:
             shutil.rmtree(repo_to_path)
         except PermissionError:

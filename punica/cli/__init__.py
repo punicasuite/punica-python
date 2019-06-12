@@ -6,4 +6,4 @@ from .smartx_cmd import smartx_cmd
 from .deploy_cmd import deploy_cmd
 from .invoke_cmd import invoke_cmd
 from .compile_cmd import compile_cmd
-from .solo_chain_cmd import solo_chain_cmd
+from .solo_cmd import solo_chain_cmd

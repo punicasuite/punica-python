@@ -7,7 +7,7 @@ import webbrowser
 from .main import main
 
 
-@main.command('solo-chain')
+@main.command('solo')
 @click.pass_context
 def solo_chain_cmd(ctx):
     """

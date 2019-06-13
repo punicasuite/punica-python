@@ -95,7 +95,7 @@ class Deploy(object):
             else:
                 avm_dir_path = os.path.join(project_dir, 'contracts', 'build')
         if not os.path.exists(avm_dir_path):
-            click.echo(crayons.red('No avm file found in this project', bold=True))
+            echo(crayons.red('No avm file found in this project', bold=True))
             return ''
         rpc_address = handle_network_config(project_dir, network)
         try:
@@ -110,19 +110,19 @@ class Deploy(object):
         ontology.rpc.set_address(rpc_address)
         try:
             contract = ontology.rpc.get_contract(hex_contract_address)
-            click.echo('\tDeploy failed...')
+            echo('\tDeploy failed...')
             if len(contract.get('Code', '')) != 0:
-                click.echo('\tThe contract has exist in current network...')
-                click.echo('\tThe contract address is {}'.format(hex_contract_address))
+                echo('\tThe contract has exist in current network...')
+                echo('\tThe contract address is {}'.format(hex_contract_address))
             else:
-                click.echo('\tSomething is error... ')
-                click.echo(f'\t{contract}')
+                echo('\tSomething is error... ')
+                echo(f'\t{contract}')
             return ''
         except SDKException as e:
             if 'unknow contract' in e.args[1]:
                 pass
             elif 'ConnectionError' in e.args[1]:
-                click.echo('\tNetwork error, please check your network first.')
+                echo('\tNetwork error, please check your network first.')
                 return ''
             else:
                 raise e
@@ -132,13 +132,13 @@ class Deploy(object):
             tx = Deploy.generate_signed_deploy_transaction(hex_avm_code, project_dir, wallet_file_name, config,
                                                            password)
         except PunicaException as e:
-            click.echo('\tDeploy failed...')
-            click.echo('\t', e.args[1])
+            echo('\tDeploy failed...')
+            echo('\t', e.args[1])
             return ''
-        click.echo('Running deployment: {}'.format(avm_file_name))
-        click.echo('\tDeploying...')
+        echo('Running deployment: {}'.format(avm_file_name))
+        echo('\tDeploying...')
         ontology.rpc.set_address(rpc_address)
         tx_hash = ontology.rpc.send_raw_transaction(tx)
-        click.echo('\tThe transaction has been sent to network...')
-        click.echo(f'\tPlease check the status by TxHash: {tx_hash}')
+        echo('\tThe transaction has been sent to network...')
+        echo(f'\tPlease check the status by TxHash: {tx_hash}')
         return tx_hash

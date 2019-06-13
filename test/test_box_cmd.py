@@ -26,6 +26,15 @@ class TestUnbox(unittest.TestCase):
         finally:
             ensure_remove_dir_if_exists(project_path)
 
+    def test_boxes(self):
+        runner = CliRunner()
+        result = runner.invoke(main, ['boxes', '-h'])
+        info_list = result.output.split('\n')
+        print(info_list)
+        result = runner.invoke(main, 'boxes')
+        # info_list = result.output.split('\n')
+        print(result.output)
+
 
 if __name__ == '__main__':
     unittest.main()

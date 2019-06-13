@@ -6,7 +6,7 @@ import json
 
 from os import listdir, getcwd, path
 
-import click
+from click import echo
 import requests
 
 from halo import Halo
@@ -53,12 +53,12 @@ class Box:
             to_path = getcwd()
         ensure_path_exists(to_path)
         if listdir(to_path):
-            click.echo('This directory is non-empty...')
+            echo('This directory is non-empty...')
             prepare_spinner.fail()
             return False
         repo_url = Box.generate_repo_url(box_name)
         if requests.get(repo_url).status_code != 200:
-            click.echo('Please check the box name you input.')
+            echo('Please check the box name you input.')
             prepare_spinner.fail()
             return False
         prepare_spinner.succeed()
@@ -71,10 +71,10 @@ class Box:
         repo_url = 'https://github.com/punica-box/punica-init-default-box'
         if Box.download_repo(repo_url, to_path):
             Box.handle_ignorance(to_path)
-            click.echo('Unbox successful. Sweet!')
+            echo('Unbox successful. Sweet!')
             Box.echo_box_help_cmd()
         else:
-            click.echo('Unbox successful. Enjoy it!')
+            echo('Unbox successful. Enjoy it!')
 
     @staticmethod
     def unbox(box_name: str, to_path: str = '') -> bool:
@@ -82,21 +82,21 @@ class Box:
         prepare_spinner.start()
         ensure_path_exists(to_path)
         if listdir(to_path):
-            click.echo('This directory is non-empty...')
+            echo('This directory is non-empty...')
             prepare_spinner.fail()
             return False
         repo_url = Box.generate_repo_url(box_name)
         if requests.get(repo_url).status_code != 200:
-            click.echo(f"Punica Box {box_name} doesn't exist.")
+            echo(f"Punica Box {box_name} doesn't exist.")
             prepare_spinner.fail()
             return False
         prepare_spinner.succeed()
         if Box.download_repo(repo_url, to_path):
             Box.handle_ignorance(to_path)
-            click.echo('Unbox successful. Sweet!')
+            echo('Unbox successful. Sweet!')
             Box.echo_box_help_cmd()
             return True
-        click.echo('Unbox failed. Sorry.')
+        echo('Unbox failed. Sorry.')
         return False
 
     @staticmethod
@@ -160,16 +160,16 @@ class Box:
             return True
         except GitCommandError as e:
             if e.status == 126:
-                click.echo('Please check your network.')
+                echo('Please check your network.')
             elif e.status == 128:
-                click.echo('Please check your Git tool.')
+                echo('Please check your Git tool.')
             else:
                 raise PunicaException(PunicaError.other_error(e.args[2]))
             return False
 
     @staticmethod
     def echo_box_help_cmd():
-        click.echo("""
+        echo("""
 
         Commands:
 

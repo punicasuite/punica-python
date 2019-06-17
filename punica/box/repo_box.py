@@ -6,7 +6,7 @@ import json
 
 from os import listdir, getcwd, path
 
-import click
+from click import echo
 import requests
 
 from halo import Halo
@@ -46,57 +46,58 @@ class Box:
         return True
 
     @staticmethod
-    def prepare_download(box_name: str, to_path: str = '') -> bool:
+    def prepare_to_download(box_name: str, to_path: str = '') -> str:
         prepare_spinner = Halo(text="Preparing to download", spinner='dots')
         prepare_spinner.start()
         if to_path == '':
             to_path = getcwd()
         ensure_path_exists(to_path)
         if listdir(to_path):
-            click.echo('This directory is non-empty...')
             prepare_spinner.fail()
-            return False
+            echo('This directory is non-empty...')
+            return ''
         repo_url = Box.generate_repo_url(box_name)
         if requests.get(repo_url).status_code != 200:
-            click.echo('Please check the box name you input.')
+            echo('Please check the box name you input.')
             prepare_spinner.fail()
-            return False
+            return ''
         prepare_spinner.succeed()
-        return True
+        return repo_url
+
+    @staticmethod
+    def echo_unbox_failed():
+        echo('Unbox failed.')
+
+    @staticmethod
+    def echo_unbox_successful():
+        echo('\nUnbox successful. Sweet!')
 
     @staticmethod
     def init(to_path: str):
-        if not Box.prepare_download(to_path):
-            return
-        repo_url = 'https://github.com/punica-box/punica-init-default-box'
-        if Box.download_repo(repo_url, to_path):
-            Box.handle_ignorance(to_path)
-            click.echo('Unbox successful. Sweet!')
-            Box.echo_box_help_cmd()
-        else:
-            click.echo('Unbox successful. Enjoy it!')
+        repo_url = Box.prepare_to_download('punica-init-default', to_path)
+        if len(repo_url) == 0:
+            Box.echo_unbox_failed()
+            return False
+        if not Box.download_repo(repo_url, to_path):
+            Box.echo_unbox_failed()
+            return False
+        Box.handle_ignorance(to_path)
+        Box.echo_unbox_successful()
+        Box.echo_box_help_cmd()
+        return True
 
     @staticmethod
     def unbox(box_name: str, to_path: str = '') -> bool:
-        prepare_spinner = Halo(text="Preparing to download", spinner='dots')
-        prepare_spinner.start()
-        ensure_path_exists(to_path)
-        if listdir(to_path):
-            click.echo('This directory is non-empty...')
-            prepare_spinner.fail()
+        repo_url = Box.prepare_to_download(box_name, to_path)
+        if len(repo_url) == 0:
+            Box.echo_unbox_failed()
             return False
-        repo_url = Box.generate_repo_url(box_name)
-        if requests.get(repo_url).status_code != 200:
-            click.echo(f"Punica Box {box_name} doesn't exist.")
-            prepare_spinner.fail()
-            return False
-        prepare_spinner.succeed()
         if Box.download_repo(repo_url, to_path):
             Box.handle_ignorance(to_path)
-            click.echo('Unbox successful. Sweet!')
+            Box.echo_unbox_successful()
             Box.echo_box_help_cmd()
             return True
-        click.echo('Unbox failed. Sorry.')
+        Box.echo_unbox_failed()
         return False
 
     @staticmethod
@@ -160,23 +161,19 @@ class Box:
             return True
         except GitCommandError as e:
             if e.status == 126:
-                click.echo('Please check your network.')
+                echo('Please check your network.')
             elif e.status == 128:
-                click.echo('Please check your Git tool.')
+                echo('Please check your Git tool.')
             else:
                 raise PunicaException(PunicaError.other_error(e.args[2]))
             return False
 
     @staticmethod
     def echo_box_help_cmd():
-        click.echo("""
-
-        Commands:
-
-          Compile contracts: punica compile
-          Deploy contracts:  punica deploy
-          Test contracts:    punica test
-        """)
+        echo('\nCommands:\n'
+             '  Compile contracts: punica compile\n'
+             '  Deploy contracts : punica deploy\n'
+             '  Test contracts   : punica test\n')
 
     @staticmethod
     def list_boxes():

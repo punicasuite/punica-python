@@ -11,7 +11,6 @@ from unittest.mock import patch
 from ontology.utils.utils import get_random_bytes
 
 from test import wallet_password, test_file_dir, ontology
-
 from punica.deploy.deploy_contract import Deploy
 
 

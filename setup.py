@@ -28,7 +28,6 @@ setup(
         'Click==7.0',
         'requests==2.22.0',
         'GitPython==2.1.11',
-        'punica-neo-boa==0.4.9',
         'ontology-python-sdk==2.0.4',
     ],
     license="MIT",

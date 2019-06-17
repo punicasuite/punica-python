@@ -4,14 +4,14 @@
 import os
 import unittest
 
-from punica.compile.contract_compile import PunicaCompiler
+from punica.compile import py_contract
 
 
 class TestCompiler(unittest.TestCase):
 
     def test_compile_contract_remote(self):
         contract_path = os.path.join(os.getcwd(), 'test_file', 'test_compile_remote', 'oep4.py')
-        PunicaCompiler.compile_contract(contract_path)
+        py_contract.compile_contract(contract_path)
         avm_save_path = os.path.join(os.getcwd(), 'test_file', 'test_compile_remote', 'build', 'oep4.avm')
         abi_save_path = os.path.join(os.getcwd(), 'test_file', 'test_compile_remote', 'build', 'oep4_abi.json')
         with open(avm_save_path, 'r') as f:
@@ -25,7 +25,7 @@ class TestCompiler(unittest.TestCase):
 
     def test_compile_contract(self):
         contract_path = os.path.join(os.getcwd(), 'test_file', 'test_compile', 'contracts', 'oep4.py')
-        PunicaCompiler.compile_contract(contract_path)
+        py_contract.compile_contract(contract_path)
         split_path = os.path.split(contract_path)
         save_path = os.path.join(os.getcwd(), 'build', split_path[1])
         avm_save_path = save_path.replace('.py', '.avm')
@@ -46,10 +46,10 @@ class TestCompiler(unittest.TestCase):
 
     def test_generate_avm_file(self):
         contract_path = os.path.join(os.getcwd(), 'test_file', 'test_compile', 'oep4.py')
-        PunicaCompiler.generate_avm_file(contract_path)
         split_path = os.path.split(contract_path)
         save_path = os.path.join(os.getcwd(), 'build', split_path[1])
         avm_save_path = save_path.replace('.py', '.avm')
+        py_contract.compile_py_contract_in_local(contract_path, avm_save_path)
         with open(os.path.join(os.getcwd(), 'test_file', 'test_compile', 'oep4.avm'), 'r') as f:
             target_avm = f.read()
         with open(avm_save_path, 'r') as f:

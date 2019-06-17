@@ -1,18 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import click
-
+from click import echo, pass_context
 from ontology.exception.exception import SDKException
 
 from .main import main
-
 from punica.box.repo_box import Box
 from punica.exception.punica_exception import PunicaException
 
 
 @main.command('init')
-@click.pass_context
+@pass_context
 def init_cmd(ctx):
     """
     Initialize new and empty Ontology DApp project.
@@ -21,5 +19,5 @@ def init_cmd(ctx):
     try:
         Box.init(project_dir)
     except (PunicaException, SDKException) as e:
-        click.echo('An error occur...')
-        click.echo(e.args[1])
+        echo('An error occur...')
+        echo(e.args[1])

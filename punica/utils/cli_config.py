@@ -3,10 +3,33 @@
 
 import os
 import json
+from os import path
 
 from punica.exception.punica_exception import PunicaException, PunicaError
 
-DEFAULT_CONFIG = 'config.json'
+OLD_DEFAULT_CONFIG = 'punica-config.json'
+DEFAULT_CONFIG = 'punica.json'
+
+
+class Config(object):
+    _OLD_DEFAULT_CONFIG = 'punica-config.json'
+    _DEFAULT_CONFIG = 'punica.json'
+
+    def __init__(self, project_dir: str):
+        self.project_dir = project_dir
+        config_file_path = path.join(self.project_dir, DEFAULT_CONFIG)
+        old_config_file_path = path.join(self.project_dir, OLD_DEFAULT_CONFIG)
+        if path.exists(config_file_path):
+            self.config_file_path = config_file_path
+        elif path.exists(old_config_file_path):
+            self.config_file_path = old_config_file_path
+        else:
+            raise PunicaException(PunicaError.config_file_not_found)
+        with open(self.config_file_path, 'r')as f:
+            self.config = json.load(f)
+
+    def get_default_network(self):
+        return self.config.get('defaultNet', '')
 
 
 def handle_network_config(config_dir_path: str, network: str = '', is_print: bool = True) -> str:

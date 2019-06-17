@@ -55,6 +55,17 @@ def ensure_remove_dir_if_exists(path):
     return False
 
 
+def save_avm_file(avm_code: str, to_path: str):
+    try:
+        with open(to_path, 'w') as f:
+            f.write(avm_code.lstrip('b\'').rstrip('\''))
+    except PermissionError as error:
+        if error.args[0] == 13:
+            raise PunicaException(PunicaError.permission_error)
+        else:
+            raise PunicaException(PunicaError.other_error(error.args[1]))
+
+
 def read_avm(avm_dir_path: str, avm_file_name: str = '') -> (str, str):
     if not os.path.isdir(avm_dir_path):
         raise PunicaException(PunicaError.directory_error)

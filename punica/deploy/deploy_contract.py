@@ -4,28 +4,37 @@
 import os
 import time
 import getpass
+from os import path
 
 import crayons
 from click import echo
-from click._unicodefun import click
-from ontology.exception.exception import SDKException
 from ontology.sdk import Ontology
 from ontology.common.address import Address
+from ontology.exception.exception import SDKException
 
 from punica.utils.file_system import (
     read_avm,
     read_wallet
 )
 
-from punica.utils.handle_config import (
+from punica.utils.cli_config import (
     handle_network_config,
-    handle_deploy_config
-)
+    handle_deploy_config,
+    Config)
 
 from punica.exception.punica_exception import PunicaException, PunicaError
 
 
 class Deploy(object):
+    def __init__(self, project_dir: str = '', network: str = ''):
+        if project_dir == '':
+            project_dir = os.getcwd()
+        self.project_dir = project_dir
+        self.avm_dir = path.join(project_dir, 'contracts', 'build')
+        if len(network) == 0:
+            network = Config(self.project_dir).get_default_network()
+        self.network = network
+
     @staticmethod
     def generate_signed_deploy_transaction(avm_code: str, project_path: str = '', wallet_file_name: str = '',
                                            config: str = '', password: str = ''):

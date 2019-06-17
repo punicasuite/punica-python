@@ -18,7 +18,7 @@ from punica.exception.punica_exception import PunicaException
 @pass_context
 def compile_cmd(ctx, contract):
     """
-    Compile the specified contracts to avm and abi file.
+    Compile contract source files
     """
     project_dir = ctx.obj['PROJECT_DIR']
     try:

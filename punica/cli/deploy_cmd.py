@@ -19,7 +19,7 @@ from punica.exception.punica_exception import PunicaException
 @click.pass_context
 def deploy_cmd(ctx, network, avm, wallet, config):
     """
-    Deploys the specified contracts to specified chain.
+    Deploy contracts to specified network.
     """
     project_dir = ctx.obj['PROJECT_DIR']
 

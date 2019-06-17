@@ -169,14 +169,10 @@ class Box:
 
     @staticmethod
     def echo_box_help_cmd():
-        echo("""
-
-        Commands:
-
-          Compile contracts: punica compile
-          Deploy contracts:  punica deploy
-          Test contracts:    punica test
-        """)
+        echo('Commands:\n'
+             '  Compile contracts: punica compile\n'
+             '  Deploy contracts : punica deploy\n'
+             '  Test contracts   : punica test')
 
     @staticmethod
     def list_boxes():

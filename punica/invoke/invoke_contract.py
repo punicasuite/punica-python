@@ -19,7 +19,7 @@ from punica.utils.file_system import (
     read_wallet
 )
 
-from punica.utils.handle_config import (
+from punica.utils.cli_config import (
     handle_invoke_config,
     handle_network_config,
     DEFAULT_CONFIG)

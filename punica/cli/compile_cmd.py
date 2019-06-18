@@ -14,7 +14,7 @@ from punica.exception.punica_exception import PunicaException
 
 
 @main.command('compile')
-@argument('contract', default='')
+@argument('contract_name', default='')
 @pass_context
 def compile_cmd(ctx, contract_name: str):
     """

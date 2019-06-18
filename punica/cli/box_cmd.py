@@ -18,9 +18,23 @@ def unbox_cmd(ctx, box_name):
     """
     Download a Punica Box, a pre-built Punica project
     """
-    project_dir = ctx.obj['PROJECT_DIR']
+    box = Box(ctx.obj['PROJECT_DIR'])
     try:
-        Box.unbox(box_name, project_dir)
+        box.unbox(box_name)
+    except (PunicaException, SDKException) as e:
+        echo('An error occur...')
+        echo(e.args[1])
+
+
+@main.command('init')
+@pass_context
+def init_cmd(ctx):
+    """
+    Initialize new and empty Ontology project.
+    """
+    box = Box(ctx.obj['PROJECT_DIR'])
+    try:
+        box.init_box()
     except (PunicaException, SDKException) as e:
         echo('An error occur...')
         echo(e.args[1])
@@ -32,11 +46,9 @@ def boxes_cmd(ctx):
     """
     List all available punica box.
     """
+    box = Box(ctx.obj['PROJECT_DIR'])
     try:
-        boxes = Box.list_boxes()
+        box.list_boxes()
     except (PunicaException, SDKException):
         webbrowser.open('https://punica.ont.io/boxes/')
         return
-    echo('The easiest way to get started:')
-    for index, box in enumerate(boxes):
-        echo(f'{index}. {box}')

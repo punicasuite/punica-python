@@ -13,7 +13,7 @@ from punica.exception.punica_exception import PunicaException
 class TestCompiler(unittest.TestCase):
     def test_init(self):
         init_to_path = os.path.join(os.getcwd(), 'init')
-        Box.init(init_to_path)
+        Box.init_box(init_to_path)
         init_config = InitConfig(init_to_path)
         self.assertTrue(os.path.exists(init_config.src_path()))
         self.assertTrue(os.path.exists(init_config.test_path()))

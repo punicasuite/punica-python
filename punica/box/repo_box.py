@@ -21,12 +21,57 @@ from punica.utils.file_system import (
 from punica.exception.punica_exception import PunicaError, PunicaException
 
 
-class Box:
-    @staticmethod
-    def handle_ignorance(repo_to_path: str = '') -> bool:
+class Box(object):
+    def __init__(self, project_dir: str):
+        self.__project_dir = project_dir
+        self.__box_repos_url = 'https://api.github.com/users/punica-box/repos'
+
+    @property
+    def project_dir(self):
+        return self.__project_dir
+
+    def unbox(self, box_name: str) -> bool:
+        repo_url = self.prepare_to_download(box_name)
+        if len(repo_url) == 0:
+            Box.echo_unbox_failed()
+            return False
+        if Box.download_repo(repo_url, self.project_dir):
+            self.handle_ignorance()
+            self.echo_unbox_successful()
+            self.echo_box_help_cmd()
+            return True
+        self.echo_unbox_failed()
+        return False
+
+    def init_box(self):
+        repo_url = self.prepare_to_download('punica-init-default')
+        if len(repo_url) == 0:
+            Box.echo_unbox_failed()
+            return False
+        if not Box.download_repo(repo_url, self.project_dir):
+            Box.echo_unbox_failed()
+            return False
+        self.handle_ignorance()
+        self.echo_unbox_successful()
+        self.echo_box_help_cmd()
+        return True
+
+    def list_boxes(self):
+        response = requests.get(self.__box_repos_url).content.decode()
+        repos = json.loads(response)
+        if isinstance(repos, dict):
+            message = repos.get('message', '')
+            if 'API rate limit exceeded' in message:
+                raise PunicaException(PunicaError.other_error(message))
+        echo('The easiest way to get started:')
+        for index, repo in enumerate(repos):
+            name = repo.get('name', '')
+            echo(f'{index}. {name}')
+
+    def handle_ignorance(self) -> bool:
         unpack_spinner = Halo(text="Unpacking...", spinner='dots')
         unpack_spinner.start()
-        box_ignore_file_path = path.join(repo_to_path, 'punica-box.json')
+        box_ignore_file_path = path.join(self.project_dir, 'punica-box.json')
         try:
             with open(box_ignore_file_path, 'r') as f:
                 box_ignore_files = json.load(f)['ignore']
@@ -36,7 +81,7 @@ class Box:
             return False
         for file in box_ignore_files:
             try:
-                file_path = path.join(repo_to_path, file)
+                file_path = path.join(self.project_dir, file)
                 ensure_remove_dir_if_exists(file_path)
                 remove_file_if_exists(file_path)
             except (PermissionError, FileNotFoundError):
@@ -45,14 +90,11 @@ class Box:
         unpack_spinner.succeed()
         return True
 
-    @staticmethod
-    def prepare_to_download(box_name: str, to_path: str = '') -> str:
+    def prepare_to_download(self, box_name: str) -> str:
         prepare_spinner = Halo(text="Preparing to download", spinner='dots')
         prepare_spinner.start()
-        if to_path == '':
-            to_path = getcwd()
-        ensure_path_exists(to_path)
-        if listdir(to_path):
+        ensure_path_exists(self.project_dir)
+        if listdir(self.project_dir):
             prepare_spinner.fail()
             echo('This directory is non-empty...')
             return ''
@@ -71,34 +113,6 @@ class Box:
     @staticmethod
     def echo_unbox_successful():
         echo('\nUnbox successful. Sweet!')
-
-    @staticmethod
-    def init(to_path: str):
-        repo_url = Box.prepare_to_download('punica-init-default', to_path)
-        if len(repo_url) == 0:
-            Box.echo_unbox_failed()
-            return False
-        if not Box.download_repo(repo_url, to_path):
-            Box.echo_unbox_failed()
-            return False
-        Box.handle_ignorance(to_path)
-        Box.echo_unbox_successful()
-        Box.echo_box_help_cmd()
-        return True
-
-    @staticmethod
-    def unbox(box_name: str, to_path: str = '') -> bool:
-        repo_url = Box.prepare_to_download(box_name, to_path)
-        if len(repo_url) == 0:
-            Box.echo_unbox_failed()
-            return False
-        if Box.download_repo(repo_url, to_path):
-            Box.handle_ignorance(to_path)
-            Box.echo_unbox_successful()
-            Box.echo_box_help_cmd()
-            return True
-        Box.echo_unbox_failed()
-        return False
 
     @staticmethod
     def generate_repo_url(box_name: str) -> str:
@@ -179,18 +193,3 @@ class Box:
              '  Compile contracts: punica compile\n'
              '  Deploy contracts : punica deploy\n'
              '  Test contracts   : punica test\n')
-
-    @staticmethod
-    def list_boxes():
-        repos_url = 'https://api.github.com/users/punica-box/repos'
-        response = requests.get(repos_url).content.decode()
-        repos = json.loads(response)
-        if isinstance(repos, dict):
-            message = repos.get('message', '')
-            if 'API rate limit exceeded' in message:
-                raise PunicaException(PunicaError.other_error(message))
-        name_list = []
-        for repo in repos:
-            name = repo.get('name', '')
-            name_list.append(name)
-        return name_list

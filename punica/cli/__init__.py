@@ -1,5 +1,4 @@
 from .main import main
-from .init_cmd import init_cmd
 from .test_cmd import test_cmd
 from .box_cmd import unbox_cmd
 from .smartx_cmd import smartx_cmd

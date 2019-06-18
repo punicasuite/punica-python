@@ -16,7 +16,7 @@ from punica.exception.punica_exception import PunicaException
 @pass_context
 def unbox_cmd(ctx, box_name):
     """
-    Download a Punica Box, a pre-built Ontology DApp project.
+    Download a Punica Box, a pre-built Punica project
     """
     project_dir = ctx.obj['PROJECT_DIR']
     try:

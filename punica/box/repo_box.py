@@ -114,52 +114,57 @@ class Box:
     def download_repo(repo_url: str, repo_to_path: str = ''):
         if repo_to_path == '':
             repo_to_path = getcwd()
-        receiving_spinner = Halo(spinner='dots')
-        resolving_spinner = Halo(spinner='dots')
-        counting_spinner = Halo(spinner='dots')
-        compressing_spinner = Halo(spinner='dots')
+        spinner = Halo(spinner='dots')
 
-        spinners = [receiving_spinner, resolving_spinner, counting_spinner, compressing_spinner]
+        def calcu_progress_scale(cur_count: int, max_count: int):
+            return round(cur_count / max_count * 100, 2)
 
-        def update(self, op_code, cur_count, max_count=None, message=''):
+        def show_spinner(stage_info: str, cur_count: int, max_count: int, message: str = ''):
+            if spinner.spinner_id is None:
+                spinner.start()
+            scale = calcu_progress_scale(cur_count, max_count)
+            if len(message) == 0:
+                spinner.text = f'{stage_info}: {scale}% ({cur_count}/{max_count})'
+            else:
+                spinner.text = f'{stage_info}: {scale}%, {message}'
+            if scale == 100:
+                spinner.succeed()
+            return
+
+        def update(self, op_code: RemoteProgress, cur_count: int, max_count: int = None, message: str = ''):
             if op_code == RemoteProgress.COUNTING:
-                if counting_spinner.spinner_id is None:
-                    counting_spinner.start()
-                scale = round(cur_count / max_count * 100, 2)
-                counting_spinner.text = f'Counting objects: {scale}% ({cur_count}/{max_count})'
-                if scale == 100:
-                    counting_spinner.succeed()
+                show_spinner('Counting objects', cur_count, max_count)
+                return
             if op_code == RemoteProgress.COMPRESSING:
-                if compressing_spinner.spinner_id is None:
-                    compressing_spinner.start()
-                scale = round(cur_count / max_count * 100, 2)
-                compressing_spinner.text = f'Compressing objects: {scale}% ({cur_count}/{max_count})'
-                if scale == 100:
-                    compressing_spinner.succeed()
+                show_spinner('Compressing objects', cur_count, max_count)
+                return
             if op_code == RemoteProgress.RECEIVING:
-                if receiving_spinner.spinner_id is None:
-                    receiving_spinner.start()
-                scale = round(cur_count / max_count * 100, 2)
-                receiving_spinner.text = f'Receiving objects: {scale}%, {message}'
-                if scale == 100:
-                    receiving_spinner.succeed()
+                show_spinner('Receiving objects', cur_count, max_count, message)
+                return
             if op_code == RemoteProgress.RESOLVING:
-                if resolving_spinner.spinner_id is None:
-                    resolving_spinner.start()
-                scale = round(cur_count / max_count * 100, 2)
-                resolving_spinner.text = f'Resolving deltas: {scale}%'
-                if scale == 100:
-                    resolving_spinner.succeed()
+                show_spinner('Resolving deltas', cur_count, max_count)
+                return
+            if op_code == RemoteProgress.WRITING:
+                show_spinner('Writing objects', cur_count, max_count)
+                return
+            if op_code == RemoteProgress.FINDING_SOURCES:
+                show_spinner('Finding sources', cur_count, max_count)
+                return
+            if op_code == RemoteProgress.CHECKING_OUT:
+                show_spinner('Checking out files', cur_count, max_count)
+                return
 
         RemoteProgress.update = update
 
         try:
             Repo.clone_from(url=repo_url, to_path=repo_to_path, depth=1, progress=RemoteProgress())
-            for spinner in spinners:
-                if spinner.spinner_id is not None and len(spinner.text) != 0:
-                    spinner.fail()
+            if spinner.spinner_id is not None and len(spinner.text) != 0:
+                spinner.fail()
+                return False
             return True
         except GitCommandError as e:
+            if spinner.spinner_id is not None and len(spinner.text) != 0:
+                spinner.fail()
             if e.status == 126:
                 echo('Please check your network.')
             elif e.status == 128:

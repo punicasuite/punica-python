@@ -40,13 +40,17 @@ class TestCompiler(unittest.TestCase):
     def test_unbox(self):
         box_name = 'tutorialtoken'
         box_to_path = os.path.join(os.getcwd(), 'test_unbox')
-        Box.unbox(box_name, box_to_path)
-        shutil.rmtree(box_to_path)
+        try:
+            Box.unbox(box_name, box_to_path)
+        finally:
+            shutil.rmtree(box_to_path)
 
         box_name = 'errorbox'
         box_to_path = os.path.join(os.getcwd(), 'test_unbox')
-        Box.unbox(box_name, box_to_path)
-        shutil.rmtree(box_to_path)
+        try:
+            Box.unbox(box_name, box_to_path)
+        finally:
+            shutil.rmtree(box_to_path)
 
     def test_list_boxes(self):
         try:

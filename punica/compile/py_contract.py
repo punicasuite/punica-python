@@ -8,7 +8,7 @@ import requests
 from halo import Halo
 from click import echo
 from typing import List
-from os import path, listdir
+from os import path, listdir, getcwd
 
 from punica.exception.punica_exception import PunicaException
 from punica.utils.file_system import (
@@ -22,7 +22,9 @@ CSHARP_CONTRACT_COMPILE_URL = "https://smartxcompiler.ont.io/api/v1.0/csharp/com
 
 
 class PyContract(object):
-    def __init__(self, project_dir: str):
+    def __init__(self, project_dir: str = ''):
+        if len(project_dir) == 0:
+            project_dir = getcwd()
         self.__project_dir = project_dir
         self.v2_prefix = "OntCversion = '2.0.0'"
         self.v1_py_contract_compile_url = "https://smartxcompiler.ont.io/api/v1.0/python/compile"
@@ -70,6 +72,9 @@ class PyContract(object):
         return contract_path, avm_save_path
 
     def compile_contract(self, contract_name: str):
+        title = contract_name.replace('.py', '')
+        echo(title)
+        echo('-' * len(title))
         contract_path, avm_save_path = self.prepare_to_compile(contract_name)
         compile_spinner = Halo(text=f"Compiling {contract_name}", spinner='bouncingBar')
         compile_spinner.start()
@@ -78,7 +83,7 @@ class PyContract(object):
             compile_spinner.fail()
             return False
         compile_spinner.succeed()
-        save_spinner = Halo(text=f'Avm file written to {path.split(avm_save_path)[0]}')
+        save_spinner = Halo(text=f'Saving avm file...')
         save_spinner.start()
         try:
             save_avm_file(avm_code, avm_save_path)
@@ -87,6 +92,9 @@ class PyContract(object):
             echo(e.args[1])
             return False
         save_spinner.succeed()
+        end_msg = f'> Avm file written to {path.split(avm_save_path)[0]}'
+        echo(''.join(['-' * len(end_msg)]))
+        echo(f'{end_msg}\n')
         return True
 
     def compile_py_contract_in_remote(self, contract_path: str):

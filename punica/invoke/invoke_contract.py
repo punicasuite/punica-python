@@ -1,18 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import binascii
-import getpass
+
 import os
 import time
+import getpass
+import binascii
 
-from ontology.common.address import Address
-from ontology.contract.neo.abi.abi_info import AbiInfo
-from ontology.contract.neo.abi.build_params import BuildParams
 from ontology.contract.neo.vm import NeoVm
+from ontology.common.address import Address
 from ontology.exception.exception import SDKException
+from ontology.contract.neo.abi.abi_info import AbiInfo
 from ontology.wallet.wallet_manager import WalletManager
+from ontology.contract.neo.abi.build_params import BuildParams
 
-from punica.exception.punica_exception import PunicaException, PunicaError
+from punica.core.contract_project import ContractProject
+from punica.exception.punica_exception import (
+    PunicaException,
+    PunicaError
+)
 
 from punica.utils.file_system import (
     read_abi,
@@ -21,11 +26,14 @@ from punica.utils.file_system import (
 
 from punica.utils.cli_config import (
     handle_invoke_config,
-    handle_network_config,
-    DEFAULT_CONFIG)
+    handle_network_config
+)
 
 
-class Invoke:
+class Invoke(ContractProject):
+    def __init__(self, project_dir: str = ''):
+        super().__init__(project_dir)
+
     @staticmethod
     def get_function(params: dict, function_name: str, abi_info: AbiInfo):
         if function_name == '':

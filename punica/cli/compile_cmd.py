@@ -1,15 +1,14 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-import os
-from os import path
-
-from halo import Halo
-from click import echo, pass_context, option, argument
 from ontology.exception.exception import SDKException
+
+from click import (
+    argument,
+    pass_context,
+    echo
+)
 
 from .main import main
 from punica.compile.py_contract import PyContract
+from punica.utils.output import echo_cli_exception
 from punica.exception.punica_exception import PunicaException
 
 
@@ -20,11 +19,10 @@ def compile_cmd(ctx, contract_name: str):
     """
     Compile contract source files
     """
-    project_dir = ctx.obj['PROJECT_DIR']
+    py_contract = PyContract(ctx.obj['PROJECT_DIR'])
+    echo('\nCompiling your contracts...')
+    echo('===========================\n')
     try:
-        spinner = Halo(text='Compiling...', spinner='dots')
-        spinner.start()
-        py_contract = PyContract(project_dir)
         if len(contract_name) == 0:
             contract_name_list = py_contract.get_all_contract()
             for contract_name in contract_name_list:
@@ -34,5 +32,4 @@ def compile_cmd(ctx, contract_name: str):
             contract_name += '.py'
         py_contract.compile_contract(contract_name)
     except (PunicaException, SDKException) as e:
-        echo('An error occur...')
-        echo(e.args[1])
+        echo_cli_exception(e)

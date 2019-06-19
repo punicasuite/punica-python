@@ -1,14 +1,12 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-import click
 import webbrowser
+
+from click import pass_context
 
 from .main import main
 
 
 @main.command('smartx')
-@click.pass_context
+@pass_context
 def smartx_cmd(ctx):
     """
     Ontology smart contract IDE,SmartX (http://smartx.ont.io/)

@@ -1,13 +1,15 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 import webbrowser
 
-from click import echo, argument, pass_context
 from ontology.exception.exception import SDKException
+
+from click import (
+    argument,
+    pass_context
+)
 
 from .main import main
 from punica.box.repo_box import Box
+from punica.utils.output import echo_cli_exception
 from punica.exception.punica_exception import PunicaException
 
 
@@ -22,8 +24,7 @@ def unbox_cmd(ctx, box_name):
     try:
         box.unbox(box_name)
     except (PunicaException, SDKException) as e:
-        echo('An error occur...')
-        echo(e.args[1])
+        echo_cli_exception(e)
 
 
 @main.command('init')
@@ -36,8 +37,7 @@ def init_cmd(ctx):
     try:
         box.init_box()
     except (PunicaException, SDKException) as e:
-        echo('An error occur...')
-        echo(e.args[1])
+        echo_cli_exception(e)
 
 
 @main.command('boxes')
@@ -51,4 +51,3 @@ def boxes_cmd(ctx):
         box.list_boxes()
     except (PunicaException, SDKException):
         webbrowser.open('https://punica.ont.io/boxes/')
-        return

@@ -5,6 +5,7 @@ import os
 import json
 import stat
 import shutil
+from os import path
 
 from ontology.exception.exception import SDKException
 from ontology.wallet.wallet_manager import WalletManager
@@ -48,11 +49,24 @@ def remove_dir_if_exists(path):
     return False
 
 
-def ensure_remove_dir_if_exists(path):
-    if os.path.isdir(path):
-        shutil.rmtree(path, ignore_errors=False, onerror=handle_read_only_remove_error)
+def ensure_remove_dir_if_exists(dir_path):
+    if os.path.isdir(dir_path):
+        shutil.rmtree(dir_path, ignore_errors=False, onerror=handle_read_only_remove_error)
         return True
     return False
+
+
+def read_avm_code(avm_dir: str, contract_name: str):
+    if not contract_name.endswith('.avm'):
+        contract_name = ''.join([contract_name, '.avm'])
+    avm_file_path = path.join(avm_dir, contract_name)
+    if not path.exists(avm_file_path):
+        raise PunicaException(PunicaError.avm_file_not_found)
+    with open(avm_file_path, 'r') as f:
+        avm_code = f.read()
+    if len(avm_code) == 0:
+        raise PunicaException(PunicaError.avm_file_empty)
+    return avm_code
 
 
 def save_avm_file(avm_code: str, to_path: str):
@@ -64,29 +78,6 @@ def save_avm_file(avm_code: str, to_path: str):
             raise PunicaException(PunicaError.permission_error)
         else:
             raise PunicaException(PunicaError.other_error(error.args[1]))
-
-
-def read_avm(avm_dir_path: str, avm_file_name: str = '') -> (str, str):
-    if not os.path.isdir(avm_dir_path):
-        raise PunicaException(PunicaError.directory_error)
-    if avm_file_name != '':
-        avm_file_path = os.path.join(avm_dir_path, avm_file_name)
-        if not os.path.exists(avm_file_path):
-            raise PunicaException(PunicaError.other_error(avm_file_path + ' not exist'))
-        with open(avm_file_path, 'r') as f:
-            hex_avm = f.read()
-    else:
-        dir_list = os.listdir(avm_dir_path)
-        hex_avm = ''
-        for file in dir_list:
-            split_path = os.path.splitext(file)
-            if (split_path[0] == avm_file_name or avm_file_name == '') and split_path[1] == '.avm':
-                avm_file_name = ''.join(split_path)
-                avm_path = os.path.join(avm_dir_path, file)
-                with open(avm_path, 'r') as f:
-                    hex_avm = f.read()
-                    break
-    return hex_avm, avm_file_name
 
 
 def read_abi(abi_dir_path: str, abi_file_name: str) -> dict:

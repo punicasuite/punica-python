@@ -1,19 +1,19 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-import click
+from click import (
+    option,
+    pass_context
+)
 
 from ontology.exception.exception import SDKException
 
-from punica.test.test import Test
 from .main import main
-
+from punica.test.test import Test
+from punica.utils.output import echo_cli_exception
 from punica.exception.punica_exception import PunicaException
 
 
 @main.group('test', invoke_without_command=True)
-@click.option('--file', nargs=1, type=str, default='', help='Specify which test file will be used.')
-@click.pass_context
+@option('--file', nargs=1, type=str, default='', help='Specify which test file will be used.')
+@pass_context
 def test_cmd(ctx, file):
     """
     Unit test with specified smart contract
@@ -26,8 +26,8 @@ def test_cmd(ctx, file):
 
 
 @test_cmd.command('template')
-@click.option('--abi', nargs=1, type=str, default='', help='Specify which abi file will be used.')
-@click.pass_context
+@option('--abi', nargs=1, type=str, default='', help='Specify which abi file will be used.')
+@pass_context
 def template_cmd(ctx, abi):
     """
     generate test template file
@@ -36,7 +36,4 @@ def template_cmd(ctx, abi):
     try:
         Test.generate_test_template(project_dir, '', abi)
     except (PunicaException, SDKException) as e:
-        print('An error occur...')
-        print(e)
-        print('Punica will exist...')
-        exit(1)
+        echo_cli_exception(e)

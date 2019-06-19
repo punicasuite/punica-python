@@ -1,7 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-
 class PunicaException(Exception):
     def __init__(self, error: dict):
         super().__init__(error['code'], error['msg'])
@@ -32,10 +28,11 @@ class PunicaError(object):
     wallet_file_error = get_error.__func__(10004, 'error exist in wallet file')
     wallet_file_unspecified = get_error.__func__(10005, 'please specify the wallet file you want to open')
     directory_error = get_error.__func__(10006, 'the path isn\'t a directory')
-    avm_file_empty = get_error.__func__(10007, 'the avm file is empty')
-    abi_file_not_found = get_error.__func__(10008, 'abi file not found')
-    abi_file_empty = get_error.__func__(10009, 'abi file is empty')
-    abi_file_error = get_error.__func__(10009, 'error exist in abi file')
+    avm_file_not_found = get_error.__func__(10007, 'avm file not fount')
+    avm_file_empty = get_error.__func__(10008, 'the avm file is empty')
+    abi_file_not_found = get_error.__func__(10009, 'abi file not found')
+    abi_file_empty = get_error.__func__(100190, 'abi file is empty')
+    abi_file_error = get_error.__func__(10011, 'error exist in abi file')
 
     network_error = get_error.__func__(20000, 'please make sure you network state, and the repository exists.')
 

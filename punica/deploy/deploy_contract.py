@@ -88,7 +88,7 @@ class Deployment(ContractProjectWithConfig):
             payer_address
         )
         tx.sign_transaction(payer)
-        tx_hash = self._send_raw_tx(tx)
+        tx_hash = self._send_raw_tx_with_spinner(tx)
         self._echo_pending_tx_info(tx_hash, f'\nDeploy {contract_name}')
         return tx_hash
 

@@ -67,7 +67,7 @@ class ContractProjectWithConfig(ProjectWithConfig):
         echo(f'> Network id:   {self.ontology.rpc.get_network_id()}')
         echo(f'> Gas price:    {self.ontology.rpc.get_gas_price()}\n\n')
 
-    def _send_raw_tx(self, tx: Transaction) -> str:
+    def _send_raw_tx_with_spinner(self, tx: Transaction) -> str:
         spinner = Halo(text="Sending transaction into network...\n", spinner='dots')
         for _ in range(5):
             try:
@@ -80,8 +80,23 @@ class ContractProjectWithConfig(ProjectWithConfig):
         spinner.fail()
         return ''
 
-    def _echo_pending_tx_info(self, tx_hash: str, title: str) -> bool:
-        spinner = Halo(text="Checking transaction status...\n", spinner='dots')
+    def _send_raw_tx_pre_exec_with_spinner(self, tx: Transaction) -> dict:
+        spinner = Halo(text="Sending transaction into network...\n", spinner='dots')
+        res = dict()
+        for _ in range(5):
+            try:
+                time.sleep(1)
+                res = self.ontology.rpc.send_raw_transaction_pre_exec(tx)
+                spinner.succeed()
+                break
+            except SDKException:
+                continue
+        if len(res) == 0:
+            spinner.fail()
+        return res
+
+    def _echo_pending_tx_info(self, tx_hash: str, title: str = '') -> bool:
+        spinner = Halo(text="Checking transaction status...", spinner='dots')
         spinner.start()
         tx_info = dict()
         for _ in range(5):
@@ -98,6 +113,7 @@ class ContractProjectWithConfig(ProjectWithConfig):
         spinner.succeed()
         payer = tx_info.get('Payer', '')
         balance = self.ontology.rpc.get_balance(payer)
+        echo('')
         if len(title) != 0:
             echo(title)
             echo('-' * len(title))

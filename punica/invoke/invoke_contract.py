@@ -1,6 +1,7 @@
 from typing import List
 
 from click import echo
+from halo import Halo
 from ontology.contract.neo.invoke_function import InvokeFunction
 from ontology.core.invoke_transaction import InvokeTransaction
 
@@ -41,11 +42,26 @@ class Invocation(ContractProjectWithConfig):
         invoke_func = InvokeFunction(func.name, func.args_normalized)
         echo(func.name)
         echo('-' * len(func.name))
+        echo('')
         if func.pre_exec:
-            res = self.__send_tx_pre_exec(contract_address, invoke_func, func.signers)
-            echo(res)
+            response = self.__send_tx_pre_exec(contract_address, invoke_func, func.signers)
+            self.__echo_pre_exec_result(response)
         else:
-            tx_hash = self.__send_tx(contract_address, invoke_func, func.payer, func.signers)
+            self.__send_tx(contract_address, invoke_func, func.payer, func.signers)
+
+    @staticmethod
+    def __echo_pre_exec_result(response: dict):
+        spinner = Halo(text="Parsing result...\n", spinner='dots')
+        spinner.start()
+        if not isinstance(response, dict):
+            spinner.fail()
+            return
+        spinner.succeed()
+        echo("")
+        echo(f"> gas:    {response.get('Gas', '')}")
+        echo(f"> state:  {response.get('State', '')}")
+        echo(f"> result: {response.get('Result', '')}")
+        echo(f"> notify: {response.get('Notify', list())}\n")
 
     def __send_tx(self, contract_address: str, func: InvokeFunction, payer_address: str,
                   signer_address_list: List[str]):
@@ -59,21 +75,15 @@ class Invocation(ContractProjectWithConfig):
                                                           self.invoke_config.get('gasPrice', 500),
                                                           self.invoke_config.get('gasLimit', 20000))
         tx = self.__add_signature(tx, signer_address_list, payer_address)
-
-        tx_hash = self._send_raw_tx(tx)
-        self._echo_pending_tx_info(tx_hash, f'\nDeploy {contract_name}')
-
-
-        tx_hash = self._send_raw_tx(tx)
-        self._echo_pending_tx_info(tx_hash, f'\n{func.}')
-
-
-        return self.ontology.rpc.send_raw_transaction(tx)
+        tx_hash = self._send_raw_tx_with_spinner(tx)
+        self._echo_pending_tx_info(tx_hash)
+        return tx_hash
 
     def __send_tx_pre_exec(self, contract_address: str, func: InvokeFunction, signer_address_list: List[str]):
         tx = self.ontology.neo_vm.make_invoke_transaction(contract_address, func)
         tx = self.__add_signature(tx, signer_address_list)
-        return self.ontology.rpc.send_raw_transaction_pre_exec(tx)
+        res = self._send_raw_tx_pre_exec_with_spinner(tx)
+        return res
 
     def __add_signature(self, tx: InvokeTransaction, signer_address_list: List[str], payer_address: str = ''):
         if len(payer_address) == 34:

@@ -1,6 +1,6 @@
 import os
 
-from punica.invoke.invoke_contract import Invoke
+from punica.invoke.invoke_contract import Invocation
 
 from punica.utils.file_system import read_abi
 
@@ -9,7 +9,7 @@ class Test:
     @staticmethod
     def get_abi_info(abi_dir_path: str):
         abi_dict = read_abi(abi_dir_path, os.path.basename(abi_dir_path))
-        return Invoke.generate_abi_info(abi_dict)
+        return Invocation.generate_abi_info(abi_dict)
 
     @staticmethod
     def test_file(project_dir_path, file_name):

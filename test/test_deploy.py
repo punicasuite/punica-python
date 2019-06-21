@@ -16,29 +16,20 @@ from punica.deploy.deploy_contract import Deployment
 
 class TestDeploy(unittest.TestCase):
     def setUp(self):
-        self.project_path = os.path.join(test_file_dir, 'test_deploy')
+        self.project_path = os.path.join(test_file_dir, 'test_deploy', 'normalized')
         self.network = 'testNet'
+        self.deployment = Deployment(self.project_path, self.network)
 
     def test_generate_contract_address(self):
-        hex_contract_address = Deployment.generate_contract_address(self.project_path)
+        hex_contract_address = self.deployment.get_contract_address('oep4')
         self.assertEqual('3310277e27a0ed749a3525ca2f898ebcd7d6631e', hex_contract_address)
 
     @patch('getpass.getpass')
-    def test_unnormalized_deploy_contract(self, password):
-        project_path = os.path.join(self.project_path, 'unnormalized')
-        tx_hash = Deployment.deploy_smart_contract(project_path, self.network)
-        password.return_value = wallet_password
-        print(tx_hash)
-
-    @patch('getpass.getpass')
     def test_normalized_deploy_contract(self, password):
-        project_path = os.path.join(self.project_path, 'normalized')
-        tx_hash = Deployment.deploy_smart_contract(project_path, self.network)
-        self.assertEqual(0, len(tx_hash))
         password.return_value = wallet_password
-        with open(path.join(project_path, 'contracts', 'build', 'random.avm'), 'w') as f:
+        with open(path.join(self.project_path, 'build', 'contracts', 'random.avm'), 'w') as f:
             f.write(get_random_bytes(100).hex())
-        tx_hash = Deployment.deploy_smart_contract(project_path, self.network, 'random.avm')
+        tx_hash = self.deployment.deploy_smart_contract('random')
         time.sleep(6)
         ontology.rpc.connect_to_test_net()
         deploy_information = ontology.rpc.get_transaction_by_tx_hash(tx_hash).get('Payload')

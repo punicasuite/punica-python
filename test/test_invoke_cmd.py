@@ -13,8 +13,8 @@ class TestInvokeCmd(unittest.TestCase):
         project_path = os.path.join(os.getcwd(), 'test_file', 'test_invoke')
         password.return_value = 'password'
         runner = CliRunner()
-        result = runner.invoke(main, ['-p', project_path, 'invoke'])
-        print(result.output)
+        # result = runner.invoke(main, ['-p', project_path, 'invoke'])
+        # print(result.output)
         # self.assertEqual(0, result.exit_code)
         result = runner.invoke(main, ['-p', project_path, 'invoke', 'balanceOf'])
         print(result.output)

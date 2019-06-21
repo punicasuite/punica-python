@@ -27,7 +27,7 @@ class Func(object):
     @classmethod
     def from_dict(cls, data: dict):
         name = list(data.keys())[0]
-        return cls(name, data[name], data.get('payer', ''), data.get('signers', ''), data.get('preExec', ''))
+        return cls(name, data[name], data.get('payer', ''), data.get('signers', list()), data.get('preExec', False))
 
     @property
     def args_normalized(self):

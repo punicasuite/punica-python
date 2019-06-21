@@ -37,17 +37,41 @@ class Invocation(ContractProjectWithConfig):
             punica_func_list.append(Func.from_dict(params))
         return punica_func_list
 
-    def invoke(self, func: Func):
+    def invoke(self, func: Func, is_pre: bool = False):
         contract_address = self.invoke_config['address']
-        invoke_func = InvokeFunction(func.name, func.args_normalized)
-        echo(func.name)
-        echo('-' * len(func.name))
-        echo('')
-        if func.pre_exec:
-            response = self.__send_tx_pre_exec(contract_address, invoke_func, func.signers)
-            self.__echo_pre_exec_result(response)
+        if is_pre or func.pre_exec:
+            self.__invoke_banner(f'Prepare execute {func.name}')
+            self.__pre_invoke(contract_address, func)
         else:
-            self.__send_tx(contract_address, invoke_func, func.payer, func.signers)
+            self.__invoke_banner(f'Execute {func.name}')
+            self.__commit_invoke(contract_address, func)
+
+    @staticmethod
+    def __invoke_banner(msg: str):
+        echo(msg)
+        echo(f"{'-' * len(msg)}\n")
+
+    def __pre_invoke(self, contract_address, func: Func):
+        invoke_func = InvokeFunction(func.name, func.args_normalized)
+        response = self.__send_tx_pre_exec(contract_address, invoke_func, func.signers)
+        self.__echo_pre_exec_result(response)
+
+    def __commit_invoke(self, contract_address: str, func: Func):
+        invoke_func = InvokeFunction(func.name, func.args_normalized)
+        payer_address = func.payer
+        if len(payer_address) == 0:
+            payer_address = self.invoke_config.get('defaultPayer', '')
+        if len(payer_address) == 0:
+            payer_address = input('Please input payer address: ')
+        tx = self.ontology.neo_vm.make_invoke_transaction(contract_address,
+                                                          invoke_func,
+                                                          payer_address,
+                                                          self.invoke_config.get('gasPrice', 500),
+                                                          self.invoke_config.get('gasLimit', 20000))
+        tx = self.__add_signature(tx, func.signers, payer_address)
+        tx_hash = self._send_raw_tx_with_spinner(tx)
+        self._echo_pending_tx_info(tx_hash)
+        return tx_hash
 
     @staticmethod
     def __echo_pre_exec_result(response: dict):
@@ -62,22 +86,6 @@ class Invocation(ContractProjectWithConfig):
         echo(f"> state:  {response.get('State', '')}")
         echo(f"> result: {response.get('Result', '')}")
         echo(f"> notify: {response.get('Notify', list())}\n")
-
-    def __send_tx(self, contract_address: str, func: InvokeFunction, payer_address: str,
-                  signer_address_list: List[str]):
-        if len(payer_address) == 0:
-            payer_address = self.invoke_config.get('defaultPayer', '')
-        if len(payer_address) == 0:
-            payer_address = input('Please input payer address: ')
-        tx = self.ontology.neo_vm.make_invoke_transaction(contract_address,
-                                                          func,
-                                                          payer_address,
-                                                          self.invoke_config.get('gasPrice', 500),
-                                                          self.invoke_config.get('gasLimit', 20000))
-        tx = self.__add_signature(tx, signer_address_list, payer_address)
-        tx_hash = self._send_raw_tx_with_spinner(tx)
-        self._echo_pending_tx_info(tx_hash)
-        return tx_hash
 
     def __send_tx_pre_exec(self, contract_address: str, func: InvokeFunction, signer_address_list: List[str]):
         tx = self.ontology.neo_vm.make_invoke_transaction(contract_address, func)

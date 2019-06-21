@@ -28,7 +28,7 @@ setup(
         'Click==7.0',
         'requests==2.22.0',
         'GitPython==2.1.11',
-        'ontology-python-sdk==2.0.4',
+        'ontology-python-sdk==2.0.5',
     ],
     license="MIT",
     zip_safe=False,

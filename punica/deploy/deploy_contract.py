@@ -55,6 +55,9 @@ class Deployment(ContractProjectWithConfig):
         except PunicaException:
             echo(crayons.red('No avm file found in this project, please compile first.\n', bold=True))
             return ''
+        except SDKException:
+            echo(crayons.red('Invalid avm file found in this project.\n', bold=True))
+            return ''
         try:
             contract = self.ontology.rpc.get_contract(hex_contract_address)
             self.__echo_contract_info(contract_name, contract, 'This contract exist in current network.')

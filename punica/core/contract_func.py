@@ -35,11 +35,14 @@ class Func(object):
 
     @staticmethod
     def __normalize_args(args: Union[str, list]):
-        if len(args) == 1:
+        if not isinstance(args, list):
             return Func.__normalize_arg(args)
         else:
             for index, arg in enumerate(args):
-                args[index] = Func.__normalize_args(arg)
+                if isinstance(arg, list):
+                    args[index] = Func.__normalize_args(arg)
+                else:
+                    args[index] = Func.__normalize_arg(arg)
         return args
 
     @staticmethod

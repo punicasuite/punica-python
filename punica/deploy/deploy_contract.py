@@ -1,31 +1,25 @@
-import json
 import time
 import crayons
 
-from os import path, listdir
 from click import echo
 from getpass import getpass
+from os import path, listdir
 
 from halo import Halo
 from ontology.exception.exception import SDKException
 
-from punica.core.contract_project import ContractProject
+from punica.core.contract_project import ContractProjectWithConfig
 from punica.exception.punica_exception import PunicaException, PunicaError
 
 
-class Deployment(ContractProject):
+class Deployment(ContractProjectWithConfig):
     def __init__(self, project_dir: str = '', network: str = '', wallet_path: str = '', contract_config_path: str = ''):
         super().__init__(project_dir, network, wallet_path, contract_config_path)
-        self._avm_dir = path.join(project_dir, 'build', 'contracts')
+        self._avm_dir = path.join(self.project_dir, 'build', 'contracts')
 
     @property
     def avm_dir(self):
         return self._avm_dir
-
-    @staticmethod
-    def __echo_staring_msg():
-        echo('\nStarting deployments...')
-        echo('=======================')
 
     def __echo_contract_info(self, file_name: str, contract_deploy_info: dict, ending_msg: str = ''):
         banner = file_name.replace('.avm', '')
@@ -43,7 +37,10 @@ class Deployment(ContractProject):
             echo(crayons.red(f'{ending_msg}\n', bold=True))
 
     def get_all_avm_file(self):
-        files_in_dir = listdir(self.avm_dir)
+        try:
+            files_in_dir = listdir(self.avm_dir)
+        except FileNotFoundError:
+            raise PunicaException(PunicaError.pj_dir_path_error)
         avm_file_list = list()
         for file in files_in_dir:
             if not file.endswith('.avm'):
@@ -52,7 +49,6 @@ class Deployment(ContractProject):
         return avm_file_list
 
     def deploy_smart_contract(self, contract_name: str) -> str:
-        self.__echo_staring_msg()
         self._echo_network_info()
         try:
             hex_contract_address = self.get_contract_address(contract_name)
@@ -68,7 +64,7 @@ class Deployment(ContractProject):
                 raise e
         contract_config = self.contract_config
         try:
-            deploy_config = contract_config['deployConfig']
+            deploy_config = contract_config['deploy']
         except KeyError:
             echo(crayons.red('Please provide deployment config.\n', bold=True))
             return ''

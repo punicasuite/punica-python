@@ -41,4 +41,5 @@ class PunicaError(object):
     permission_error = get_error.__func__(30001, 'permission denied, please check your file path.')
     pj_dir_path_error = get_error.__func__(30002, 'Please check your project dir path.')
 
-    parameter_type_error = get_error.__func__(40000, 'parameter type is wrong.')
+    invalid_contract_func_name = get_error.__func__(40000, 'Invalid contract interface name.')
+    parameter_type_error = get_error.__func__(40001, 'parameter type is wrong.')

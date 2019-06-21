@@ -55,6 +55,9 @@ class Deployment(ContractProjectWithConfig):
         except PunicaException:
             echo(crayons.red('No avm file found in this project, please compile first.\n', bold=True))
             return ''
+        except SDKException:
+            echo(crayons.red('Invalid avm file found in this project.\n', bold=True))
+            return ''
         try:
             contract = self.ontology.rpc.get_contract(hex_contract_address)
             self.__echo_contract_info(contract_name, contract, 'This contract exist in current network.')
@@ -71,10 +74,7 @@ class Deployment(ContractProjectWithConfig):
         payer_address = deploy_config.get('payer', '')
         if len(payer_address) == 0:
             payer_address = input('Please input payer address: ')
-        password = contract_config.get('password', dict()).get(payer_address, '')
-        if len(password) == 0:
-            password = getpass(prompt='Please input payer account password: ')
-        payer = self.get_acct_by_address(payer_address, password)
+        payer = self.get_acct_by_address(payer_address)
         avm_code = self.get_avm_code(contract_name)
         if len(avm_code) == 0:
             return ''
@@ -91,25 +91,8 @@ class Deployment(ContractProjectWithConfig):
             payer_address
         )
         tx.sign_transaction(payer)
-        tx_hash = self.ontology.rpc.send_raw_transaction(tx)
-        echo('Deployment transaction has been send into network...\n')
-
-        spinner = Halo(text="Checking transaction status...\n", spinner='dots')
-        spinner.start()
-        tx_info = dict()
-        for _ in range(5):
-            try:
-                time.sleep(6)
-                tx_info = self.ontology.rpc.get_transaction_by_tx_hash(tx_hash)
-                break
-            except SDKException:
-                continue
-        if len(tx_info) == 0:
-            spinner.fail()
-            echo(f"Using 'punica info status {tx_hash}' to query transaction status.")
-            return ''
-        spinner.succeed()
-        self._echo_tx_info(tx_hash, f'\nDeploy {contract_name}')
+        tx_hash = self._send_raw_tx_with_spinner(tx)
+        self._echo_pending_tx_info(tx_hash, f'\nDeploy {contract_name}')
         return tx_hash
 
     def get_avm_file_path(self, file_name: str):

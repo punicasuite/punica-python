@@ -66,10 +66,11 @@ class Box(object):
             message = repos.get('message', '')
             if 'API rate limit exceeded' in message:
                 raise PunicaException(PunicaError.other_error(message))
-        echo('The easiest way to get started:')
+        echo('\nThe easiest way to get started:\n')
         for index, repo in enumerate(repos):
             name = repo.get('name', '')
-            echo(f'{index}. {name}')
+            echo(f' {index}. {name}')
+        echo('')
 
     def handle_ignorance(self) -> bool:
         unpack_spinner = Halo(text="Unpacking...", spinner='dots')
@@ -195,4 +196,4 @@ class Box(object):
         echo('\nCommands:\n'
              '  Compile contracts: punica compile\n'
              '  Deploy contracts : punica deploy\n'
-             '  Test contracts   : punica test\n')
+             '  Invoke contracts : punica invoke\n')

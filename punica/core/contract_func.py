@@ -27,7 +27,7 @@ class Func(object):
     @classmethod
     def from_dict(cls, data: dict):
         name = list(data.keys())[0]
-        return cls(name, data[name], data.get('payer', ''), data.get('signers', ''), data.get('preExec', ''))
+        return cls(name, data[name], data.get('payer', ''), data.get('signers', list()), data.get('preExec', False))
 
     @property
     def args_normalized(self):
@@ -35,11 +35,14 @@ class Func(object):
 
     @staticmethod
     def __normalize_args(args: Union[str, list]):
-        if len(args) == 1:
+        if not isinstance(args, list):
             return Func.__normalize_arg(args)
         else:
             for index, arg in enumerate(args):
-                args[index] = Func.__normalize_args(arg)
+                if isinstance(arg, list):
+                    args[index] = Func.__normalize_args(arg)
+                else:
+                    args[index] = Func.__normalize_arg(arg)
         return args
 
     @staticmethod

@@ -19,10 +19,10 @@ def compile_cmd(ctx, contract_name: str):
     """
     Compile contract source files
     """
-    py_contract = PyContract(ctx.obj['PROJECT_DIR'])
     echo('\nCompiling your contracts...')
     echo('===========================\n')
     try:
+        py_contract = PyContract(ctx.obj['PROJECT_DIR'])
         if len(contract_name) == 0:
             contract_name_list = py_contract.get_all_contract()
             for contract_name in contract_name_list:

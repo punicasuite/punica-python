@@ -2,15 +2,17 @@ import json
 import time
 
 from os import path
-from click import echo
-from ontology.exception.exception import SDKException
-from ontology.sdk import Ontology
 
-from punica.core.project import Project
+import crayons
+from click import echo
+from ontology.sdk import Ontology
+from ontology.exception.exception import SDKException
+
+from punica.core.projectwithconfig import ProjectWithConfig
 from punica.exception.punica_exception import PunicaException, PunicaError
 
 
-class ContractProject(Project):
+class ContractProjectWithConfig(ProjectWithConfig):
     def __init__(self, project_dir: str = '', network: str = '', wallet_path: str = '', contract_config_path: str = ''):
         super().__init__(project_dir)
         if len(contract_config_path) == 0:

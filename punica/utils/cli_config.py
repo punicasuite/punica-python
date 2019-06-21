@@ -7,7 +7,7 @@ from os import path
 
 from punica.exception.punica_exception import PunicaException, PunicaError
 
-OLD_DEFAULT_CONFIG = 'punica-config.json'
+OLD_DEFAULT_CONFIG = 'punica.json'
 DEFAULT_CONFIG = 'punica.json'
 
 
@@ -61,7 +61,7 @@ def handle_deploy_config(project_dir_path: str, config: str = ''):
         raise PunicaException(PunicaError.config_file_not_found)
     try:
         wallet_file = config['defaultWallet']
-        deploy_information = config['deployConfig']
+        deploy_information = config['deploy']
     except KeyError:
         raise PunicaException(PunicaError.config_file_error)
     if not isinstance(deploy_information, dict):

@@ -9,6 +9,6 @@ from .main import main
 @pass_context
 def solo_chain_cmd(ctx):
     """
-    Ontology Blockchain private net in test mode. please download from https://github.com/punicasuite/solo-chain/releases
+    Personal blockchain for Ontology development.
     """
     webbrowser.open('https://github.com/punicasuite/solo-chain/releases')

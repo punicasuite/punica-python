@@ -3,13 +3,16 @@
 
 import re
 import json
-
-from os import listdir, getcwd, path
-
-from click import echo
 import requests
 
+from os import (
+    path,
+    getcwd,
+    listdir
+)
+
 from halo import Halo
+from click import echo
 from git import RemoteProgress, Repo, GitCommandError
 
 from punica.utils.file_system import (
@@ -100,8 +103,8 @@ class Box(object):
             return ''
         repo_url = Box.generate_repo_url(box_name)
         if requests.get(repo_url).status_code != 200:
-            echo('Please check the box name you input.')
             prepare_spinner.fail()
+            echo('Please check the box name you input.')
             return ''
         prepare_spinner.succeed()
         return repo_url

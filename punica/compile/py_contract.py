@@ -8,9 +8,11 @@ import requests
 from halo import Halo
 from click import echo
 from typing import List
-from os import path, listdir, getcwd
+from os import path, listdir
 
-from punica.exception.punica_exception import PunicaException
+from punica.core.base_project import BaseProject
+from punica.exception.punica_exception import PunicaException, PunicaError
+
 from punica.utils.file_system import (
     ensure_file_exists,
     save_avm_file
@@ -21,19 +23,24 @@ V2_PY_CONTRACT_COMPILE_URL = "https://smartxcompiler.ont.io/api/v2.0/python/comp
 CSHARP_CONTRACT_COMPILE_URL = "https://smartxcompiler.ont.io/api/v1.0/csharp/compile"
 
 
-class PyContract(object):
+class PyContract(BaseProject):
     def __init__(self, project_dir: str = ''):
-        if len(project_dir) == 0:
-            project_dir = getcwd()
-        self.__project_dir = project_dir
+        super().__init__(project_dir)
+        self._contract_dir = path.join(self.project_dir, 'contracts')
         self.v2_prefix = "OntCversion = '2.0.0'"
         self.v1_py_contract_compile_url = "https://smartxcompiler.ont.io/api/v1.0/python/compile"
         self.v2_py_contract_compile_url = "https://smartxcompiler.ont.io/api/v2.0/python/compile"
         self.csharp_contract_compile_url = "https://smartxcompiler.ont.io/api/v1.0/csharp/compile"
 
+    @property
+    def contract_dir(self):
+        return self._contract_dir
+
     def get_all_contract(self) -> List[str]:
-        contract_dir = path.join(self.__project_dir, 'contracts')
-        files_in_dir = listdir(contract_dir)
+        try:
+            files_in_dir = listdir(self.contract_dir)
+        except FileNotFoundError:
+            raise PunicaException(PunicaError.pj_dir_path_error)
         contract_list = list()
         for file in files_in_dir:
             if not file.endswith('.py'):
@@ -42,13 +49,13 @@ class PyContract(object):
         return contract_list
 
     def get_contract_path(self, contract_name: str):
-        contract_path = path.join(self.__project_dir, 'contracts', contract_name)
+        contract_path = path.join(self.project_dir, 'contracts', contract_name)
         if not path.exists(contract_path):
             return ''
         return contract_path
 
     def get_avm_save_path(self, contract_name: str):
-        avm_save_path = path.join(self.__project_dir, 'build', 'contracts', contract_name)
+        avm_save_path = path.join(self.project_dir, 'build', 'contracts', contract_name)
         if not avm_save_path.endswith('.py'):
             return ''
         avm_save_path = avm_save_path.replace('.py', '.avm')

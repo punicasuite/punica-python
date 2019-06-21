@@ -1,5 +1,5 @@
 import click
-from click import argument
+from click import argument, echo
 
 from ontology.exception.exception import SDKException
 
@@ -19,8 +19,10 @@ def deploy_cmd(ctx, contract_name, network, wallet, config):
     """
     Deploy contracts to specified network.
     """
-    deployment = Deployment(ctx.obj['PROJECT_DIR'], network, wallet, config)
+    echo('\nDeploying your contracts...')
+    echo('===========================\n')
     try:
+        deployment = Deployment(ctx.obj['PROJECT_DIR'], network, wallet, config)
         if len(contract_name) == 0:
             avm_file_list = deployment.get_all_avm_file()
             for file in avm_file_list:

@@ -3,6 +3,6 @@ crayons==0.2.0
 Click==7.0
 requests==2.22.0
 GitPython==2.1.11
-ontology-python-sdk==2.0.4
+ontology-python-sdk==2.0.6
 wheel==0.33.4
 twine==1.13.0

@@ -10,10 +10,9 @@ from punica.cli import main
 class TestToolCmd(unittest.TestCase):
     @patch('getpass.getpass')
     def test_invoke_cmd(self, password):
-        project_path = os.path.join(os.getcwd(), 'test_file', 'test_invoke')
         password.return_value = 'password'
         runner = CliRunner()
-        result = runner.invoke(main, ['-p', '/Users/sss/dev/punicaboxdemo/initdemo', 'tool', 'transform'])
+        result = runner.invoke(main, ['tool', 'transform'])
         self.assertEqual(0, result.exit_code)
 
 

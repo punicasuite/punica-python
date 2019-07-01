@@ -6,9 +6,9 @@ from click import echo
 from getpass import getpass
 
 from halo import Halo
+from ontology.sdk import Ontology
 from ontology.account.account import Account
 from ontology.core.transaction import Transaction
-from ontology.sdk import Ontology
 from ontology.exception.exception import SDKException
 
 from punica.core.project_with_config import ProjectWithConfig

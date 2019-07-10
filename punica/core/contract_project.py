@@ -6,6 +6,7 @@ from click import echo
 from getpass import getpass
 
 from halo import Halo
+from crayons import red
 from ontology.sdk import Ontology
 from ontology.account.account import Account
 from ontology.core.transaction import Transaction
@@ -69,15 +70,18 @@ class ContractProjectWithConfig(ProjectWithConfig):
 
     def _send_raw_tx_with_spinner(self, tx: Transaction) -> str:
         spinner = Halo(text="Sending transaction into network...\n", spinner='dots')
+        msg = ''
         for _ in range(5):
             try:
                 time.sleep(1)
                 tx_hash = self.ontology.rpc.send_raw_transaction(tx)
                 spinner.succeed()
                 return tx_hash
-            except SDKException:
+            except SDKException as e:
+                msg = str(e.args[1]).replace('Other Error, ', '')
                 continue
         spinner.fail()
+        echo(red(f'\n{msg}\n', bold=True))
         return ''
 
     def _send_raw_tx_pre_exec_with_spinner(self, tx: Transaction) -> dict:

@@ -15,4 +15,4 @@ def echo_cli_exception(e: Union[PunicaException, SDKException]):
             words[0] = 'Payer'
             words[1] = Data.to_b58_address(Data.to_reserve_hex_str(words[1]))
             msg = ' '.join(words)
-    echo(red(f'{msg}\n', bold=True))
+    echo(red(f'\n{msg}\n', bold=True))

@@ -15,7 +15,7 @@ class TestUtils(unittest.TestCase):
         network = 'privateNet'
         wallet_file_name = 'wallet.json'
         password.return_value = 'password'
-        project_path = os.path.join(os.getcwd(), 'test_file', 'test_invoke')
+        project_path = os.path.join(os.getcwd(), 'data', 'test_invoke')
         Invocation.invoke_all_function_in_list(wallet_file_name, project_path, network, 'Name,BalanceOf')
 
 

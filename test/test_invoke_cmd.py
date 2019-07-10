@@ -9,7 +9,7 @@ from punica.cli import main
 
 class TestInvokeCmd(unittest.TestCase):
     def setUp(self):
-        self.project_path = os.path.join(os.getcwd(), 'test_file', 'test_invoke')
+        self.project_path = os.path.join(os.getcwd(), 'data', 'test_invoke')
 
     @patch('getpass.getpass')
     def test_invoke_cmd(self, password):

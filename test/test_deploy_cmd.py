@@ -18,7 +18,7 @@ class TestDeployCmd(unittest.TestCase):
 
     @patch('getpass.getpass')
     def test_deploy_cmd(self, password):
-        project_path = os.path.join(os.path.dirname(__file__), 'test_file', 'test_deploy')
+        project_path = os.path.join(os.path.dirname(__file__), 'data', 'test_deploy')
         password.return_value = 'password'
         try:
             os.mkdir(project_path)

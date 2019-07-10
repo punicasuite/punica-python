@@ -16,13 +16,13 @@ from punica.deploy.deploy_contract import Deployment
 
 class TestDeploy(unittest.TestCase):
     def setUp(self):
-        self.project_path = os.path.join(test_file_dir, 'test_deploy', 'normalized')
+        self.project_path = os.path.join(test_file_dir, 'deploy', 'normalized')
         self.network = 'testNet'
         self.deployment = Deployment(self.project_path, self.network)
 
     def test_generate_contract_address(self):
         hex_contract_address = self.deployment.get_contract_address('oep4')
-        self.assertEqual('3310277e27a0ed749a3525ca2f898ebcd7d6631e', hex_contract_address)
+        self.assertEqual('cb9f3b7c6fb1cf2c13a40637c189bdd066a272b4', hex_contract_address)
 
     @patch('getpass.getpass')
     def test_normalized_deploy_contract(self, password):

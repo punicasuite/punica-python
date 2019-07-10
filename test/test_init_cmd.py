@@ -16,7 +16,7 @@ class TestInit(unittest.TestCase):
         self.runner = CliRunner()
 
     def test_init_empty_project(self):
-        project_path = os.path.join(os.path.dirname(__file__), 'test_file', 'test_init_empty')
+        project_path = os.path.join(os.path.dirname(__file__), 'data', 'test_init_empty')
         try:
             result = self.runner.invoke(main, ['--project', project_path, 'init'])
             info_list = result.output.split('\n')

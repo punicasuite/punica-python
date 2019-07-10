@@ -10,7 +10,7 @@ from punica.cli import main
 class TestAccountCmd(unittest.TestCase):
     @patch('getpass.getpass')
     def test_account_cmd(self, password):
-        project_path = os.path.join(os.getcwd(), 'test_file', 'test_account')
+        project_path = os.path.join(os.getcwd(), 'data', 'test_account')
         password.return_value = 'password'
         runner = CliRunner()
         result = runner.invoke(main, ['-p', project_path, 'wallet'])

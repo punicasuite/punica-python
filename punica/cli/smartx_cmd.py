@@ -9,6 +9,6 @@ from .main import main
 @pass_context
 def smartx_cmd(ctx):
     """
-    Ontology smart contract IDE,SmartX (http://smartx.ont.io/)
+    One-stop IDE for smart contract.
     """
     webbrowser.open("https://smartx.ont.io/")

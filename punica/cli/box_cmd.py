@@ -18,7 +18,7 @@ from punica.exception.punica_exception import PunicaException
 @pass_context
 def unbox_cmd(ctx, box_name):
     """
-    Download a Punica Box, a pre-built Punica project
+    Download a Punica Box, a pre-built Punica project.
     """
     box = Box(ctx.obj['PROJECT_DIR'])
     try:

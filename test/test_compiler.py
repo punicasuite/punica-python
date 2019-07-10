@@ -5,23 +5,16 @@ import os
 import unittest
 
 from punica.compile import py_contract
+from punica.compile.py_contract import PyContract
 
 
 class TestCompiler(unittest.TestCase):
+    def setUp(self):
+        pj_path = os.path.join(os.getcwd(), 'test_file', 'test_compile')
+        self.py_contract = PyContract(pj_path)
 
     def test_compile_contract_remote(self):
-        contract_path = os.path.join(os.getcwd(), 'test_file', 'test_compile_remote', 'oep4.py')
-        py_contract.compile_contract(contract_path)
-        avm_save_path = os.path.join(os.getcwd(), 'test_file', 'test_compile_remote', 'build', 'oep4.avm')
-        abi_save_path = os.path.join(os.getcwd(), 'test_file', 'test_compile_remote', 'build', 'oep4_abi.json')
-        with open(avm_save_path, 'r') as f:
-            avm_save = f.read()
-            self.assertIsNotNone(avm_save)
-        with open(abi_save_path, 'r') as f3:
-            abi_save = f3.read()
-            self.assertIsNotNone(abi_save)
-        os.remove(avm_save_path)
-        os.remove(abi_save_path)
+        self.py_contract.compile_contract('oep4.py')
 
     def test_compile_contract(self):
         contract_path = os.path.join(os.getcwd(), 'test_file', 'test_compile', 'contracts', 'oep4.py')

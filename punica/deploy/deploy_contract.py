@@ -21,7 +21,8 @@ class Deployment(ContractProjectWithConfig):
     def avm_dir(self):
         return self._avm_dir
 
-    def __echo_contract_info(self, file_name: str, contract_deploy_info: dict, ending_msg: str = ''):
+    def __echo_contract_info(self, file_name: str, contract_deploy_info: dict, ending_msg: str = '',
+                             ending_msg_is_red: bool = True):
         banner = file_name.replace('.avm', '')
         echo(banner)
         echo('-' * len(banner))
@@ -34,7 +35,10 @@ class Deployment(ContractProjectWithConfig):
         echo(f"> description:      {contract_deploy_info.get('Description', '')}")
         if len(ending_msg) != 0:
             echo(''.join(['-' * len(ending_msg)]))
-            echo(crayons.red(f'{ending_msg}\n', bold=True))
+            if ending_msg_is_red:
+                echo(crayons.red(f'{ending_msg}\n', bold=True))
+                return
+            echo(f'{ending_msg}\n')
 
     def get_all_avm_file(self):
         try:
@@ -93,7 +97,10 @@ class Deployment(ContractProjectWithConfig):
         )
         tx.sign_transaction(payer)
         tx_hash = self._send_raw_tx_with_spinner(tx)
-        self._echo_pending_tx_info(tx_hash, f'\nDeploy {contract_name}')
+        if self._echo_pending_tx_info(tx_hash, f'\nDeploy {contract_name}'):
+            contract = self.ontology.rpc.get_contract(hex_contract_address)
+            self.__echo_contract_info(contract_name, contract, 'You can invoke it by contract address.',
+                                      ending_msg_is_red=False)
         return tx_hash
 
     def get_avm_file_path(self, file_name: str):

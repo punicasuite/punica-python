@@ -1,7 +1,7 @@
 from typing import List
 
-from click import echo
 from halo import Halo
+from click import echo
 from ontology.contract.neo.invoke_function import InvokeFunction
 from ontology.core.invoke_transaction import InvokeTransaction
 
@@ -70,6 +70,8 @@ class Invocation(ContractProjectWithConfig):
                                                           self.invoke_config.get('gasLimit', 20000))
         tx = self.__add_signature(tx, func.signers, payer_address)
         tx_hash = self._send_raw_tx_with_spinner(tx)
+        if len(tx_hash) != 64:
+            return ''
         self._echo_pending_tx_info(tx_hash)
         return tx_hash
 

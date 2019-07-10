@@ -4,11 +4,11 @@
         "ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6": "password"
     },
     "deploy": {
-        "name": "oep4",
+        "name": "Punica",
         "version": "v1.0.0",
         "author": "NashMiao",
         "email": "wdx7266@vip.qq.com",
-        "desc": "oep4",
+        "desc": "A contract for test Punica deploy",
         "needStorage": true,
         "payer": "ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
         "gasPrice": 500,

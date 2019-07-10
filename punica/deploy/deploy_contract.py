@@ -63,7 +63,8 @@ class Deployment(ContractProjectWithConfig):
             self.__echo_contract_info(contract_name, contract, 'This contract exist in current network.')
             return ''
         except SDKException as e:
-            if 'unknow contract' not in e.args[1] and 'unknown contract' not in e.args[1]:
+            msg = str(e.args[1]).lower()
+            if 'unknow contract' not in msg and 'unknown contract' not in msg:
                 raise e
         contract_config = self.contract_config
         try:

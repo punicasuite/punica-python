@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 """
 Copyright (C) 2018-2019 The ontology Authors
 This file is part of The ontology library.
@@ -24,5 +21,5 @@ import os
 from ontology.sdk import Ontology
 
 wallet_password = os.environ['PUNICA_CLI_TEST_PASSWORD']
-test_file_dir = os.path.join(os.getcwd(), 'test_file')
+test_file_dir = os.path.join(os.getcwd(), 'data')
 ontology = Ontology()

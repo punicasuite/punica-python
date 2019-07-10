@@ -1,0 +1,17 @@
+{
+    "defaultWallet": "wallet.json",
+    "password": {
+        "ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6": "password"
+    },
+    "deploy": {
+        "name": "oep4",
+        "version": "v1.0.0",
+        "author": "NashMiao",
+        "email": "wdx7266@vip.qq.com",
+        "desc": "oep4",
+        "needStorage": true,
+        "payer": "ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
+        "gasPrice": 500,
+        "gasLimit": 21000000
+    }
+}

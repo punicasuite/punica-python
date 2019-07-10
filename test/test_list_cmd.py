@@ -10,7 +10,7 @@ from punica.cli import main
 class TestListCmd(unittest.TestCase):
     @patch('getpass.getpass')
     def test_list_cmd(self, password):
-        project_path = os.path.join(os.getcwd(), 'test_file', 'test_list')
+        project_path = os.path.join(os.getcwd(), 'data', 'test_list')
         password.return_value = 'password'
         runner = CliRunner()
         result = runner.invoke(main, ['-p', project_path, 'list'])

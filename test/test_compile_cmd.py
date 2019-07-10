@@ -12,7 +12,7 @@ from punica.utils.file_system import ensure_remove_dir_if_exists
 
 class TestCompileCmd(unittest.TestCase):
     def test_compile(self):
-        project_path = os.path.join(os.path.dirname(__file__), 'test_file', 'test_compile_init_box')
+        project_path = os.path.join(os.path.dirname(__file__), 'data', 'test_compile_init_box')
         runner = CliRunner()
         try:
             os.mkdir(project_path)

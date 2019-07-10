@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 import json
 import urllib3
 import requests
@@ -18,19 +15,15 @@ from punica.utils.file_system import (
     save_avm_file
 )
 
-V1_PY_CONTRACT_COMPILE_URL = "https://smartxcompiler.ont.io/api/v1.0/python/compile"
-V2_PY_CONTRACT_COMPILE_URL = "https://smartxcompiler.ont.io/api/v2.0/python/compile"
-CSHARP_CONTRACT_COMPILE_URL = "https://smartxcompiler.ont.io/api/v1.0/csharp/compile"
-
 
 class PyContract(BaseProject):
     def __init__(self, project_dir: str = ''):
         super().__init__(project_dir)
         self._contract_dir = path.join(self.project_dir, 'contracts')
         self.v2_prefix = "OntCversion = '2.0.0'"
-        self.v1_py_contract_compile_url = "https://smartxcompiler.ont.io/api/v1.0/python/compile"
-        self.v2_py_contract_compile_url = "https://smartxcompiler.ont.io/api/v2.0/python/compile"
-        self.csharp_contract_compile_url = "https://smartxcompiler.ont.io/api/v1.0/csharp/compile"
+        self.v1_py_contract_compile_url = "https://smartxcompiler1.ont.io/api/v1.0/python/compile"
+        self.v2_py_contract_compile_url = "https://smartxcompiler1.ont.io/api/v2.0/python/compile"
+        self.csharp_contract_compile_url = "https://smartxcompiler1.ont.io/api/v1.0/csharp/compile"
 
     @property
     def contract_dir(self):
@@ -78,16 +71,25 @@ class PyContract(BaseProject):
         prepare_spinner.succeed()
         return contract_path, avm_save_path
 
-    def compile_contract(self, contract_name: str):
+    def compile_contract(self, contract_name: str, is_v1: bool = False):
         title = contract_name.replace('.py', '')
         echo(title)
         echo('-' * len(title))
         contract_path, avm_save_path = self.prepare_to_compile(contract_name)
         compile_spinner = Halo(text=f"Compiling {contract_name}", spinner='bouncingBar')
         compile_spinner.start()
-        avm_code = self.compile_py_contract_in_remote(contract_path)
+        try:
+            avm_code = self.compile_py_contract_in_remote(contract_path, is_v1)
+        except requests.exceptions.RequestException as e:
+            compile_spinner.fail()
+            while not isinstance(e, str):
+                e = e.args[0]
+            e = e.replace(': ', ':\n')
+            echo(f'\n{e}\n')
+            return False
         if len(avm_code) == 0:
             compile_spinner.fail()
+            echo("An error occur in remote server.")
             return False
         compile_spinner.succeed()
         save_spinner = Halo(text=f'Saving avm file...')
@@ -104,14 +106,13 @@ class PyContract(BaseProject):
         echo(f'{end_msg}\n')
         return True
 
-    def compile_py_contract_in_remote(self, contract_path: str):
+    def compile_py_contract_in_remote(self, contract_path: str, is_v1: bool = False):
         payload = self.generate_compile_payload(contract_path)
-        url = self.get_compiler_url(contract_path)
+        url = self.get_compiler_url(contract_path, is_v1)
         urllib3.disable_warnings()
         res = requests.post(url, json=payload, headers={'Content-type': 'application/json'}, timeout=10, verify=False)
         result = json.loads(res.content)
         if result["errcode"] != 0:
-            echo("An error occur in remote server.")
             return ''
         return result.get('avm', '')
 

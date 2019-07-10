@@ -9,6 +9,6 @@ from .main import main
 @pass_context
 def solo_chain_cmd(ctx):
     """
-    Personal blockchain for Ontology development.
+    One-click personal blockchain for Ontology development.
     """
     webbrowser.open('https://github.com/punicasuite/solo-chain/releases')

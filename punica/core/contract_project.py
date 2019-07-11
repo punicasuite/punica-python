@@ -87,16 +87,19 @@ class ContractProjectWithConfig(ProjectWithConfig):
     def _send_raw_tx_pre_exec_with_spinner(self, tx: Transaction) -> dict:
         spinner = Halo(text="Sending transaction into network...\n", spinner='dots')
         res = dict()
+        msg = ''
         for _ in range(5):
             try:
                 time.sleep(1)
                 res = self.ontology.rpc.send_raw_transaction_pre_exec(tx)
                 spinner.succeed()
                 break
-            except SDKException:
+            except SDKException as e:
+                msg = str(e.args[1]).replace('Other Error, ', '')
                 continue
         if len(res) == 0:
             spinner.fail()
+            echo(red(f'\n{msg}\n', bold=True))
         return res
 
     def _echo_pending_tx_info(self, tx_hash: str, title: str = '') -> bool:

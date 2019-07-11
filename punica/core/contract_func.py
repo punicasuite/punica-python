@@ -6,7 +6,7 @@ from ontology.exception.exception import SDKException
 
 class Func(object):
     def __init__(self, name: str = '', args: Union[str, list] = '', payer: str = '', signers: List[str] = None,
-                 pre_exec: bool = False):
+                 pre_exec: bool = False, return_type: str = '', event: List[str] = None):
         self.name = name
         self.args = args
         self.payer = payer
@@ -14,6 +14,10 @@ class Func(object):
             signers = list()
         self.signers = signers
         self.pre_exec = pre_exec
+        self.return_type = return_type
+        if event is None:
+            event = list()
+        self.event = event
 
     def __iter__(self):
         data = dict()
@@ -21,13 +25,16 @@ class Func(object):
         data['payer'] = self.payer
         data['signers'] = self.signers
         data['preExec'] = self.pre_exec
+        data['return'] = self.return_type
+        data['event'] = self.event
         for key, value in data.items():
             yield (key, value)
 
     @classmethod
     def from_dict(cls, data: dict):
         name = list(data.keys())[0]
-        return cls(name, data[name], data.get('payer', ''), data.get('signers', list()), data.get('preExec', False))
+        return cls(name, data[name], data.get('payer', ''), data.get('signers', list()), data.get('preExec', False),
+                   data.get('return', ''), data.get('event', list()))
 
     @property
     def args_normalized(self):

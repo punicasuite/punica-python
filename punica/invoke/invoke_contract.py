@@ -1,13 +1,18 @@
+import json
+
 from typing import List
 
 from halo import Halo
 from click import echo
 from ontology.contract.neo.invoke_function import InvokeFunction
 from ontology.core.invoke_transaction import InvokeTransaction
+from ontology.exception.exception import SDKException
+from ontology.utils.contract import Data, Event
 
 from punica.core.contract_func import Func
 from punica.core.contract_project import ContractProjectWithConfig
 from punica.exception.punica_exception import PunicaException, PunicaError
+from punica.info.chain_info import Info
 
 
 class Invocation(ContractProjectWithConfig):
@@ -54,7 +59,25 @@ class Invocation(ContractProjectWithConfig):
     def __pre_invoke(self, contract_address, func: Func):
         invoke_func = InvokeFunction(func.name, func.args_normalized)
         response = self.__send_tx_pre_exec(contract_address, invoke_func, func.signers)
-        self.__echo_pre_exec_result(response)
+        self.__echo_pre_exec_result(response, func.return_type)
+
+    @staticmethod
+    def decode_raw_data(data: str, d_type: str):
+        if d_type.lower() == 'hex':
+            return Data.to_hex_str(data)
+        if d_type.lower() == 'int':
+            return Data.to_int(data)
+        if d_type.lower() == 'bool':
+            return Data.to_bool(data)
+        if d_type.lower() == 'utf8':
+            return Data.to_utf8_str(data)
+        if d_type.lower() == 'dict':
+            return Data.to_dict(data)
+        if d_type.lower() == 'bytes':
+            return Data.to_bytes(data)
+        if d_type.lower() == 'address':
+            return Data.to_b58_address(data)
+        return data
 
     def __commit_invoke(self, contract_address: str, func: Func):
         invoke_func = InvokeFunction(func.name, func.args_normalized)
@@ -72,17 +95,36 @@ class Invocation(ContractProjectWithConfig):
         tx_hash = self._send_raw_tx_with_spinner(tx)
         if len(tx_hash) != 64:
             return ''
-        self._echo_pending_tx_info(tx_hash)
+        if self._echo_pending_tx_info(tx_hash):
+            event = self.ontology.rpc.get_contract_event_by_tx_hash(tx_hash)
+            notify = Event.get_notify_by_contract_address(event, contract_address)
+            if len(notify) != 0:
+                notify['States'] = self.parse_states(notify.get('States', dict()), func.event)
+                echo('> Contract emit event:\n')
+                echo('  ' + json.dumps(notify, indent=2).replace('\n', '\n  ') + '\n')
+        echo(f"Using 'punica info tx {tx_hash}' to query all events in transaction.\n")
         return tx_hash
 
-    @staticmethod
-    def __echo_pre_exec_result(response: dict):
+    def parse_states(self, states: List[str], states_type: List[str]):
+        for i, s in enumerate(states):
+            try:
+                states[i] = self.decode_raw_data(s, states_type[i])
+            except IndexError:
+                pass
+        return states
+
+    def __echo_pre_exec_result(self, response: dict, return_type: str = ''):
         spinner = Halo(text="Parsing result...\n", spinner='dots')
         spinner.start()
         if not isinstance(response, dict):
             spinner.fail()
             return
-        spinner.succeed()
+        try:
+            response['Result'] = self.decode_raw_data(response.get('Result', ''), return_type)
+            spinner.succeed()
+        except SDKException as e:
+            spinner.fail()
+            echo(f'\n{e.args[1]}\n')
         echo("")
         echo(f"> gas:    {response.get('Gas', '')}")
         echo(f"> state:  {response.get('State', '')}")

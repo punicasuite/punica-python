@@ -5,6 +5,7 @@ import requests
 from halo import Halo
 from click import echo
 from typing import List
+from crayons import red
 from os import path, listdir
 
 from punica.core.base_project import BaseProject
@@ -79,7 +80,7 @@ class PyContract(BaseProject):
         compile_spinner = Halo(text=f"Compiling {contract_name}", spinner='bouncingBar')
         compile_spinner.start()
         try:
-            avm_code = self.compile_py_contract_in_remote(contract_path, is_v1)
+            avm_code, err_info = self.compile_py_contract_in_remote(contract_path, is_v1)
         except requests.exceptions.RequestException as e:
             compile_spinner.fail()
             while not isinstance(e, str):
@@ -89,7 +90,9 @@ class PyContract(BaseProject):
             return False
         if len(avm_code) == 0:
             compile_spinner.fail()
-            echo("An error occur in remote server.")
+            if len(err_info) == 0:
+                err_info = 'An error occur in remote server.'
+            echo(red(f'\n{err_info}\n', bold=True))
             return False
         compile_spinner.succeed()
         save_spinner = Halo(text=f'Saving avm file...')
@@ -106,15 +109,15 @@ class PyContract(BaseProject):
         echo(f'{end_msg}\n')
         return True
 
-    def compile_py_contract_in_remote(self, contract_path: str, is_v1: bool = False):
+    def compile_py_contract_in_remote(self, contract_path: str, is_v1: bool = False) -> (str, str):
         payload = self.generate_compile_payload(contract_path)
         url = self.get_compiler_url(contract_path, is_v1)
         urllib3.disable_warnings()
         res = requests.post(url, json=payload, headers={'Content-type': 'application/json'}, timeout=10, verify=False)
         result = json.loads(res.content)
         if result["errcode"] != 0:
-            return ''
-        return result.get('avm', '')
+            return '', result.get('errdetail', '')
+        return result.get('avm', ''), ''
 
     @staticmethod
     def generate_compile_payload(contract_path: str):

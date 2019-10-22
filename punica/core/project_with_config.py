@@ -10,7 +10,7 @@ class ProjectWithConfig(BaseProject):
     def __init__(self, project_dir: str = ''):
         super().__init__(project_dir)
         pj_config_file_path = path.join(self.project_dir, 'punica.json')
-        old_pj_config_file_path = path.join(self.project_dir, 'punica.json')
+        old_pj_config_file_path = path.join(self.project_dir, 'punica-config.json')
         if path.exists(pj_config_file_path):
             self._pj_config_file_path = pj_config_file_path
         elif path.exists(old_pj_config_file_path):

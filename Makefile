@@ -1,25 +1,31 @@
-.PHONY: build
+SHELL := /bin/bash
+
+venv:
+	rm -rf ./venv; \
+	python3 -m venv venv; \
+	. venv/bin/activate
 
 install:
-	pip install --user pipenv
-	pipenv install
-	pipenv shell
+	. venv/bin/activate; \
+	pip3 install -r requirements.txt
 
 install-dev:
-	pip install --user pipenv
-	pipenv install --dev --pypi-mirror https://mirrors.aliyun.com/pypi/simple
-	pipenv shell
+	. venv/bin/activate; \
+	pip3 install -r requirements-dev.txt
 
-install-mirror:
-	pip install --user pipenv
-	pipenv install --pypi-mirror https://mirrors.aliyun.com/pypi/simple
-	pipenv shell
+install-dev-mirror:
+	. venv/bin/activate; \
+	pip3 install -r requirements-dev.txt -i  https://mirrors.aliyun.com/pypi/simple
+
+list:
+	. venv/bin/activate; \
+	pip3 list --format=columns
 
 test:
-	python -m unittest discover
+	python3 -m unittest discover
 
 build:
-	python setup.py bdist_wheel --python-tag py3
+	python3 setup.py bdist_wheel --python-tag py3
 
 publish:
 	twine upload dist/* -u NashMiao -p %PYPI_PASSWORD

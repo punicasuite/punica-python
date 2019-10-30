@@ -1,0 +1,17 @@
+{
+  "networks": {
+    "test": {
+      "host": "http://polaris1.ont.io",
+      "port": 20336
+    },
+    "main": {
+      "host": "http://dappnode1.ont.io",
+      "port": 20336
+    },
+    "local": {
+      "host": "http://127.0.0.1",
+      "port": 20336
+    }
+  },
+  "defaultNet":"test"
+}

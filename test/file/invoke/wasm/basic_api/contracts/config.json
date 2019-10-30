@@ -1,0 +1,38 @@
+{
+  "defaultWallet": "wallet.json",
+  "password": {
+    "ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6": "password",
+    "AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve": "password"
+  },
+  "invoke": {
+    "address": "bf8ee176c360f7a77b9c45b6faab213bc50eaf5d",
+    "defaultPayer": "ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
+    "defaultSigner": "ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
+    "sleep": 6,
+    "gasPrice": 500,
+    "gasLimit": 21000000,
+    "functions": [
+      {
+        "add": [
+          -1,
+          5
+        ],
+        "preExec": true,
+        "return": "int"
+      },
+      {
+        "storage_write": [
+          "punica_cli_key",
+          "punica_cli_value"
+        ]
+      },
+      {
+        "storage_read": [
+          "punica_cli_key"
+        ],
+        "preExec": true,
+        "return": "str"
+      }
+    ]
+  }
+}

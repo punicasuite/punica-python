@@ -1,7 +1,7 @@
-import os
 import unittest
-from unittest.mock import patch
 
+from os import path, getcwd
+from unittest.mock import patch
 from click.testing import CliRunner
 
 from punica.cli import main
@@ -9,16 +9,38 @@ from punica.cli import main
 
 class TestInvokeCmd(unittest.TestCase):
     def setUp(self):
-        self.project_path = os.path.join(os.getcwd(), 'file', 'test_invoke')
+        self.project_path = path.join(getcwd(), 'file', 'invoke')
+        self.runner = CliRunner()
 
-    @patch('getpass.getpass')
-    def test_invoke_cmd(self, password):
-        password.return_value = 'password'
-        runner = CliRunner()
-        result = runner.invoke(main, ['-p', self.project_path, 'invoke'])
+    def test_invoke_neo_contract_cmd(self):
+        self.project_path = path.join(self.project_path, 'neo', 'oep4')
+        result = self.runner.invoke(main, ['-p', self.project_path, 'invoke'])
         print(result.output)
         self.assertEqual(0, result.exit_code)
-        result = runner.invoke(main, ['-p', self.project_path, 'invoke', 'balanceOf'])
+        info_list = result.output.split('\n')
+        self.assertIn('Invoking your contract...', info_list)
+        self.assertIn('Execute NeoVm contract method init', info_list)
+        self.assertIn('> Saving transaction to chain.', info_list)
+
+    def test_invoke_neo_contract_balance_of_cmd(self):
+        self.project_path = path.join(self.project_path, 'neo', 'oep4')
+        result = self.runner.invoke(main, ['-p', self.project_path, 'invoke', 'balanceOf'])
+        self.assertEqual(0, result.exit_code)
+        info_list = result.output.split('\n')
+        self.assertIn('Invoking your contract...', info_list)
+        self.assertIn('Prepare execute NeoVm contract method balanceOf', info_list)
+
+    def test_invoke_neo_contract_transfer_multi_cmd(self):
+        self.project_path = path.join(self.project_path, 'neo', 'oep4')
+        result = self.runner.invoke(main, ['-p', self.project_path, 'invoke', 'transferMulti'])
+        self.assertEqual(0, result.exit_code)
+        info_list = result.output.split('\n')
+        self.assertIn('Invoking your contract...', info_list)
+        self.assertIn('Execute NeoVm contract method transferMulti', info_list)
+
+    def test_invoke_wasm_contract(self):
+        self.project_path = path.join(self.project_path, 'wasm', 'basic_api')
+        result = self.runner.invoke(main, ['-p', self.project_path, 'invoke', '--wasm'])
         print(result.output)
 
 

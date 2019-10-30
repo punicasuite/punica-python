@@ -22,22 +22,28 @@ from punica.exception.punica_exception import PunicaException
 @option('--config', nargs=1, type=str, default='', help='Specify which config file will be used.')
 @option('--sleep', nargs=1, type=int, default=0, help='Time to sleep between each invocation.')
 @option('--pre', is_flag=True, help='Prepare execute transaction, without commit to ledger.')
+@option('--wasm', is_flag=True, help='Invoke WebAssembly contract.')
 @pass_context
-def invoke_cmd(ctx, func_name, network, wallet_path, config, sleep, pre):
+def invoke_cmd(ctx, func_name, network, wallet_path, config, sleep, pre, wasm):
     """
     Invoke the contract methods in contract config file.
     """
-    echo('\nInvoking your build...')
-    echo('==========================\n')
     try:
-        invocation = Invocation(ctx.obj['PROJECT_DIR'], network, wallet_path, config)
-        punica_func_list = invocation.get_func_list()
+        invocation = Invocation(ctx.obj['PROJECT_DIR'], network, wallet_path, config, wasm)
+        invocation.echo_invoke_banner()
         if len(func_name) == 0:
+            punica_func_list = invocation.get_func_list()
             for func in punica_func_list:
-                invocation.invoke(func, pre)
-                time.sleep(sleep)
+                if invocation.is_wasm:
+                    invocation.invoke_wasm_contract(func, pre)
+                else:
+                    invocation.invoke_neo_contract(func, pre)
+            time.sleep(sleep)
         else:
             func = invocation.get_func_by_name(func_name)
-            invocation.invoke(func, pre)
+            if invocation.is_wasm:
+                invocation.invoke_wasm_contract(func, pre)
+            else:
+                invocation.invoke_neo_contract(func, pre)
     except (PunicaException, SDKException) as e:
         echo_cli_exception(e)

@@ -10,7 +10,7 @@ from punica.cli import main
 class TestAssetCmd(unittest.TestCase):
     @patch('getpass.getpass')
     def test_invoke_cmd(self, password):
-        project_path = os.path.join(os.getcwd(), 'file', 'test_invoke')
+        project_path = os.path.join(os.getcwd(), 'file', 'invoke')
         password.return_value = 'password'
         runner = CliRunner()
         result = runner.invoke(main, ['-p', '/Users/sss/dev/localgit/test', 'asset', 'transfer',

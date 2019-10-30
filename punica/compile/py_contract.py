@@ -20,7 +20,7 @@ from punica.utils.file_system import (
 class PyContract(BaseProject):
     def __init__(self, project_dir: str = ''):
         super().__init__(project_dir)
-        self._contract_dir = path.join(self.project_dir, 'contracts')
+        self._contract_dir = path.join(self.project_dir, 'build')
         self.v2_prefix = "OntCversion = '2.0.0'"
         self.v1_py_contract_compile_url = "https://smartxcompiler1.ont.io/api/v1.0/python/compile"
         self.v2_py_contract_compile_url = "https://smartxcompiler1.ont.io/api/v2.0/python/compile"
@@ -43,13 +43,13 @@ class PyContract(BaseProject):
         return contract_list
 
     def get_contract_path(self, contract_name: str):
-        contract_path = path.join(self.project_dir, 'contracts', contract_name)
+        contract_path = path.join(self.project_dir, 'build', contract_name)
         if not path.exists(contract_path):
             return ''
         return contract_path
 
     def get_avm_save_path(self, contract_name: str):
-        avm_save_path = path.join(self.project_dir, 'build', 'contracts', contract_name)
+        avm_save_path = path.join(self.project_dir, 'build', 'build', contract_name)
         if not avm_save_path.endswith('.py'):
             return ''
         avm_save_path = avm_save_path.replace('.py', '.avm')

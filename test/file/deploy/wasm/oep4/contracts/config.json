@@ -1,0 +1,17 @@
+{
+  "defaultWallet": "wallet.json",
+  "password": {
+    "AKeDu9QW6hfAhwpvCwNNwkEQt1LkUQpBpW": "password",
+    "AHBB3LQNpqXjCLathy7vTNgmQ1cGSj8S9Z": "password"
+  },
+  "deploy": {
+    "name": "WSM-DXToken",
+    "version": "v1.0.0",
+    "author": "NashMiao",
+    "email": "wdx7266@vip.qq.com",
+    "desc": "https://github.com/punica-box/interplanetary-album-box",
+    "payer": "AKeDu9QW6hfAhwpvCwNNwkEQt1LkUQpBpW",
+    "gasPrice": 500,
+    "gasLimit": 30000000
+  }
+}

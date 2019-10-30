@@ -1,8 +1,6 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 import os
 import unittest
+from unittest import mock
 
 from click.testing import CliRunner
 
@@ -12,7 +10,7 @@ from punica.utils.file_system import ensure_remove_dir_if_exists
 
 class TestCompileCmd(unittest.TestCase):
     def test_compile(self):
-        project_path = os.path.join(os.path.dirname(__file__), 'data', 'test_compile_init_box')
+        project_path = os.path.join(os.path.dirname(__file__), 'file', 'test_compile_init_box')
         runner = CliRunner()
         try:
             os.mkdir(project_path)

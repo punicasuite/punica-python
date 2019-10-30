@@ -34,6 +34,7 @@ class PunicaError(object):
     abi_file_not_found = get_error.__func__(10010, 'abi file not found')
     abi_file_empty = get_error.__func__(10011, 'abi file is empty')
     abi_file_error = get_error.__func__(10012, 'error exist in abi file')
+    wasm_file_not_found = get_error.__func__(10013, 'wasm file not fount')
 
     network_error = get_error.__func__(20000, 'please make sure you network state, and the repository exists.')
 

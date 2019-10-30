@@ -194,6 +194,6 @@ class Box(object):
     @staticmethod
     def echo_box_help_cmd():
         echo('\nCommands:\n'
-             '  Compile contracts: punica compile\n'
-             '  Deploy contracts : punica deploy\n'
-             '  Invoke contracts : punica invoke\n')
+             '  Compile build: punica compile\n'
+             '  Deploy build : punica deploy\n'
+             '  Invoke build : punica invoke\n')

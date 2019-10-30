@@ -17,20 +17,20 @@ from punica.exception.punica_exception import PunicaException
 
 @main.command('invoke')
 @argument('func_name', default='')
-@option('--network', nargs=1, type=str, default='', help='Specify which network the contracts will be deployed.')
-@option('--wallet', nargs=1, type=str, default='', help='Specify which wallet file will be used.')
+@option('--network', nargs=1, type=str, default='', help='Specify which network the build will be deployed.')
+@option('--wallet', '-w', 'wallet_path', nargs=1, type=str, default='', help='Specify which wallet file will be used.')
 @option('--config', nargs=1, type=str, default='', help='Specify which config file will be used.')
 @option('--sleep', nargs=1, type=int, default=0, help='Time to sleep between each invocation.')
 @option('--pre', is_flag=True, help='Prepare execute transaction, without commit to ledger.')
 @pass_context
-def invoke_cmd(ctx, func_name, network, wallet, config, sleep, pre):
+def invoke_cmd(ctx, func_name, network, wallet_path, config, sleep, pre):
     """
     Invoke the contract methods in contract config file.
     """
-    echo('\nInvoking your contracts...')
+    echo('\nInvoking your build...')
     echo('==========================\n')
     try:
-        invocation = Invocation(ctx.obj['PROJECT_DIR'], network, wallet, config)
+        invocation = Invocation(ctx.obj['PROJECT_DIR'], network, wallet_path, config)
         punica_func_list = invocation.get_func_list()
         if len(func_name) == 0:
             for func in punica_func_list:

@@ -16,10 +16,11 @@ You should have received a copy of the GNU Lesser General Public License
 along with The ontology.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import os
+from os import path, environ, getcwd
 
 from ontology.sdk import Ontology
 
-wallet_password = os.environ['PUNICA_CLI_TEST_PASSWORD']
-test_file_dir = os.path.join(os.getcwd(), 'data')
+global_wallet_password = environ['PUNICA_CLI_PASSWORD']
+global_wallet_path = path.join(path.dirname(__file__), 'wallet.json')
+test_file_dir = path.join(getcwd(), 'file')
 ontology = Ontology()

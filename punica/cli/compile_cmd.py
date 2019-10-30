@@ -21,7 +21,7 @@ def compile_cmd(ctx, contract_name: str, v1: bool):
     """
     Compile contract source files.
     """
-    echo('\nCompiling your contracts...')
+    echo('\nCompiling your build...')
     echo('===========================\n')
     try:
         py_contract = PyContract(ctx.obj['PROJECT_DIR'])

@@ -13,7 +13,7 @@ class TestInit(unittest.TestCase):
         self.runner = CliRunner()
 
     def test_itx_info(self):
-        project_path = os.path.join(os.path.dirname(__file__), 'data', 'test_init_empty')
+        project_path = os.path.join(os.path.dirname(__file__), 'file', 'test_init_empty')
         try:
             result = self.runner.invoke(main, ['info','tx','3fa996e1009e1194336e1c79ca2b2cfebce37a90a4281f4068b86fbae228098b'])
             # info_list = result.output.split('\n')

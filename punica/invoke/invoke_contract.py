@@ -4,15 +4,15 @@ from typing import List
 
 from halo import Halo
 from click import echo
-from ontology.contract.neo.invoke_function import InvokeFunction
-from ontology.core.invoke_transaction import InvokeTransaction
+from ontology.utils.neo import NeoData
+from ontology.utils.event import Event
 from ontology.exception.exception import SDKException
-from ontology.utils.contract import Data, Event
+from ontology.core.invoke_transaction import InvokeTransaction
+from ontology.contract.neo.invoke_function import NeoInvokeFunction
 
 from punica.core.contract_func import Func
 from punica.core.contract_project import ContractProjectWithConfig
 from punica.exception.punica_exception import PunicaException, PunicaError
-from punica.info.chain_info import Info
 
 
 class Invocation(ContractProjectWithConfig):
@@ -57,30 +57,30 @@ class Invocation(ContractProjectWithConfig):
         echo(f"{'-' * len(msg)}\n")
 
     def __pre_invoke(self, contract_address, func: Func):
-        invoke_func = InvokeFunction(func.name, func.args_normalized)
+        invoke_func = NeoInvokeFunction(func.name, func.args_normalized)
         response = self.__send_tx_pre_exec(contract_address, invoke_func, func.signers)
         self.__echo_pre_exec_result(response, func.return_type)
 
     @staticmethod
     def decode_raw_data(data: str, d_type: str):
         if d_type.lower() == 'hex':
-            return Data.to_hex_str(data)
+            return NeoData.to_hex_str(data)
         if d_type.lower() == 'int':
-            return Data.to_int(data)
+            return NeoData.to_int(data)
         if d_type.lower() == 'bool':
-            return Data.to_bool(data)
+            return NeoData.to_bool(data)
         if d_type.lower() == 'utf8':
-            return Data.to_utf8_str(data)
+            return NeoData.to_utf8_str(data)
         if d_type.lower() == 'dict':
-            return Data.to_dict(data)
+            return NeoData.to_dict(data)
         if d_type.lower() == 'bytes':
-            return Data.to_bytes(data)
+            return NeoData.to_bytes(data)
         if d_type.lower() == 'address':
-            return Data.to_b58_address(data)
+            return NeoData.to_b58_address(data)
         return data
 
     def __commit_invoke(self, contract_address: str, func: Func):
-        invoke_func = InvokeFunction(func.name, func.args_normalized)
+        invoke_func = NeoInvokeFunction(func.name, func.args_normalized)
         payer_address = func.payer
         if len(payer_address) == 0:
             payer_address = self.invoke_config.get('defaultPayer', '')
@@ -131,7 +131,7 @@ class Invocation(ContractProjectWithConfig):
         echo(f"> result: {response.get('Result', '')}")
         echo(f"> notify: {response.get('Notify', list())}\n")
 
-    def __send_tx_pre_exec(self, contract_address: str, func: InvokeFunction, signer_address_list: List[str]):
+    def __send_tx_pre_exec(self, contract_address: str, func: NeoInvokeFunction, signer_address_list: List[str]):
         tx = self.ontology.neo_vm.make_invoke_transaction(contract_address, func)
         tx = self.__add_signature(tx, signer_address_list)
         res = self._send_raw_tx_pre_exec_with_spinner(tx)

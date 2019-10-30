@@ -14,18 +14,18 @@ from punica.deploy.deploy_contract import Deployment
 
 class TestDeploy(unittest.TestCase):
     def setUp(self):
-        self.project_path = os.path.join(test_file_dir, 'deploy', 'normalized')
+        self.project_path = os.path.join(test_file_dir, 'deploy', 'neo')
         self.network = 'testNet'
         self.deployment = Deployment(self.project_path, self.network)
 
     def test_generate_contract_address(self):
-        hex_contract_address = self.deployment.get_contract_address('oep4')
+        hex_contract_address = self.deployment.get_neo_contract_address('oep4')
         self.assertEqual('cb9f3b7c6fb1cf2c13a40637c189bdd066a272b4', hex_contract_address)
 
     def test_deploy(self):
-        with open(path.join(self.project_path, 'build', 'contracts', 'random.avm'), 'w') as f:
+        with open(path.join(self.project_path, 'build', 'build', 'random.avm'), 'w') as f:
             f.write(get_random_bytes(100).hex())
-        tx_hash = self.deployment.deploy_smart_contract('random')
+        tx_hash = self.deployment.deploy_neo_contract('random')
         time.sleep(6)
         ontology.rpc.connect_to_test_net()
         deploy_information = ontology.rpc.get_transaction_by_tx_hash(tx_hash).get('Payload')

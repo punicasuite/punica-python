@@ -9,7 +9,7 @@ class InitConfig:
         self.__path = repo_path
 
     def contract_path(self) -> str:
-        contract_path = os.path.join(self.__path, 'contracts')
+        contract_path = os.path.join(self.__path, 'build')
         return contract_path
 
     @staticmethod

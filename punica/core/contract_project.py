@@ -19,7 +19,6 @@ from punica.exception.punica_exception import PunicaException, PunicaError
 class ContractProjectWithConfig(ProjectWithConfig):
     def __init__(self, project_dir: str = '', network: str = '', wallet_path: str = '', contract_config_path: str = ''):
         super().__init__(project_dir)
-
         contract_config_file_path = path.join(self.project_dir, 'contracts', 'config.json')
         old_contract_config_file_path = path.join(self.project_dir, 'contracts', 'default-config.json')
         if len(contract_config_path) != 0:
@@ -35,7 +34,7 @@ class ContractProjectWithConfig(ProjectWithConfig):
                 self._contract_config = json.load(f)
         except FileNotFoundError:
             raise PunicaException(PunicaError.config_file_not_found)
-        self._avm_dir = path.join(project_dir, 'build', 'contracts')
+        self._contract_build_dir = path.join(project_dir, 'build', 'build')
         self._wallet_dir = path.join(project_dir, 'wallet')
         if len(network) == 0:
             network = self.default_network
@@ -136,7 +135,7 @@ class ContractProjectWithConfig(ProjectWithConfig):
 
     def get_acct_by_address(self, address: str) -> Account:
         password = self.contract_config.get('password', dict()).get(address, '')
-        if len(password) == 0:
+        while len(password) == 0:
             password = getpass(prompt=f'Unlock {address}: ')
         while True:
             try:

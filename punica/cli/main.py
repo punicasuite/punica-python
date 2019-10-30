@@ -9,6 +9,8 @@ import click
 CONTEXT_SETTINGS = dict(
     help_option_names=['-h', '--help'],
 )
+
+
 @click.group(context_settings=CONTEXT_SETTINGS)
 @click.option(
     '--project',
@@ -19,12 +21,12 @@ CONTEXT_SETTINGS = dict(
     ),
     type=click.Path(exists=False, dir_okay=True),
 )
-@click.version_option(
-    pkg_resources.get_distribution("punica").version,
-    '--version',
-    '-v',
-    message='%(version)s',
-)
+# @click.version_option(
+#     pkg_resources.get_distribution("punica").version,
+#     '--version',
+#     '-v',
+#     message='%(version)s',
+# )
 @click.pass_context
 def main(ctx, project_dir):
     ctx.obj = dict()

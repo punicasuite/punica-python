@@ -25,6 +25,8 @@ test:
 	python3 -m unittest discover
 
 build:
+	python3 -m pip install -U twine wheel setuptools
+	python3 setup.py sdist
 	python3 setup.py bdist_wheel --python-tag py3
 
 publish:

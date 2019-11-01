@@ -65,7 +65,7 @@ class ContractProjectWithConfig(ProjectWithConfig):
     def _echo_network_info(self):
         echo(f'> Network name: {self.network}')
         echo(f'> Network id:   {self.ontology.rpc.get_network_id()}')
-        echo(f'> Gas price:    {self.ontology.rpc.get_gas_price()}\n\n')
+        echo(f'> Gas price:    {self.ontology.rpc.get_gas_price()}\n')
 
     def _send_raw_tx_with_spinner(self, tx: Transaction) -> str:
         spinner = Halo(text="Sending transaction into network...\n", spinner='dots')

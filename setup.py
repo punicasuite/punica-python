@@ -10,7 +10,7 @@ with open(path.join(getcwd(), 'README.md'), mode='r', encoding='utf-8') as f:
 
 setup(
     name='punica',
-    version='0.3.0',
+    version='0.3.0.RC1',
     description="""Ontology DApp Development Framework""",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -28,7 +28,7 @@ setup(
         'Click==7.0',
         'requests==2.22.0',
         'GitPython==2.1.11',
-        'ontology-python-sdk==2.0.6',
+        'ontology-python-sdk==2.1.0',
     ],
     license="MIT",
     zip_safe=False,

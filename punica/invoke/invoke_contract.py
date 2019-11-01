@@ -113,6 +113,8 @@ class Invocation(ContractProjectWithConfig):
     def decode_wasm_raw_data(data: str, d_type: str):
         if d_type.lower() == 'int':
             return WasmData.to_int(data)
+        if d_type.lower() == 'str':
+            return WasmData.to_utf8(data)
         return data
 
     def _get_payer_address(self, func: Func) -> str:

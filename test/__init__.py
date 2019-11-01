@@ -1,4 +1,5 @@
 from os import path, environ, getcwd
+from subprocess import Popen, PIPE
 
 from ontology.sdk import Ontology
 

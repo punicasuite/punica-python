@@ -1,0 +1,68 @@
+{
+    "name": "MyWallet",
+    "version": "1.1",
+    "createTime": "2018-10-31 16:42:39",
+    "defaultOntid": "did:ont:AHBB3LQNpqXjCLathy7vTNgmQ1cGSj8S9Z",
+    "defaultAccountAddress": "AKeDu9QW6hfAhwpvCwNNwkEQt1LkUQpBpW",
+    "scrypt": {
+        "n": 16384,
+        "r": 8,
+        "p": 8,
+        "dkLen": 64
+    },
+    "identities": [
+        {
+            "ontid": "did:ont:AHBB3LQNpqXjCLathy7vTNgmQ1cGSj8S9Z",
+            "label": "MagicIdentity",
+            "lock": false,
+            "controls": [
+                {
+                    "address": "AHBB3LQNpqXjCLathy7vTNgmQ1cGSj8S9Z",
+                    "algorithm": "ECDSA",
+                    "enc-alg": "aes-256-gcm",
+                    "hash": "sha256",
+                    "id": "keys-1",
+                    "key": "NAB1dYF5nfBk+q3XxQmaboy8AyTCPrDoWHqyiTUy1FVQ0t/HHpnPt5L/aszqQUSc",
+                    "parameters": {
+                        "curve": "P-256"
+                    },
+                    "salt": "ZjAzMzYwMzY4ODk3M2Y4Mg==",
+                    "publicKey": "03e28a7f70c028e99d42f6ff23c93d41a47c0c2c5b9244634c8d9e609403cf0e3d"
+                }
+            ],
+            "isDefault": true
+        }
+    ],
+    "accounts": [
+        {
+            "address": "AKeDu9QW6hfAhwpvCwNNwkEQt1LkUQpBpW",
+            "algorithm": "ECDSA",
+            "enc-alg": "aes-256-gcm",
+            "isDefault": true,
+            "key": "bSm3F4cLIe3UUK7iNQgiW2j5zXVXLRTsPUqJ2ymZuyc+gdoPNSlJRJsZ5Pi/+PJP",
+            "label": "MagicAccount",
+            "lock": false,
+            "parameters": {
+                "curve": "P-256"
+            },
+            "salt": "MTY4YTc2NjFiY2ZkZjM0Zg==",
+            "publicKey": "03aca1cc38a85bba70ca99df99bcc0aae53bf7e47d3467f90c851acda09ab19d9e",
+            "signatureScheme": "SHA256withECDSA"
+        },
+        {
+            "address": "AHBB3LQNpqXjCLathy7vTNgmQ1cGSj8S9Z",
+            "algorithm": "ECDSA",
+            "enc-alg": "aes-256-gcm",
+            "isDefault": false,
+            "key": "NAB1dYF5nfBk+q3XxQmaboy8AyTCPrDoWHqyiTUy1FVQ0t/HHpnPt5L/aszqQUSc",
+            "label": "OntIdCtrlAcct",
+            "lock": false,
+            "parameters": {
+                "curve": "P-256"
+            },
+            "salt": "ZjAzMzYwMzY4ODk3M2Y4Mg==",
+            "publicKey": "03e28a7f70c028e99d42f6ff23c93d41a47c0c2c5b9244634c8d9e609403cf0e3d",
+            "signatureScheme": "SHA256withECDSA"
+        }
+    ]
+}

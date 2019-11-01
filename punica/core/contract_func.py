@@ -57,7 +57,7 @@ class Func(object):
         if isinstance(arg, str):
             if arg[0] == 'A' and len(arg) == 34:
                 try:
-                    return Address.b58decode(arg).to_bytes()
+                    return Address.b58decode(arg)
                 except SDKException:
                     pass
             if arg[0] == 'b' and arg[1] == '\'' and arg[-1] == '\'':

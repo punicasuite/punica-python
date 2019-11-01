@@ -60,5 +60,9 @@ class Func(object):
                     return Address.b58decode(arg).to_bytes()
                 except SDKException:
                     pass
-            return arg.encode('utf-8')
+            if arg[0] == 'b' and arg[1] == '\'' and arg[-1] == '\'':
+                try:
+                    return arg.encode('utf-8')
+                except SDKException:
+                    pass
         return arg

@@ -27,7 +27,6 @@ class Invocation(ContractProjectWithConfig):
             invoke_config = self.contract_config.get('invokeConfig', dict())
         self._is_wasm = is_wasm
         self.__invoke_config = invoke_config
-        self._echo_network_info()
 
     @property
     def is_wasm(self):
@@ -37,12 +36,12 @@ class Invocation(ContractProjectWithConfig):
     def invoke_config(self):
         return self.__invoke_config
 
-    @staticmethod
-    def echo_invoke_banner():
+    def echo_invoke_banner(self):
         msg = 'Invoking your contract...'
         echo(f'\n{msg}')
         msg = '=' * len(msg)
         echo(f'{msg}\n')
+        self._echo_network_info()
 
     def get_func_by_name(self, func_name: str) -> Func:
         punica_func_list = self.get_func_list()

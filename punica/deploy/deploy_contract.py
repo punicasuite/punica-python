@@ -146,7 +146,7 @@ class Deployment(ContractProjectWithConfig):
             return True
         except SDKException as e:
             msg = str(e.args[1]).lower()
-            if 'unknow contract' not in msg and 'unknown contract' not in msg:
+            if 'unknow contract' not in msg or 'unknown contract' not in msg:
                 return False
             raise e
 

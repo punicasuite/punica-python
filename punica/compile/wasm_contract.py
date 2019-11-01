@@ -8,7 +8,7 @@ from halo import Halo
 
 from punica.core.base_project import BaseProject
 from punica.exception.punica_exception import PunicaError, PunicaException
-from punica.utils.file_system import ensure_file_exists, ensure_remove_dir_if_exists, ensure_path_exists
+from punica.utils.file_system import ensure_remove_dir_if_exists, ensure_path_exists
 
 
 class WasmContract(BaseProject):
@@ -106,8 +106,7 @@ class WasmContract(BaseProject):
             proc.communicate()
 
     def _optimize_contract(self) -> bool:
-        echo('')
-        optimize_spinner = Halo(text=f"Optimizing your WebAssembly contract...", spinner='bouncingBar')
+        optimize_spinner = Halo(text=f"\nOptimizing your WebAssembly contract...", spinner='bouncingBar')
         optimize_spinner.start()
         try:
             wasm_file_list = self.get_all_wasm_file(self.compile_release_dir)
@@ -122,7 +121,7 @@ class WasmContract(BaseProject):
             return False
 
     def _clean_compile_env(self) -> bool:
-        clean_spinner = Halo(text='Cleaning the environment...', spinner='bouncingBar')
+        clean_spinner = Halo(text='Cleaning the environment...\n', spinner='bouncingBar')
         clean_spinner.start()
         try:
             wasm_file_list = self.get_all_wasm_file(self.compile_release_dir)
@@ -130,7 +129,6 @@ class WasmContract(BaseProject):
                 shutil.copyfile(path.join(self.compile_release_dir, file), path.join(self.build_release_dir, file))
             ensure_remove_dir_if_exists(path.join(self.contract_dir, 'target'))
             clean_spinner.succeed()
-            echo('')
             return True
         except Exception as e:
             clean_spinner.fail()
@@ -140,7 +138,7 @@ class WasmContract(BaseProject):
     def compile_contract(self):
         if not self.ensure_env_correct():
             return
-        compile_spinner = Halo(text=f"Compiling your WebAssembly contracts...", spinner='bouncingBar')
+        compile_spinner = Halo(text=f"Compiling...", spinner='bouncingBar')
         compile_spinner.succeed()
         echo('')
         compile_cmd = 'RUSTFLAGS="-C link-arg=-zstack-size=32768" cargo build --release --target wasm32-unknown-unknown'

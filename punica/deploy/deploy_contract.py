@@ -94,6 +94,8 @@ class Deployment(ContractProjectWithConfig):
         )
         tx.sign_transaction(payer)
         tx_hash = self._send_raw_tx_with_spinner(tx)
+        if len(tx_hash) != 64:
+            return ''
         if self._echo_pending_tx_info(tx_hash, f'\nDeploy {contract_name}'):
             contract = self.ontology.rpc.get_contract(hex_contract_address)
             self.__echo_contract_info(contract_name, contract,
@@ -132,6 +134,8 @@ class Deployment(ContractProjectWithConfig):
         )
         tx.sign_transaction(payer)
         tx_hash = self._send_raw_tx_with_spinner(tx)
+        if len(tx_hash) != 64:
+            return ''
         if self._echo_pending_tx_info(tx_hash, f'\nDeploy {contract_name}'):
             contract = self.ontology.rpc.get_contract(hex_contract_address)
             self.__echo_contract_info(contract_name, contract,
